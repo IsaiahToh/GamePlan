@@ -1,8 +1,10 @@
 import { Route, Routes } from "react-router-dom";
-import Header from "./pages/Header";
+import Header from "./components/Header";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
+import Home from "./pages/Home";
+import About from "./pages/About";
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
         <Route path="/dashboard" element={<Dashboard />}></Route>
+        <Route path="/" element={<Home/>}></Route>
+        <Route path="/about" element={<About />}></Route>
       </Routes>
     </>
   );

@@ -5,6 +5,7 @@ require("dotenv").config({
 const express = require("express");
 const signupRoute = require("./routes/signup");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -14,6 +15,7 @@ app.get("/", (req, res) => {
 });
 
 app.use(bodyParser.json());
+app.use(cors());
 app.use("/user", signupRoute);
 
 app.listen(port, () => {

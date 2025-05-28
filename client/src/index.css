@@ -118,3 +118,14 @@
     @apply bg-background text-foreground;
   }
 }
+
+html, body, #root {
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+}
+
+hr {
+  visibility: hidden;
+}
+a.active hr {
+  visibility: visible;
+}
