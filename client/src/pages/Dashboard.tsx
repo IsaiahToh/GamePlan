@@ -1,4 +1,3 @@
-import MonthView from '@/components/MonthView';
 import React from 'react';
 
 const Dashboard = () => {
@@ -9,7 +8,6 @@ const Dashboard = () => {
       {/* Sidebar can be included here if needed */}
 
       <div className="w-full flex-1">
-        <MonthView />
       </div>
     </div>
   )
