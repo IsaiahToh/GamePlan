@@ -1,12 +1,13 @@
 import { Route, Routes } from "react-router-dom";
-import Header from "./components/Header";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import About from "./pages/About";
+import Header from "./components/Header";
 
 function App() {
+
   return (
     <>
       <Header />
