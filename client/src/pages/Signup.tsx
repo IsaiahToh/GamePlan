@@ -56,12 +56,24 @@ const Signup = () => {
         },
         body: JSON.stringify(values),
       });
+
+      if (response.status === 409) {
+        form.setError("email", {
+          type: "server",
+          message: "Email already exists. Please use a different email.",
+        });
+        return;
+      }
       const result = await response.json();
       console.log(result);
       navigate("/login"); // Redirect to login page after successful signup
     } catch (error) {
       console.error("Error during signup:", error);
       // Handle error (e.g., show a notification)
+      form.setError("root", {
+        type: "server",
+        message: "An error occurred during signup. Please try again.",
+      });
     }
   }
 
