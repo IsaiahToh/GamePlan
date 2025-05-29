@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 
-// 1. Define your Zod schema
+// Zod schema
 const formSchema = z.object({
   name: z.string().min(1, { message: "Name is required." }),
   email: z.string().email({ message: "Please enter a valid email address." }),
@@ -32,9 +32,11 @@ const formSchema = z.object({
     .string()
     .min(8, { message: "Password must be at least 8 characters." }),
 });
+
 const Signup = () => {
   const navigate = useNavigate();
-  // 2. Set up the form with useForm and zodResolver
+
+  // Set up form with useForm and zodResolver
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -44,7 +46,7 @@ const Signup = () => {
     },
   });
 
-  // 3. Handle form submission
+  // Handle form submission
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       const response = await fetch("http://localhost:5000/user/signup", {
@@ -84,9 +86,9 @@ const Signup = () => {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Your name" {...field} />
+                    <Input placeholder="John Doe" {...field} />
                   </FormControl>
-                  <FormDescription>Enter your full name.</FormDescription>
+                  <FormDescription>Enter your full name</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -101,13 +103,11 @@ const Signup = () => {
                   <FormControl>
                     <Input
                       type="email"
-                      placeholder="you@example.com"
+                      placeholder="johndoe@example.com"
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
-                    We'll never share your email.
-                  </FormDescription>
+                  <FormDescription>Enter a valid email address</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -122,11 +122,11 @@ const Signup = () => {
                   <FormControl>
                     <Input
                       type="password"
-                      placeholder="Not P@ssw0rd please..."
+                      placeholder="Enter your password"
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>Choose a strong password.</FormDescription>
+                  <FormDescription>Min. 8 characters</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
