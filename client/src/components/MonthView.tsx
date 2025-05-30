@@ -3,7 +3,7 @@ import Day from './Day'
 
 export default function MonthView({month}: { month: any[][] }) {
   return (
-    <div className='grid grid-cols-7 grid-rows-5 h-2/3 w-screen'>
+    <div className='grid grid-cols-7 grid-rows-5 h-2/3 w-2/3'>
       {month.map((row, i) => (
         <React.Fragment key={i}>
             {row.map((day, j) => (

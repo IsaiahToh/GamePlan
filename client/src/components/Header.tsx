@@ -1,28 +1,76 @@
 import { Button } from "@/components/ui/button";
-import { Calendar, Search, User } from "lucide-react";
+import {
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  Menu,
+  Search,
+  User,
+} from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
-export default function Header() {
+interface HeaderProps {
+  isSideBarOpen: boolean;
+  setIsSidebarOpen: (open: boolean) => void;
+}
+
+export default function Header({
+  isSideBarOpen,
+  setIsSidebarOpen,
+}: HeaderProps) {
   const navigate = useNavigate();
   const token = localStorage.getItem("token"); // Check if the user is authenticated
   const handleLogout = () => {
     localStorage.removeItem("token"); // Remove token from local storage
     navigate("/login"); // Redirect to login page
-  }
+  };
 
   return (
     <>
       <header className="flex items-center justify-between p-4 bg-gray-800 text-white">
-        <Button
-          variant="ghost"
-          className="bg-gray-800 hover:bg-gray-700 hover:text-white font-bold"
-          onClick={() => window.location.reload()}
-        >
-          <Calendar />
-          <p>GamePlan</p>
-        </Button>
+        <div className="flex items-center gap-4">
+          {token ? (
+            <Button
+              variant={"ghost"}
+              className="bg-gray-800 hover:bg-gray-700 hover:text-white"
+              onClick={() => setIsSidebarOpen(!isSideBarOpen)}
+            >
+              <Menu />
+            </Button>
+          ) : null}
+          <Button
+            variant="ghost"
+            className="bg-gray-800 hover:bg-gray-700 hover:text-white font-bold"
+            onClick={() => navigate("/")}
+          >
+            <Calendar />
+            <p>GamePlan</p>
+          </Button>
+          {token ? (
+            <Button
+              variant="outline"
+              className="bg-gray-800 hover:bg-gray-700 hover:text-white"
+            >
+              <p>Today</p>
+            </Button>
+          ) : null}
+          {token ? (
+            <Button className="bg-gray-800 hover:bg-gray-700 hover:text-white">
+              <ChevronLeft />
+            </Button>
+          ) : null}
+          {token ? (
+            <Button className="bg-gray-800 hover:bg-gray-700 hover:text-white">
+              <ChevronRight />
+            </Button>
+          ) : null}
+        </div>
 
-        <div className="flex pt-2 justify-between gap-5 text-sm text-white">
+        <div
+          className={`flex pt-2 justify-between gap-5 text-sm text-white ${
+            token ? "translate-x-[-90px]" : "translate-x-[25px]"
+          }`}
+        >
           <NavLink to="/" className="flex flex-col items-center gap-1">
             <p>HOME</p>
             <hr className="w-2/4 border-none h-[1.5px] bg-white" />
