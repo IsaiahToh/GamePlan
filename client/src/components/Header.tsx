@@ -8,6 +8,7 @@ import {
   User,
 } from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Input } from "./ui/input";
 
 interface HeaderProps {
   isSideBarOpen: boolean;
@@ -20,10 +21,15 @@ export default function Header({
 }: HeaderProps) {
   const navigate = useNavigate();
   const token = localStorage.getItem("token"); // Check if the user is authenticated
+
   const handleLogout = () => {
     localStorage.removeItem("token"); // Remove token from local storage
     navigate("/login"); // Redirect to login page
   };
+
+  const handleSettings = () => {
+    navigate("/settings");
+  }
 
   return (
     <>
@@ -67,9 +73,7 @@ export default function Header({
         </div>
 
         <div
-          className={`flex pt-2 justify-between gap-5 text-sm text-white ${
-            token ? "translate-x-[-90px]" : "translate-x-[25px]"
-          }`}
+          className="flex pt-2 justify-between gap-5 text-sm text-white absolute left-1/2 -translate-x-1/2"
         >
           <NavLink to="/" className="flex flex-col items-center gap-1">
             <p>HOME</p>
@@ -92,16 +96,23 @@ export default function Header({
 
         {token ? (
           <div className="flex items-center gap-4">
-            <Search />
+            <Search className="translate-x-11"/>
+            <Input placeholder="Search users..." className="pl-9 text-gray-300 rounded-full"></Input>
             <div className="group relative">
               <User className="cursor-pointer" />
               <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
-                <div className="flex flex-col gap-1 w-36 py-2 px-3 bg-gray-100 text-gray-500 rounded">
+                <div className="flex flex-col gap-1 w-36 py-2 px-3 bg-white text-gray-500 rounded shadow-lg">
                   <p
                     className="cursor-pointer hover:text-black"
                     onClick={handleLogout}
                   >
                     Logout
+                  </p>
+                  <p
+                    className="cursor-pointer hover:text-black"
+                    onClick={handleSettings}
+                  >
+                    Settings
                   </p>
                 </div>
               </div>

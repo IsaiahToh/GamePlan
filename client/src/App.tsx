@@ -8,6 +8,7 @@ import Header from "./components/Header";
 import { useState } from "react";
 import { getMonth } from "./lib/utils";
 import Sidebar from "./components/Sidebar";
+import { Settings } from "./pages/Settings";
 
 function App() {
   const [currentMonth, setCurrentMonth] = useState(getMonth());
@@ -33,6 +34,7 @@ function App() {
             ></Route>
             <Route path="/" element={<Home />}></Route>
             <Route path="/about" element={<About />}></Route>
+            <Route path="/settings" element={<Settings />}></Route>
           </Routes>
         </main>
       </div>

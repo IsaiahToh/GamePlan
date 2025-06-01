@@ -121,6 +121,7 @@
 
 html, body, #root {
   font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+  overflow-y: hidden;
 }
 
 hr {
