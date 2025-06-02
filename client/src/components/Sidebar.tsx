@@ -21,8 +21,6 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
           </ul>
         </nav>
       </aside>
-
     </div>
   );
 }
-

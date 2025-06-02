@@ -9,15 +9,23 @@ import {
 } from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Input } from "./ui/input";
+import dayjs from "dayjs";
+import { Dropdown } from "./Dropdown";
 
 interface HeaderProps {
   isSideBarOpen: boolean;
   setIsSidebarOpen: (open: boolean) => void;
+  currentMonth: number;
+  setCurrentMonth: React.Dispatch<React.SetStateAction<number>>
+  setView: React.Dispatch<React.SetStateAction<string>>
 }
 
 export default function Header({
   isSideBarOpen,
   setIsSidebarOpen,
+  currentMonth,
+  setCurrentMonth,
+  setView
 }: HeaderProps) {
   const navigate = useNavigate();
   const token = localStorage.getItem("token"); // Check if the user is authenticated
@@ -34,7 +42,7 @@ export default function Header({
   return (
     <>
       <header className="flex items-center justify-between p-4 bg-gray-800 text-white">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center">
           {token ? (
             <Button
               variant={"ghost"}
@@ -46,7 +54,7 @@ export default function Header({
           ) : null}
           <Button
             variant="ghost"
-            className="bg-gray-800 hover:bg-gray-700 hover:text-white font-bold"
+            className="bg-gray-800 hover:bg-gray-700 hover:text-white font-bold mr-10"
             onClick={() => navigate("/")}
           >
             <Calendar />
@@ -56,17 +64,18 @@ export default function Header({
             <Button
               variant="outline"
               className="bg-gray-800 hover:bg-gray-700 hover:text-white"
+              onClick={() => setCurrentMonth(dayjs().month())}
             >
               <p>Today</p>
             </Button>
           ) : null}
           {token ? (
-            <Button className="bg-gray-800 hover:bg-gray-700 hover:text-white">
+            <Button className="bg-gray-800 hover:bg-gray-700 hover:text-white" onClick={() => {setCurrentMonth(currentMonth - 1)}}>
               <ChevronLeft />
             </Button>
           ) : null}
           {token ? (
-            <Button className="bg-gray-800 hover:bg-gray-700 hover:text-white">
+            <Button className="bg-gray-800 hover:bg-gray-700 hover:text-white" onClick={() => {setCurrentMonth(currentMonth + 1)}}>
               <ChevronRight />
             </Button>
           ) : null}
@@ -96,6 +105,7 @@ export default function Header({
 
         {token ? (
           <div className="flex items-center gap-4">
+            <Dropdown setView={setView}/>
             <Search className="translate-x-11"/>
             <Input placeholder="Search users..." className="pl-9 text-gray-300 rounded-full"></Input>
             <div className="group relative">
