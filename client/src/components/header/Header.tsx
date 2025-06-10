@@ -8,7 +8,7 @@ import {
   User,
 } from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 import dayjs from "dayjs";
 import { Dropdown } from "./Dropdown";
 
@@ -16,8 +16,8 @@ interface HeaderProps {
   isSideBarOpen: boolean;
   setIsSidebarOpen: (open: boolean) => void;
   currentMonth: number;
-  setCurrentMonth: React.Dispatch<React.SetStateAction<number>>
-  setView: React.Dispatch<React.SetStateAction<string>>
+  setCurrentMonth: React.Dispatch<React.SetStateAction<number>>;
+  setView: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function Header({
@@ -25,7 +25,7 @@ export default function Header({
   setIsSidebarOpen,
   currentMonth,
   setCurrentMonth,
-  setView
+  setView,
 }: HeaderProps) {
   const navigate = useNavigate();
   const token = localStorage.getItem("token"); // Check if the user is authenticated
@@ -37,7 +37,7 @@ export default function Header({
 
   const handleSettings = () => {
     navigate("/settings");
-  }
+  };
 
   return (
     <>
@@ -70,20 +70,28 @@ export default function Header({
             </Button>
           ) : null}
           {token ? (
-            <Button className="bg-gray-800 hover:bg-gray-700 hover:text-white" onClick={() => {setCurrentMonth(currentMonth - 1)}}>
+            <Button
+              className="bg-gray-800 hover:bg-gray-700 hover:text-white"
+              onClick={() => {
+                setCurrentMonth(currentMonth - 1);
+              }}
+            >
               <ChevronLeft />
             </Button>
           ) : null}
           {token ? (
-            <Button className="bg-gray-800 hover:bg-gray-700 hover:text-white" onClick={() => {setCurrentMonth(currentMonth + 1)}}>
+            <Button
+              className="bg-gray-800 hover:bg-gray-700 hover:text-white"
+              onClick={() => {
+                setCurrentMonth(currentMonth + 1);
+              }}
+            >
               <ChevronRight />
             </Button>
           ) : null}
         </div>
 
-        <div
-          className="flex pt-2 justify-between gap-5 text-sm text-white absolute left-1/2 -translate-x-1/2"
-        >
+        <div className="flex pt-2 justify-between gap-5 text-sm text-white absolute left-1/2 -translate-x-1/2">
           <NavLink to="/" className="flex flex-col items-center gap-1">
             <p>HOME</p>
             <hr className="w-2/4 border-none h-[1.5px] bg-white" />
@@ -105,9 +113,12 @@ export default function Header({
 
         {token ? (
           <div className="flex items-center gap-4">
-            <Dropdown setView={setView}/>
-            <Search className="translate-x-11"/>
-            <Input placeholder="Search users..." className="pl-9 text-gray-300 rounded-full"></Input>
+            <Dropdown setView={setView} />
+            <Search className="translate-x-11" />
+            <Input
+              placeholder="Search users..."
+              className="pl-9 text-gray-300 rounded-full"
+            ></Input>
             <div className="group relative">
               <User className="cursor-pointer" />
               <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">

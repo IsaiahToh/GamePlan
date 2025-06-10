@@ -1,4 +1,4 @@
-import React from "react";
+"use client";
 
 type SidebarProps = {
   isSidebarOpen: boolean;
@@ -6,10 +6,10 @@ type SidebarProps = {
 
 export default function Sidebar({ isSidebarOpen }: SidebarProps) {
   return (
-    <div className="flex flex-1">
+    <div className="flex">
       {/* Sidebar */}
       <aside
-        className={`bg-gray-800 text-white w-64 transition-all duration-300 ease-in-out ${
+        className={`bg-gray-700 text-white w-64 transition-all duration-300 ease-in-out ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-[50px]"
         }`}
       >

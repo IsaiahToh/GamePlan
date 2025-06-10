@@ -4,16 +4,16 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import About from "./pages/About";
-import Header from "./components/Header";
+import Header from "./components/header/Header";
 import { useState } from "react";
 import dayjs from "dayjs";
-import Sidebar from "./components/Sidebar";
+import Sidebar from "./components/header/Sidebar";
 import { Settings } from "./pages/Settings";
 
 function App() {
   const [currentMonth, setCurrentMonth] = useState(dayjs().month());
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [view, setView] = useState("Month");
+  const [view, setView] = useState("Week"); // Default view is Week
 
   return (
     <div className="flex flex-col h-screen">
@@ -25,10 +25,8 @@ function App() {
         setView={setView}
       />
       <div className="flex flex-1">
-        {isSidebarOpen && (
-          <Sidebar isSidebarOpen={isSidebarOpen} />
-        )}
-        <main className="flex-1 p-4">
+        {isSidebarOpen && <Sidebar isSidebarOpen={isSidebarOpen} />}
+        <main className="flex-1">
           <Routes>
             <Route path="/login" element={<Login />}></Route>
             <Route path="/signup" element={<Signup />}></Route>

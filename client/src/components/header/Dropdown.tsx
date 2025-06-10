@@ -19,7 +19,7 @@ interface DropdownProps {
     }
 
 export function Dropdown({setView} : DropdownProps) {
-  const [position, setPosition] = React.useState("Month");
+  const [position, setPosition] = React.useState("Week");
 
   return (
     <DropdownMenu>

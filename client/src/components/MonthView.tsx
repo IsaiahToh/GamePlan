@@ -1,9 +1,14 @@
 import React from 'react'
 import Day from './Day'
+import type dayjs from 'dayjs'
 
-export default function MonthView({month}: { month: any[][] }) {
+type MonthViewProps = {
+  month: dayjs.Dayjs[][];
+}
+
+export default function MonthView({month}: MonthViewProps) {
   return (
-    <div className='grid grid-cols-7 grid-rows-5 h-2/3 w-2/3'>
+    <div className='grid grid-cols-7 grid-rows-5 h-screen w-full overflow-auto'>
       {month.map((row, i) => (
         <React.Fragment key={i}>
             {row.map((day, j) => (
