@@ -133,7 +133,7 @@ export default function Header({
             <Search className="translate-x-11 hidden lg:block" />
             <Input
               placeholder="Search users..."
-              className="pl-9 text-gray-300 rounded-full hidden lg-block"
+              className="pl-9 text-gray-300 rounded-full hidden lg:block"
             ></Input>
             <div className="group relative">
               <User className="cursor-pointer" />
