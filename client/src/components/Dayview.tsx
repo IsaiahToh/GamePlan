@@ -4,8 +4,12 @@ import React, { useEffect, useState } from "react";
 import { ScrollArea } from "./ui/scroll-area";
 import { getHours, isCurrentDay } from "@/lib/utils";
 
-export default function Dayview() {
-  const selectedDate = dayjs();
+type DayviewProps = {
+  currentDate: dayjs.Dayjs;
+};
+
+export default function Dayview({currentDate}: DayviewProps) {
+  const selectedDate = currentDate;
   const [currentTime, setCurrentTime] = useState(dayjs());
 
   useEffect(() => {

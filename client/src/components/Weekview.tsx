@@ -3,8 +3,12 @@ import dayjs from "dayjs";
 import { ScrollArea } from "./ui/scroll-area";
 import { useEffect, useState } from "react";
 
-export default function Weekview() {
-  const selectedDate = dayjs();
+type WeekviewProps = {
+  currentDate: dayjs.Dayjs;
+};
+
+export default function Weekview({currentDate}: WeekviewProps) {
+  const selectedDate = currentDate;
   const [currentTime, setCurrentTime] = useState(dayjs());
 
   useEffect(() => {

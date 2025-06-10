@@ -17,6 +17,9 @@ interface HeaderProps {
   setIsSidebarOpen: (open: boolean) => void;
   currentMonth: number;
   setCurrentMonth: React.Dispatch<React.SetStateAction<number>>;
+  currentDate: dayjs.Dayjs;
+  setCurrentDate: React.Dispatch<React.SetStateAction<dayjs.Dayjs>>;
+  view: string;
   setView: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -25,6 +28,9 @@ export default function Header({
   setIsSidebarOpen,
   currentMonth,
   setCurrentMonth,
+  currentDate,
+  setCurrentDate,
+  view,
   setView,
 }: HeaderProps) {
   const navigate = useNavigate();
@@ -54,7 +60,7 @@ export default function Header({
           ) : null}
           <Button
             variant="ghost"
-            className="bg-gray-800 hover:bg-gray-700 hover:text-white font-bold mr-10"
+            className="hidden lg:flex bg-gray-800 hover:bg-gray-700 hover:text-white font-bold mr-10"
             onClick={() => navigate("/")}
           >
             <Calendar />
@@ -64,7 +70,10 @@ export default function Header({
             <Button
               variant="outline"
               className="bg-gray-800 hover:bg-gray-700 hover:text-white"
-              onClick={() => setCurrentMonth(dayjs().month())}
+              onClick={() => {
+                setCurrentMonth(dayjs().month());
+                setCurrentDate(dayjs());
+              }}
             >
               <p>Today</p>
             </Button>
@@ -73,7 +82,9 @@ export default function Header({
             <Button
               className="bg-gray-800 hover:bg-gray-700 hover:text-white"
               onClick={() => {
-                setCurrentMonth(currentMonth - 1);
+                view === "Month" ? setCurrentMonth(currentMonth - 1)
+                : view === "Week" ? setCurrentDate(currentDate.subtract(1, 'week'))
+                : setCurrentDate(currentDate.subtract(1, 'day'));
               }}
             >
               <ChevronLeft />
@@ -83,15 +94,20 @@ export default function Header({
             <Button
               className="bg-gray-800 hover:bg-gray-700 hover:text-white"
               onClick={() => {
-                setCurrentMonth(currentMonth + 1);
+                view === "Month" ? setCurrentMonth(currentMonth + 1)
+                : view === "Week" ? setCurrentDate(currentDate.add(1, 'week'))
+                : setCurrentDate(currentDate.add(1, 'day'));
               }}
             >
               <ChevronRight />
             </Button>
           ) : null}
+          {token ? (
+            <p>{currentDate.format("MMMM YYYY")}</p>) : null
+          }
         </div>
 
-        <div className="flex pt-2 justify-between gap-5 text-sm text-white absolute left-1/2 -translate-x-1/2">
+        <div className="lg:flex hidden pt-2 justify-between gap-5 text-sm text-white absolute left-1/2 -translate-x-1/2">
           <NavLink to="/" className="flex flex-col items-center gap-1">
             <p>HOME</p>
             <hr className="w-2/4 border-none h-[1.5px] bg-white" />
@@ -114,10 +130,10 @@ export default function Header({
         {token ? (
           <div className="flex items-center gap-4">
             <Dropdown setView={setView} />
-            <Search className="translate-x-11" />
+            <Search className="translate-x-11 hidden lg:block" />
             <Input
               placeholder="Search users..."
-              className="pl-9 text-gray-300 rounded-full"
+              className="pl-9 text-gray-300 rounded-full hidden lg-block"
             ></Input>
             <div className="group relative">
               <User className="cursor-pointer" />

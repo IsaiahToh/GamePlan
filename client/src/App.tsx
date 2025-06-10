@@ -12,6 +12,7 @@ import { Settings } from "./pages/Settings";
 
 function App() {
   const [currentMonth, setCurrentMonth] = useState(dayjs().month());
+  const [currentDate, setCurrentDate] = useState(dayjs());
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [view, setView] = useState("Week"); // Default view is Week
 
@@ -22,6 +23,9 @@ function App() {
         setIsSidebarOpen={setIsSidebarOpen}
         currentMonth={currentMonth}
         setCurrentMonth={setCurrentMonth}
+        currentDate={currentDate}
+        setCurrentDate={setCurrentDate}
+        view={view}
         setView={setView}
       />
       <div className="flex flex-1">
@@ -32,7 +36,7 @@ function App() {
             <Route path="/signup" element={<Signup />}></Route>
             <Route
               path="/dashboard"
-              element={<Dashboard month={currentMonth} view={view} />}
+              element={<Dashboard month={currentMonth} view={view} currentDate={currentDate}/>}
             ></Route>
             <Route path="/" element={<Home />}></Route>
             <Route path="/about" element={<About />}></Route>
