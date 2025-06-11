@@ -94,9 +94,12 @@ export default function Header({
             <Button
               className="bg-gray-800 hover:bg-gray-700 hover:text-white"
               onClick={() => {
-                view === "Month" ? setCurrentMonth(currentMonth + 1)
-                : view === "Week" ? setCurrentDate(currentDate.add(1, 'week'))
-                : setCurrentDate(currentDate.add(1, 'day'));
+                if (view === "Month") {
+                  setCurrentMonth(currentMonth + 1); 
+                  setCurrentDate(dayjs().month(currentMonth + 1));
+                } else if (view === "Week") {
+                  setCurrentDate(currentDate.add(1, 'week'))
+                 } else setCurrentDate(currentDate.add(1, 'day'));
               }}
             >
               <ChevronRight />
