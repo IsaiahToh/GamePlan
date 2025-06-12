@@ -8,16 +8,30 @@ import {
   User,
 } from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
+import dayjs from "dayjs";
+import { Dropdown } from "./Dropdown";
 
 interface HeaderProps {
   isSideBarOpen: boolean;
   setIsSidebarOpen: (open: boolean) => void;
+  currentMonth: number;
+  setCurrentMonth: React.Dispatch<React.SetStateAction<number>>;
+  currentDate: dayjs.Dayjs;
+  setCurrentDate: React.Dispatch<React.SetStateAction<dayjs.Dayjs>>;
+  view: string;
+  setView: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function Header({
   isSideBarOpen,
   setIsSidebarOpen,
+  currentMonth,
+  setCurrentMonth,
+  currentDate,
+  setCurrentDate,
+  view,
+  setView,
 }: HeaderProps) {
   const navigate = useNavigate();
   const token = localStorage.getItem("token"); // Check if the user is authenticated
@@ -29,12 +43,12 @@ export default function Header({
 
   const handleSettings = () => {
     navigate("/settings");
-  }
+  };
 
   return (
     <>
       <header className="flex items-center justify-between p-4 bg-gray-800 text-white">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center">
           {token ? (
             <Button
               variant={"ghost"}
@@ -46,7 +60,7 @@ export default function Header({
           ) : null}
           <Button
             variant="ghost"
-            className="bg-gray-800 hover:bg-gray-700 hover:text-white font-bold"
+            className="hidden lg:flex bg-gray-800 hover:bg-gray-700 hover:text-white font-bold mr-10"
             onClick={() => navigate("/")}
           >
             <Calendar />
@@ -56,25 +70,47 @@ export default function Header({
             <Button
               variant="outline"
               className="bg-gray-800 hover:bg-gray-700 hover:text-white"
+              onClick={() => {
+                setCurrentMonth(dayjs().month());
+                setCurrentDate(dayjs());
+              }}
             >
               <p>Today</p>
             </Button>
           ) : null}
           {token ? (
-            <Button className="bg-gray-800 hover:bg-gray-700 hover:text-white">
+            <Button
+              className="bg-gray-800 hover:bg-gray-700 hover:text-white"
+              onClick={() => {
+                view === "Month" ? setCurrentMonth(currentMonth - 1)
+                : view === "Week" ? setCurrentDate(currentDate.subtract(1, 'week'))
+                : setCurrentDate(currentDate.subtract(1, 'day'));
+              }}
+            >
               <ChevronLeft />
             </Button>
           ) : null}
           {token ? (
-            <Button className="bg-gray-800 hover:bg-gray-700 hover:text-white">
+            <Button
+              className="bg-gray-800 hover:bg-gray-700 hover:text-white"
+              onClick={() => {
+                if (view === "Month") {
+                  setCurrentMonth(currentMonth + 1); 
+                  setCurrentDate(dayjs().month(currentMonth + 1));
+                } else if (view === "Week") {
+                  setCurrentDate(currentDate.add(1, 'week'))
+                 } else setCurrentDate(currentDate.add(1, 'day'));
+              }}
+            >
               <ChevronRight />
             </Button>
           ) : null}
+          {token ? (
+            <p>{currentDate.format("MMMM YYYY")}</p>) : null
+          }
         </div>
 
-        <div
-          className="flex pt-2 justify-between gap-5 text-sm text-white absolute left-1/2 -translate-x-1/2"
-        >
+        <div className="lg:flex hidden pt-2 justify-between gap-5 text-sm text-white absolute left-1/2 -translate-x-1/2">
           <NavLink to="/" className="flex flex-col items-center gap-1">
             <p>HOME</p>
             <hr className="w-2/4 border-none h-[1.5px] bg-white" />
@@ -96,8 +132,12 @@ export default function Header({
 
         {token ? (
           <div className="flex items-center gap-4">
-            <Search className="translate-x-11"/>
-            <Input placeholder="Search users..." className="pl-9 text-gray-300 rounded-full"></Input>
+            <Dropdown setView={setView} />
+            <Search className="translate-x-11 hidden lg:block" />
+            <Input
+              placeholder="Search users..."
+              className="pl-9 text-gray-300 rounded-full hidden lg:block"
+            ></Input>
             <div className="group relative">
               <User className="cursor-pointer" />
               <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
