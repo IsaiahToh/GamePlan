@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import MonthView from '@/components/MonthView';
 import { getMonth } from '@/lib/utils';
@@ -12,6 +12,21 @@ type DashboardProps = {
 };
 
 const Dashboard: React.FC<DashboardProps> = ({ month, view, currentDate }) => {
+  const [dashboardData, setDashboardData] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      const token = localStorage.getItem("token");
+      const res = await fetch("/api/dashboard", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      setDashboardData(data);
+    };
+    fetchDashboard();
+  }, []);
 
   return (
     <>

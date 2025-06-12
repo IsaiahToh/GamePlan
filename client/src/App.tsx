@@ -10,11 +10,18 @@ import dayjs from "dayjs";
 import Sidebar from "./components/header/Sidebar";
 import { Settings } from "./pages/Settings";
 
+import { Navigate } from "react-router-dom";
+
+function ProtectedRoute({ children }: { children: JSX.Element }) {
+  const isAuthenticated = !!localStorage.getItem("token");
+  return isAuthenticated ? children : <Navigate to="/login" replace />;
+}
+
 function App() {
   const [currentMonth, setCurrentMonth] = useState(dayjs().month());
   const [currentDate, setCurrentDate] = useState(dayjs());
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [view, setView] = useState("Week"); // Default view is Week
+  const [view, setView] = useState("Week");
 
   return (
     <div className="flex flex-col h-screen">
@@ -36,7 +43,15 @@ function App() {
             <Route path="/signup" element={<Signup />}></Route>
             <Route
               path="/dashboard"
-              element={<Dashboard month={currentMonth} view={view} currentDate={currentDate}/>}
+              element={
+                <ProtectedRoute>
+                  <Dashboard
+                    month={currentMonth}
+                    view={view}
+                    currentDate={currentDate}
+                  />
+                </ProtectedRoute>
+              }
             ></Route>
             <Route path="/" element={<Home />}></Route>
             <Route path="/about" element={<About />}></Route>

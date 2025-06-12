@@ -21,6 +21,9 @@ app.use(cors());
 app.use("/user", signupRoute);
 app.use("/auth", loginRoute);
 
+const dashboardRoutes = require('./routes/dashboard');
+app.use('/api', dashboardRoutes);
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });

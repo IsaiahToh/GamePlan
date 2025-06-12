@@ -135,7 +135,7 @@ const acadYear = "2024-2025";
     return dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day);
   });
 
-  console.log(
+  /*console.log(
     JSON.stringify(
       flatLessons,
       (key, value) => {
@@ -146,5 +146,9 @@ const acadYear = "2024-2025";
       },
       2
     )
-  );
+  );*/
+  
+const jsonString = JSON.stringify(flatLessons, null, 2);
+fs.writeFileSync("dashboardData.json", jsonString, "utf-8");
+console.log("dashboardData.json has been written.");
 })();
