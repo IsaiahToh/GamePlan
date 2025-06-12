@@ -1,0 +1,38 @@
+[
+  {
+    "moduleCode": "MS2220",
+    "lessonType": "Lecture",
+    "startTime": "1000",
+    "endTime": "1200",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": "Monday"
+  },
+  {
+    "moduleCode": "MS2220",
+    "lessonType": "Tutorial",
+    "startTime": "1600",
+    "endTime": "1800",
+    "weeks": [
+      3,
+      5,
+      7,
+      9,
+      11
+    ],
+    "day": "Tuesday"
+  }
+]
