@@ -6,10 +6,8 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Header from "./components/header/Header";
 import { useState, type JSX } from "react";
-import dayjs from "dayjs";
 import Sidebar from "./components/header/Sidebar";
 import { Settings } from "./pages/Settings";
-
 import { Navigate } from "react-router-dom";
 
 function ProtectedRoute({ children }: { children: JSX.Element }) {
@@ -26,7 +24,6 @@ function App() {
       <Header
         isSideBarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
-        view={view}
         setView={setView}
       />
       <div className="flex flex-1">

@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button";
 import {
   Calendar,
-  ChevronLeft,
-  ChevronRight,
   Menu,
   Search,
   User,
@@ -15,16 +13,14 @@ import { Dropdown } from "./Dropdown";
 interface HeaderProps {
   isSideBarOpen: boolean;
   setIsSidebarOpen: (open: boolean) => void;
-  view: string;
   setView: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const currentDate = dayjs();
+const date = dayjs();
 
 export default function Header({
   isSideBarOpen,
   setIsSidebarOpen,
-  view,
   setView,
 }: HeaderProps) {
   const navigate = useNavigate();
@@ -62,7 +58,7 @@ export default function Header({
           </Button>
       
           {token ? (
-            <p>{currentDate.format("MMMM YYYY")}</p>) : null
+            <p className="font-semibold text-xl text-white outline px-5 py-2 rounded-lg border-pink-200 border-3">{date.format("MMMM YYYY")}</p>) : null
           }
         </div>
 

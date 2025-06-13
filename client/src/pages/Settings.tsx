@@ -14,24 +14,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { useState } from "react";
+import { Loader } from "lucide-react";
 
 const formSchema = z.object({
-  blockOutTimings: z
-    .array(
-      z.object({
-        from: z.string().min(1, "Start time required"),
-        to: z.string().min(1, "End time required"),
-      })
-    )
-    .min(1, "At least one block out timing required"),
-  nusmodsApi: z.string().min(1, "Course code required"),
+  blockOutTimings: z.array(
+    z.object({
+      from: z.string().min(1, "Start time required"),
+      to: z.string().min(1, "End time required"),
+    })
+  ),
+  url: z.string().min(1, "Course code required"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -41,7 +35,7 @@ export function Settings() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       blockOutTimings: [{ from: "", to: "" }],
-      nusmodsApi: "",
+      url: "",
     },
   });
 
@@ -50,16 +44,37 @@ export function Settings() {
     name: "blockOutTimings",
   });
 
-  const onSubmit = (values: FormValues) => {
+  const [loading, setLoading] = useState(false);
+
+  const onSubmit = async (values: FormValues) => {
     // Fetch NUSMods API, handle timings, etc.
-    console.log(values);
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+    const res = await fetch(
+      "http://localhost:3000/api/dashboard/scrape-and-import",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          blockOutTimings: values.blockOutTimings,
+          url: values.url,
+        }),
+      }
+    );
+    const data = await res.json();
+    console.log(data);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <Card className="max-w-xl mx-auto shadow-lg mt-10">
       <CardHeader className="text-center">
         <CardTitle className="text-3xl">Settings</CardTitle>
-
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -112,7 +127,7 @@ export function Settings() {
             />
             <FormField
               control={form.control}
-              name="nusmodsApi"
+              name="url"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>NUSMods Link</FormLabel>
@@ -134,7 +149,7 @@ export function Settings() {
                 type="submit"
                 className="bg-gray-800 hover:bg-gray-700 w-1/4 "
               >
-                Submit
+                {loading ? <Loader className="animate-spin"/> : "Update"}
               </Button>
             </div>
           </form>

@@ -2,9 +2,6 @@ import { cn, getHours, getWeek } from "@/lib/utils";
 import dayjs from "dayjs";
 import { ScrollArea } from "./ui/scroll-area";
 import { useEffect, useState } from "react";
-import weekday from "dayjs/plugin/weekday";
-
-dayjs.extend(weekday);
 
 const lessons = [
   {
@@ -54,7 +51,8 @@ export default function Weekview() {
 
   return (
     <div className="flex flex-col h-screen w-full overflow-auto">
-      <div className="grid grid-cols-[auto_1fr_1fr_1fr_1fr_1fr_1fr_1fr] place-items-center px-4 py-2">
+      {/* Header with dates of the current week */}
+      <div className="grid grid-cols-[auto_1fr_1fr_1fr_1fr_1fr_1fr_1fr] place-items-center px-4 py-2 shadow-sm border-b">
         <div className="w-16 border-r border-gray-300">
           <div className="relative h-16">
             <div className="absolute top-2 text-xs text-gray-600">GMT +8</div>
@@ -157,7 +155,7 @@ export default function Weekview() {
                   <div
                     className={cn("absolute h-0.5 w-full bg-red-500")}
                     style={{
-                      top: `${(currentTime.hour() / 24) * 100}%`,
+                      top: `${(currentTime.hour() / 24 + currentTime.minute() / 30 / 48) * 100}%`,
                     }}
                   />
                 )}

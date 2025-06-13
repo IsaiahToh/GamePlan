@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import dayjs from "dayjs";
-import { getMonth } from "@/lib/utils";
 import Weekview from "@/components/Weekview";
 import Dayview from "@/components/Dayview";
 
@@ -14,7 +12,7 @@ const Dashboard: React.FC<DashboardProps> = ({ view }: DashboardProps) => {
   useEffect(() => {
     const fetchDashboard = async () => {
       const token = localStorage.getItem("token");
-      const res = await fetch("/api/dashboard", {
+      const res = await fetch("http://localhost:3000/api/dashboard", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

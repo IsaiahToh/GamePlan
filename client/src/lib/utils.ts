@@ -11,19 +11,6 @@ export function isCurrentDay(date: dayjs.Dayjs) {
   return date.isSame(today, "day");
 }
 
-export function getMonth(month = dayjs().month()) {
-  const year = dayjs().year();
-  const firstDayOfMonth = dayjs(new Date(year, month, 1)).day();
-  let currentDayCount = 0 - firstDayOfMonth;
-  const daysMatrix = new Array(5).fill(0).map(() =>
-    new Array(7).fill(0).map(() => {
-      currentDayCount++;
-      return dayjs(new Date(year, month, currentDayCount));
-    })
-  );
-  return daysMatrix;
-}
-
 export function getWeek(date: dayjs.Dayjs) {
   const startOfWeek = date.startOf("week");
   const weekDates = [];

@@ -89,8 +89,8 @@ function parseLesson(lessonStr) {
 
 const SEMESTER = 2;
 const acadYear = "2024-2025";
-(async () => {
-  const url = "https://shorten.nusmods.com?shortUrl=8vu40b";
+
+async function scrape(url) {
   const allLessonClassNames = await scrapeLessonClassNamesInKRfrugFP(url);
 
   const allModuleInfos = await getAllModuleInfos(allLessonClassNames, acadYear);
@@ -147,8 +147,18 @@ const acadYear = "2024-2025";
       2
     )
   );*/
-  
-const jsonString = JSON.stringify(flatLessons, null, 2);
-fs.writeFileSync("dashboardData.json", jsonString, "utf-8");
-console.log("dashboardData.json has been written.");
-})();
+
+  const jsonString = JSON.stringify(flatLessons, null, 2);
+  fs.writeFileSync("dashboardData.json", jsonString, "utf-8");
+  console.log("dashboardData.json has been written.");
+};
+
+module.exports = {
+  scrape,
+  scrapeLessonClassNamesInKRfrugFP,
+  getModuleInfo,
+  getAllModuleInfos,
+  parseLesson,
+  SEMESTER,
+  acadYear,
+};

@@ -15,10 +15,10 @@ import {
 import { ChevronDown } from "lucide-react";
 
 interface DropdownProps {
-    setView: React.Dispatch<React.SetStateAction<string>>;
-    }
+  setView: React.Dispatch<React.SetStateAction<string>>;
+}
 
-export function Dropdown({setView} : DropdownProps) {
+export function Dropdown({ setView }: DropdownProps) {
   const [position, setPosition] = React.useState("Week");
 
   return (
@@ -38,8 +38,22 @@ export function Dropdown({setView} : DropdownProps) {
         <DropdownMenuLabel>View</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
-          <DropdownMenuRadioItem value="Week" onClick={() => {setView("Week")}}>Week</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="Day" onClick={() => {setView("Day")}}>Day</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem
+            value="Week"
+            onClick={() => {
+              setView("Week");
+            }}
+          >
+            Week
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem
+            value="Day"
+            onClick={() => {
+              setView("Day");
+            }}
+          >
+            Day
+          </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
