@@ -76,7 +76,15 @@ const LESSON_TYPE_MAP = {
   REC: "Recitation",
   LAB: "Laboratory",
 };
-
+const dayOrder = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
 function parseLesson(lessonStr) {
   const parts = lessonStr.split("-");
   return {
@@ -112,10 +120,10 @@ async function scrape(url) {
           flatLessons.push({
             moduleCode: parsed.moduleCode,
             lessonType: parsed.lessonType,
-            startTime: t.startTime,
-            endTime: t.endTime,
+            startTime: `${t.startTime.slice(0, 2)}:${t.startTime.slice(2)}`,
+            endTime: `${t.endTime.slice(0, 2)}:${t.endTime.slice(2)}`,
             weeks: t.weeks,
-            day: t.day,
+            day: dayOrder.indexOf(t.day),
           });
         });
       }
@@ -123,15 +131,6 @@ async function scrape(url) {
   });
 
   flatLessons.sort((a, b) => {
-    const dayOrder = [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday",
-    ];
     return dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day);
   });
 
@@ -151,7 +150,7 @@ async function scrape(url) {
   const jsonString = JSON.stringify(flatLessons, null, 2);
   fs.writeFileSync("dashboardData.json", jsonString, "utf-8");
   console.log("dashboardData.json has been written.");
-};
+}
 
 module.exports = {
   scrape,

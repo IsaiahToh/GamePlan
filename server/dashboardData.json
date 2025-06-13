@@ -2,8 +2,8 @@
   {
     "moduleCode": "CS1101S",
     "lessonType": "Tutorial",
-    "startTime": "1200",
-    "endTime": "1400",
+    "startTime": "10:00",
+    "endTime": "12:00",
     "weeks": [
       2,
       3,
@@ -18,13 +18,33 @@
       12,
       13
     ],
-    "day": "Monday"
+    "day": 1
+  },
+  {
+    "moduleCode": "CS1231S",
+    "lessonType": "Tutorial",
+    "startTime": "10:00",
+    "endTime": "12:00",
+    "weeks": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 2
   },
   {
     "moduleCode": "CS1101S",
     "lessonType": "Lecture",
-    "startTime": "1200",
-    "endTime": "1400",
+    "startTime": "12:00",
+    "endTime": "14:00",
     "weeks": [
       1,
       2,
@@ -40,13 +60,101 @@
       12,
       13
     ],
-    "day": "Wednesday"
+    "day": 2
+  },
+  {
+    "moduleCode": "CS1231S",
+    "lessonType": "Lecture",
+    "startTime": "14:00",
+    "endTime": "15:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 2
+  },
+  {
+    "moduleCode": "CS1231S",
+    "lessonType": "Lecture",
+    "startTime": "12:00",
+    "endTime": "14:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 3
+  },
+  {
+    "moduleCode": "CS1231S",
+    "lessonType": "Lecture",
+    "startTime": "14:00",
+    "endTime": "15:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 2
+  },
+  {
+    "moduleCode": "CS1231S",
+    "lessonType": "Lecture",
+    "startTime": "12:00",
+    "endTime": "14:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 3
   },
   {
     "moduleCode": "CS1101S",
     "lessonType": "Recitation",
-    "startTime": "1100",
-    "endTime": "1200",
+    "startTime": "14:00",
+    "endTime": "15:00",
     "weeks": [
       1,
       2,
@@ -62,6 +170,6 @@
       12,
       13
     ],
-    "day": "Thursday"
+    "day": 3
   }
 ]

@@ -3,42 +3,46 @@ import dayjs from "dayjs";
 import { ScrollArea } from "./ui/scroll-area";
 import { useEffect, useState } from "react";
 
-const lessons = [
-  {
-    id: "1",
-    name: "MS2220",
-    description: "AS8-02-02",
-    day: 2,
-    start: "14:30",
-    end: "17:30",
-  },
-  {
-    id: "2",
-    name: "CS2040S",
-    description: "Tut [01]",
-    day: 3,
-    start: "08:00",
-    end: "09:30",
-  },
-  {
-    id: "3",
-    name: "CS2030S",
-    description: "KR lecture hall",
-    day: 5,
-    start: "08:30",
-    end: "10:00",
-  },
-];
+// const lessons = [
+//   {
+//     moduleCode: "MS2220",
+//     lessonType: "AS8-02-02",
+//     day: 2,
+//     startTime: "14:30",
+//     endTime: "17:30",
+//     weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+//   },
+//   {
+//     moduleCode: "CS2040S",
+//     lessonType: "Tut [01]",
+//     day: 3,
+//     startTime: "08:00",
+//     endTime: "09:30",
+//     weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+//   },
+//   {
+//     moduleCode: "CS2030S",
+//     lessonType: "KR lecture hall",
+//     day: 5,
+//     startTime: "08:30",
+//     endTime: "10:00",
+//     weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+//   },
+// ];
 type Lesson = {
-  id: string;
-  name: string;
-  description: string;
+  moduleCode: string;
+  lessonType: string;
+  startTime: string; // HH:mm format
+  endTime: string; // HH:mm format
+  weeks: Array<number>; // Array of week numbers (1-13)
   day: number; // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-  start: string; // ISO string
-  end: string; // ISO string
 };
 
-export default function Weekview() {
+type WeekviewProps = {
+  lessons: any;
+};
+
+export default function Weekview({ lessons }: WeekviewProps) {
   const date = dayjs();
   const [currentTime, setCurrentTime] = useState(dayjs());
 
@@ -108,8 +112,8 @@ export default function Weekview() {
                           // Filter by time slot
                           // Check if the lesson starts at or after the slot start time
                           const lessonStart = dayDate
-                            .hour(Number(lesson.start.split(":")[0]))
-                            .minute(Number(lesson.start.split(":")[1]));
+                            .hour(Number(lesson.startTime.split(":")[0]))
+                            .minute(Number(lesson.startTime.split(":")[1]));
                           return (
                             (lessonStart.isSame(slotStart) ||
                               lessonStart.isAfter(slotStart)) &&
@@ -118,11 +122,11 @@ export default function Weekview() {
                         })
                         .map((lesson: Lesson) => {
                           const lessonStart = dayDate
-                            .hour(Number(lesson.start.split(":")[0]))
-                            .minute(Number(lesson.start.split(":")[1]));
+                            .hour(Number(lesson.startTime.split(":")[0]))
+                            .minute(Number(lesson.startTime.split(":")[1]));
                           const lessonEnd = dayDate
-                            .hour(Number(lesson.end.split(":")[0]))
-                            .minute(Number(lesson.end.split(":")[1]));
+                            .hour(Number(lesson.endTime.split(":")[0]))
+                            .minute(Number(lesson.endTime.split(":")[1]));
                           const duration = lessonEnd.diff(
                             lessonStart,
                             "minutes"
@@ -131,16 +135,17 @@ export default function Weekview() {
 
                           return (
                             <div
-                              key={lesson.id}
                               className="absolute left-0 w-full bg-blue-200 rounded px-2 py-1 text-xs"
                               style={{
                                 top: `${isOClockLesson ? 0 : 50}%`,
                                 height: `${(duration / 59) * 100}%`,
                               }}
                             >
-                              <div className="font-semibold">{lesson.name}</div>
+                              <div className="font-semibold">
+                                {lesson.moduleCode}
+                              </div>
                               <div className="text-gray-600">
-                                {lesson.description}
+                                {lesson.lessonType}
                               </div>
                             </div>
                           );
@@ -155,7 +160,11 @@ export default function Weekview() {
                   <div
                     className={cn("absolute h-0.5 w-full bg-red-500")}
                     style={{
-                      top: `${(currentTime.hour() / 24 + currentTime.minute() / 30 / 48) * 100}%`,
+                      top: `${
+                        (currentTime.hour() / 24 +
+                          currentTime.minute() / 30 / 48) *
+                        100
+                      }%`,
                     }}
                   />
                 )}

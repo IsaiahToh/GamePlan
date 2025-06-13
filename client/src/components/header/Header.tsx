@@ -26,6 +26,8 @@ export default function Header({
   const token = localStorage.getItem("token"); // Check if the user is authenticated
 
   const handleLogout = () => {
+    setIsSidebarOpen(false); // Close sidebar if open
+    setIsSettingsbarOpen(false); // Close settings bar if open
     localStorage.removeItem("token"); // Remove token from local storage
     navigate("/login"); // Redirect to login page
   };

@@ -11,14 +11,23 @@ const Dashboard: React.FC<DashboardProps> = ({ view }: DashboardProps) => {
 
   useEffect(() => {
     const fetchDashboard = async () => {
-      const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:3000/api/dashboard", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await res.json();
-      setDashboardData(data);
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.log("No token found in localStorage");
+          return;
+        }
+        const res = await fetch("http://localhost:3000/api/dashboard", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await res.json();
+        setDashboardData(data);
+        console.log("Fetched data:", data);
+      } catch (error) {
+        console.log("Error fetching dashboard data:", error);
+      }
     };
     fetchDashboard();
   }, []);
@@ -26,7 +35,15 @@ const Dashboard: React.FC<DashboardProps> = ({ view }: DashboardProps) => {
   return (
     <>
       <div className="flex flex-col justify-center items-center h-screen">
-        {view == "Week" ? <Weekview /> : <Dayview />}
+        {view == "Week" ? (
+          dashboardData && dashboardData.events ? (
+            <Weekview lessons={dashboardData.events} />
+          ) : (
+            <div>Loading...</div>
+          )
+        ) : (
+          <Dayview />
+        )}
       </div>
     </>
   );

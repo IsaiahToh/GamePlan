@@ -7,8 +7,7 @@ async function scrapeAndImportDashboard(req, res) {
   try {
     const userId = req.user.id;
     const url = req.body.url;
-    // await scrape(url); // run the scraper with the provided URL
-    await scrape(url); // run the scraper directly
+    await scrape(url);
 
     const events = JSON.parse(fs.readFileSync("dashboardData.json", "utf-8"));
     await Dashboard.findOneAndUpdate(
@@ -17,6 +16,7 @@ async function scrapeAndImportDashboard(req, res) {
       { upsert: true, new: true }
     );
     res.json({
+      url: url,
       message: "Dashboard data scraped and imported for user",
       userId,
     });
@@ -40,7 +40,11 @@ async function importDashboardData(req, res) {
 async function getDashboard(req, res) {
   const userId = req.user.id;
   const dashboard = await Dashboard.findOne({ userId });
-  res.json(dashboard);
+  if (dashboard) {
+    res.json({ events: dashboard.events });
+  } else {
+    res.json({ events: [] });
+  }
 }
 
 module.exports = {

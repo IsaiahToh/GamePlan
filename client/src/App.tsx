@@ -30,8 +30,8 @@ function App() {
         setView={setView}
       />
       <div className="flex flex-1">
-        {isSidebarOpen && <Sidebar />}
-        
+        {localStorage.getItem("token") && isSidebarOpen && <Sidebar />}
+
         <main className="flex-1">
           <Routes>
             <Route path="/login" element={<Login />}></Route>
@@ -40,9 +40,7 @@ function App() {
               path="/dashboard"
               element={
                 <ProtectedRoute>
-                  <Dashboard
-                    view={view}
-                  />
+                  <Dashboard view={view} />
                 </ProtectedRoute>
               }
             ></Route>
@@ -50,9 +48,7 @@ function App() {
             <Route path="/about" element={<About />}></Route>
           </Routes>
         </main>
-        {isSettingsbarOpen && (
-            <Settingsbar />
-        )}
+        {isSettingsbarOpen && <Settingsbar />}
       </div>
     </div>
   );
