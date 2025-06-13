@@ -15,21 +15,15 @@ import { Dropdown } from "./Dropdown";
 interface HeaderProps {
   isSideBarOpen: boolean;
   setIsSidebarOpen: (open: boolean) => void;
-  currentMonth: number;
-  setCurrentMonth: React.Dispatch<React.SetStateAction<number>>;
-  currentDate: dayjs.Dayjs;
-  setCurrentDate: React.Dispatch<React.SetStateAction<dayjs.Dayjs>>;
   view: string;
   setView: React.Dispatch<React.SetStateAction<string>>;
 }
 
+const currentDate = dayjs();
+
 export default function Header({
   isSideBarOpen,
   setIsSidebarOpen,
-  currentMonth,
-  setCurrentMonth,
-  currentDate,
-  setCurrentDate,
   view,
   setView,
 }: HeaderProps) {
@@ -66,45 +60,7 @@ export default function Header({
             <Calendar />
             <p>GamePlan</p>
           </Button>
-          {token ? (
-            <Button
-              variant="outline"
-              className="bg-gray-800 hover:bg-gray-700 hover:text-white"
-              onClick={() => {
-                setCurrentMonth(dayjs().month());
-                setCurrentDate(dayjs());
-              }}
-            >
-              <p>Today</p>
-            </Button>
-          ) : null}
-          {token ? (
-            <Button
-              className="bg-gray-800 hover:bg-gray-700 hover:text-white"
-              onClick={() => {
-                view === "Month" ? setCurrentMonth(currentMonth - 1)
-                : view === "Week" ? setCurrentDate(currentDate.subtract(1, 'week'))
-                : setCurrentDate(currentDate.subtract(1, 'day'));
-              }}
-            >
-              <ChevronLeft />
-            </Button>
-          ) : null}
-          {token ? (
-            <Button
-              className="bg-gray-800 hover:bg-gray-700 hover:text-white"
-              onClick={() => {
-                if (view === "Month") {
-                  setCurrentMonth(currentMonth + 1); 
-                  setCurrentDate(dayjs().month(currentMonth + 1));
-                } else if (view === "Week") {
-                  setCurrentDate(currentDate.add(1, 'week'))
-                 } else setCurrentDate(currentDate.add(1, 'day'));
-              }}
-            >
-              <ChevronRight />
-            </Button>
-          ) : null}
+      
           {token ? (
             <p>{currentDate.format("MMMM YYYY")}</p>) : null
           }

@@ -5,7 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Header from "./components/header/Header";
-import { useState } from "react";
+import { useState, type JSX } from "react";
 import dayjs from "dayjs";
 import Sidebar from "./components/header/Sidebar";
 import { Settings } from "./pages/Settings";
@@ -18,8 +18,6 @@ function ProtectedRoute({ children }: { children: JSX.Element }) {
 }
 
 function App() {
-  const [currentMonth, setCurrentMonth] = useState(dayjs().month());
-  const [currentDate, setCurrentDate] = useState(dayjs());
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [view, setView] = useState("Week");
 
@@ -28,10 +26,6 @@ function App() {
       <Header
         isSideBarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
-        currentMonth={currentMonth}
-        setCurrentMonth={setCurrentMonth}
-        currentDate={currentDate}
-        setCurrentDate={setCurrentDate}
         view={view}
         setView={setView}
       />
@@ -46,9 +40,7 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Dashboard
-                    month={currentMonth}
                     view={view}
-                    currentDate={currentDate}
                   />
                 </ProtectedRoute>
               }

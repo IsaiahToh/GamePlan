@@ -38,7 +38,6 @@ export function Dropdown({setView} : DropdownProps) {
         <DropdownMenuLabel>View</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
-          <DropdownMenuRadioItem value="Month" onClick={() => {setView("Month")}}>Month</DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="Week" onClick={() => {setView("Week")}}>Week</DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="Day" onClick={() => {setView("Day")}}>Day</DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>

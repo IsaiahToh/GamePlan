@@ -41,12 +41,8 @@ type Lesson = {
   end: string; // ISO string
 };
 
-type WeekviewProps = {
-  currentDate: dayjs.Dayjs;
-};
-
-export default function Weekview({ currentDate }: WeekviewProps) {
-  const selectedDate = currentDate;
+export default function Weekview() {
+  const date = dayjs();
   const [currentTime, setCurrentTime] = useState(dayjs());
 
   useEffect(() => {
@@ -64,9 +60,9 @@ export default function Weekview({ currentDate }: WeekviewProps) {
             <div className="absolute top-2 text-xs text-gray-600">GMT +8</div>
           </div>
         </div>
-        {getWeek(selectedDate).map(({ currentDate, today }, i) => (
-          <div>
-            <div key={i} className={cn("text-xs", today && "text-blue-600")}>
+        {getWeek(date).map(({ currentDate, today }, i) => (
+          <div key={i}>
+            <div className={cn("text-xs", today && "text-blue-600")}>
               {currentDate.format("ddd")}
             </div>
             <div
@@ -92,8 +88,8 @@ export default function Weekview({ currentDate }: WeekviewProps) {
               </div>
             ))}
           </div>
-          {getWeek(selectedDate).map(({ isCurrentDay, today }, dayIndex) => {
-            const dayDate = selectedDate.startOf("week").add(dayIndex, "day");
+          {getWeek(date).map(({ isCurrentDay, today }, dayIndex) => {
+            const dayDate = date.startOf("week").add(dayIndex, "day");
 
             return (
               <div key={dayIndex} className="relative border-r border-gray-300">

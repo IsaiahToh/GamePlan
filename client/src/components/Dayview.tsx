@@ -4,12 +4,9 @@ import React, { useEffect, useState } from "react";
 import { ScrollArea } from "./ui/scroll-area";
 import { getHours, isCurrentDay } from "@/lib/utils";
 
-type DayviewProps = {
-  currentDate: dayjs.Dayjs;
-};
 
-export default function Dayview({currentDate}: DayviewProps) {
-  const selectedDate = currentDate;
+export default function Dayview() {
+  const date = dayjs();
   const [currentTime, setCurrentTime] = useState(dayjs());
 
   useEffect(() => {
@@ -20,7 +17,7 @@ export default function Dayview({currentDate}: DayviewProps) {
   }, []);
 
   const isToday =
-    selectedDate.format("DD-MM-YY") === dayjs().format("DD-MM-YY");
+    date.format("DD-MM-YY") === dayjs().format("DD-MM-YY");
 
   return (
     <div className="flex h-screen w-full flex-col overflow-auto">
@@ -28,7 +25,7 @@ export default function Dayview({currentDate}: DayviewProps) {
         <div className="w-16 border-r border-gray-300 text-xs">GMT +8</div>
         <div className="flex w-16 flex-col items-center">
           <div className={cn("text-xs", isToday && "text-blue-600")}>
-            {selectedDate.format("ddd")}{" "}
+            {date.format("ddd")}{" "}
           </div>{" "}
           <div
             className={cn(
@@ -36,7 +33,7 @@ export default function Dayview({currentDate}: DayviewProps) {
               isToday && "bg-blue-600 text-white"
             )}
           >
-            {selectedDate.format("DD")}{" "}
+            {date.format("DD")}{" "}
           </div>
         </div>
         <div></div>
@@ -68,7 +65,7 @@ export default function Dayview({currentDate}: DayviewProps) {
             ))}
 
             {/* Current time indicator */}
-            {isCurrentDay(selectedDate) && (
+            {isCurrentDay(date) && (
               <div
                 className={cn("absolute h-0.5 w-full bg-red-500")}
                 style={{
