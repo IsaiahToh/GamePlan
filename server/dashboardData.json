@@ -1,88 +1,29 @@
 [
   {
-    "moduleCode": "MS2220",
-    "lessonType": "Lecture",
-    "startTime": "1000",
-    "endTime": "1200",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": "Monday"
-  },
-  {
-    "moduleCode": "CS2040S",
-    "lessonType": "Lecture",
-    "startTime": "1600",
-    "endTime": "1800",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": "Monday"
-  },
-  {
-    "moduleCode": "CS2040S",
-    "lessonType": "Lecture",
-    "startTime": "1600",
-    "endTime": "1800",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": "Monday"
-  },
-  {
-    "moduleCode": "MS2220",
+    "moduleCode": "CS1101S",
     "lessonType": "Tutorial",
-    "startTime": "1600",
-    "endTime": "1800",
+    "startTime": "1200",
+    "endTime": "1400",
     "weeks": [
+      2,
       3,
+      4,
       5,
+      6,
       7,
+      8,
       9,
-      11
+      10,
+      11,
+      12,
+      13
     ],
-    "day": "Tuesday"
+    "day": "Monday"
   },
   {
-    "moduleCode": "CS2040S",
+    "moduleCode": "CS1101S",
     "lessonType": "Lecture",
-    "startTime": "1300",
+    "startTime": "1200",
     "endTime": "1400",
     "weeks": [
       1,
@@ -102,53 +43,13 @@
     "day": "Wednesday"
   },
   {
-    "moduleCode": "CS2040S",
-    "lessonType": "Tutorial",
-    "startTime": "1000",
-    "endTime": "1200",
-    "weeks": [
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": "Wednesday"
-  },
-  {
-    "moduleCode": "CS2040S",
-    "lessonType": "Lecture",
-    "startTime": "1300",
-    "endTime": "1400",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": "Wednesday"
-  },
-  {
-    "moduleCode": "CS2040S",
+    "moduleCode": "CS1101S",
     "lessonType": "Recitation",
-    "startTime": "0900",
-    "endTime": "1000",
+    "startTime": "1100",
+    "endTime": "1200",
     "weeks": [
+      1,
+      2,
       3,
       4,
       5,

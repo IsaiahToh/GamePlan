@@ -1,17 +1,11 @@
 "use client";
 
-type SidebarProps = {
-  isSidebarOpen: boolean;
-};
-
-export default function Sidebar({ isSidebarOpen }: SidebarProps) {
+export default function Sidebar() {
   return (
     <div className="flex">
       {/* Sidebar */}
       <aside
-        className={`bg-gray-700 text-white w-64 transition-all duration-300 ease-in-out ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-[50px]"
-        }`}
+        className="bg-gray-700 text-white w-64"
       >
         <nav>
           <ul className="p-4 space-y-2">

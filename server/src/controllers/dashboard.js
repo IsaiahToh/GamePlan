@@ -1,12 +1,13 @@
-const { exec } = require("child_process");
 const fs = require("fs");
 const { scrape } = require("../services/scrapers");
 const Dashboard = require("../models/dashboard");
+const { url } = require("inspector");
 
 async function scrapeAndImportDashboard(req, res) {
   try {
     const userId = req.user.id;
-    const url = req.body.url
+    const url = req.body.url;
+    // await scrape(url); // run the scraper with the provided URL
     await scrape(url); // run the scraper directly
 
     const events = JSON.parse(fs.readFileSync("dashboardData.json", "utf-8"));

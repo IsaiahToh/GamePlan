@@ -7,8 +7,8 @@ import About from "./pages/About";
 import Header from "./components/header/Header";
 import { useState, type JSX } from "react";
 import Sidebar from "./components/header/Sidebar";
-import { Settings } from "./pages/Settings";
 import { Navigate } from "react-router-dom";
+import Settingsbar from "./components/header/Settingsbar";
 
 function ProtectedRoute({ children }: { children: JSX.Element }) {
   const isAuthenticated = !!localStorage.getItem("token");
@@ -17,6 +17,7 @@ function ProtectedRoute({ children }: { children: JSX.Element }) {
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSettingsbarOpen, setIsSettingsbarOpen] = useState(false);
   const [view, setView] = useState("Week");
 
   return (
@@ -24,10 +25,13 @@ function App() {
       <Header
         isSideBarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
+        isSettingsbarOpen={isSettingsbarOpen}
+        setIsSettingsbarOpen={setIsSettingsbarOpen}
         setView={setView}
       />
       <div className="flex flex-1">
-        {isSidebarOpen && <Sidebar isSidebarOpen={isSidebarOpen} />}
+        {isSidebarOpen && <Sidebar />}
+        
         <main className="flex-1">
           <Routes>
             <Route path="/login" element={<Login />}></Route>
@@ -44,9 +48,11 @@ function App() {
             ></Route>
             <Route path="/" element={<Home />}></Route>
             <Route path="/about" element={<About />}></Route>
-            <Route path="/settings" element={<Settings />}></Route>
           </Routes>
         </main>
+        {isSettingsbarOpen && (
+            <Settingsbar />
+        )}
       </div>
     </div>
   );

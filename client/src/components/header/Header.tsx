@@ -1,10 +1,5 @@
 import { Button } from "@/components/ui/button";
-import {
-  Calendar,
-  Menu,
-  Search,
-  User,
-} from "lucide-react";
+import { Calendar, Menu, Search, Settings, User } from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Input } from "../ui/input";
 import dayjs from "dayjs";
@@ -13,6 +8,8 @@ import { Dropdown } from "./Dropdown";
 interface HeaderProps {
   isSideBarOpen: boolean;
   setIsSidebarOpen: (open: boolean) => void;
+  isSettingsbarOpen: boolean;
+  setIsSettingsbarOpen: (open: boolean) => void;
   setView: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -21,6 +18,8 @@ const date = dayjs();
 export default function Header({
   isSideBarOpen,
   setIsSidebarOpen,
+  isSettingsbarOpen,
+  setIsSettingsbarOpen,
   setView,
 }: HeaderProps) {
   const navigate = useNavigate();
@@ -31,35 +30,31 @@ export default function Header({
     navigate("/login"); // Redirect to login page
   };
 
-  const handleSettings = () => {
-    navigate("/settings");
-  };
-
   return (
     <>
       <header className="flex items-center justify-between p-4 bg-gray-800 text-white">
         <div className="flex items-center">
           {token ? (
-            <Button
-              variant={"ghost"}
-              className="bg-gray-800 hover:bg-gray-700 hover:text-white"
+            <Menu
+              className="cursor-pointer mx-3"
+              size={20}
               onClick={() => setIsSidebarOpen(!isSideBarOpen)}
-            >
-              <Menu />
-            </Button>
+            />
           ) : null}
-          <Button
-            variant="ghost"
-            className="hidden lg:flex bg-gray-800 hover:bg-gray-700 hover:text-white font-bold mr-10"
-            onClick={() => navigate("/")}
+
+          <div
+            className="group relative flex mx-2 gap-x-2 cursor-pointer"
+            onClick={() => window.location.reload()}
           >
             <Calendar />
-            <p>GamePlan</p>
-          </Button>
-      
+            <p className="font-semibold">GamePlan</p>
+          </div>
+
           {token ? (
-            <p className="font-semibold text-xl text-white outline px-5 py-2 rounded-lg border-pink-200 border-3">{date.format("MMMM YYYY")}</p>) : null
-          }
+            <p className="font-semibold text-xl text-white outline px-5 py-2 rounded-lg border-pink-200 border-3 mx-2">
+              {date.format("MMMM YYYY")}
+            </p>
+          ) : null}
         </div>
 
         <div className="lg:flex hidden pt-2 justify-between gap-5 text-sm text-white absolute left-1/2 -translate-x-1/2">
@@ -100,15 +95,16 @@ export default function Header({
                   >
                     Logout
                   </p>
-                  <p
-                    className="cursor-pointer hover:text-black"
-                    onClick={handleSettings}
-                  >
-                    Settings
-                  </p>
                 </div>
               </div>
             </div>
+            <Settings
+              className="cursor-pointer"
+              size={40}
+              onClick={() => {
+                setIsSettingsbarOpen(!isSettingsbarOpen);
+              }}
+            />
           </div>
         ) : (
           <div className="flex items-center gap-4">

@@ -14,9 +14,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useState } from "react";
-import { Loader } from "lucide-react";
+import { Loader, Plus } from "lucide-react";
 
 const formSchema = z.object({
   blockOutTimings: z.array(
@@ -25,17 +24,15 @@ const formSchema = z.object({
       to: z.string().min(1, "End time required"),
     })
   ),
-  url: z.string().min(1, "Course code required"),
+  url: z.string().min(1, "Link required").url("Invalid URL format"),
 });
 
-type FormValues = z.infer<typeof formSchema>;
-
-export function Settings() {
-  const form = useForm<FormValues>({
+export default function Settingsbar() {
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       blockOutTimings: [{ from: "", to: "" }],
-      url: "",
+      url: "https://shorten.nusmods.com?shortUrl=75bsp5",
     },
   });
 
@@ -46,47 +43,55 @@ export function Settings() {
 
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = async (values: FormValues) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // Fetch NUSMods API, handle timings, etc.
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-    const res = await fetch(
-      "http://localhost:3000/api/dashboard/scrape-and-import",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          blockOutTimings: values.blockOutTimings,
-          url: values.url,
-        }),
-      }
-    );
-    const data = await res.json();
-    console.log(data);
+      const res = await fetch(
+        "http://localhost:3000/api/dashboard/scrape-and-import",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            blockOutTimings: values.blockOutTimings,
+            url: values.url,
+          }),
+        }
+      );
+      const data = await res.json();
+      console.log(data);
+    } catch (error) {
+      form.setError("root", {
+        type: "server",
+        message: "An unexpected error occurred. Please try again later.",
+      });
     } finally {
       setLoading(false);
     }
   };
-
   return (
-    <Card className="max-w-xl mx-auto shadow-lg mt-10">
-      <CardHeader className="text-center">
-        <CardTitle className="text-3xl">Settings</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <div className="flex">
+      {/* Settingsbar */}
+      <aside className="bg-white text-gray-700 shadow-md shadow-gray-500">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4 p-5"
+          >
             <FormField
               control={form.control}
               name="blockOutTimings"
               render={() => (
                 <FormItem>
-                  <FormLabel>Daily block out timings</FormLabel>
+                  <FormLabel className="text-black text-xl font-semibold">
+                    Daily Blockout Timings
+                  </FormLabel>
                   <FormDescription>
-                    Add your daily unavailable time slots.
+                    Specify times when you are unavailable for tasks.
                   </FormDescription>
                   {fields.map((field, index) => (
                     <div key={field.id} className="flex items-center gap-2 ">
@@ -117,9 +122,11 @@ export function Settings() {
                   <Button
                     type="button"
                     onClick={() => append({ from: "", to: "" })}
-                    className="bg-gray-800 hover:bg-gray-700"
+                    className="bg-white text-gray-500 w-1/4"
+                    variant="link"
                   >
-                    Add another
+                    <Plus />
+                    <p>Add another</p>
                   </Button>
                   <FormMessage />
                 </FormItem>
@@ -130,16 +137,19 @@ export function Settings() {
               name="url"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>NUSMods Link</FormLabel>
+                  <FormLabel className="text-xl font-semibold text-black">
+                    NUSMods Link
+                  </FormLabel>
+                  <FormDescription>
+                    Enter your NUSMods sharing link. Retrieve under Share/Sync.
+                  </FormDescription>
                   <FormControl>
                     <Input
                       placeholder="e.g. https://shorten.nusmods.com?shortUrl=xxxxxx"
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
-                    Enter your NUSMods sharing link. Retrieve under Share/Sync.
-                  </FormDescription>
+
                   <FormMessage />
                 </FormItem>
               )}
@@ -147,14 +157,14 @@ export function Settings() {
             <div className="flex justify-center">
               <Button
                 type="submit"
-                className="bg-gray-800 hover:bg-gray-700 w-1/4 "
+                className="bg-gray-800 hover:bg-gray-700 w-full "
               >
-                {loading ? <Loader className="animate-spin"/> : "Update"}
+                {loading ? <Loader className="animate-spin" /> : "Update"}
               </Button>
             </div>
           </form>
         </Form>
-      </CardContent>
-    </Card>
+      </aside>
+    </div>
   );
 }
