@@ -2,41 +2,47 @@ import { cn, getHours, getWeek } from "@/lib/utils";
 import dayjs from "dayjs";
 import { ScrollArea } from "./ui/scroll-area";
 import { useEffect, useState } from "react";
+import weekday from "dayjs/plugin/weekday";
 
-const events = [
+dayjs.extend(weekday);
+
+const lessons = [
   {
     id: "1",
     name: "MS2220",
     description: "AS8-02-02",
-    start: "2025-06-09T09:00:00+08:00",
-    end: "2025-06-09T11:00:00+08:00",
+    day: 2,
+    start: "14:30",
+    end: "17:30",
   },
   {
     id: "2",
-    name: "Doctor Appointment",
-    description: "Annual physical checkup.",
-    start: "2025-06-11T14:30:00+08:00",
-    end: "2025-06-11T15:00:00+08:00",
+    name: "CS2040S",
+    description: "Tut [01]",
+    day: 3,
+    start: "08:00",
+    end: "09:30",
   },
   {
     id: "3",
-    name: "Project Review",
-    description: "Review project milestones.",
-    start: "2025-06-13T16:00:00+08:00",
-    end: "2025-06-13T17:00:00+08:00",
+    name: "CS2030S",
+    description: "KR lecture hall",
+    day: 5,
+    start: "08:30",
+    end: "10:00",
   },
 ];
-type Event = {
+type Lesson = {
   id: string;
   name: string;
   description: string;
+  day: number; // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
   start: string; // ISO string
   end: string; // ISO string
 };
 
 type WeekviewProps = {
   currentDate: dayjs.Dayjs;
-  events: Event[];
 };
 
 export default function Weekview({ currentDate }: WeekviewProps) {
@@ -79,82 +85,72 @@ export default function Weekview({ currentDate }: WeekviewProps) {
           {/* Time Column */}
           <div className="w-16 border-r border-gray-300">
             {getHours.map((hour, index) => (
-              <div key={index} className="relative h-16">
+              <div key={index} className="relative h-8">
                 <div className="absolute -top-2 text-xs text-gray-600">
                   {hour.format("HH:mm")}
                 </div>
               </div>
             ))}
           </div>
-          {getWeek(selectedDate).map(({ isCurrentDay, today }, dayIndex) => { 
+          {getWeek(selectedDate).map(({ isCurrentDay, today }, dayIndex) => {
             const dayDate = selectedDate.startOf("week").add(dayIndex, "day");
 
             return (
               <div key={dayIndex} className="relative border-r border-gray-300">
                 {getHours.map((hour, hourIndex) => {
-                  const firstHalfSlotStart = dayDate
+                  const slotStart = dayDate
                     .hour(hour.hour())
                     .minute(0)
                     .second(0);
-                  const firstHalfSlotEnd = firstHalfSlotStart.add(0.5, "hour");
-                  const secondHalfSlotStart = firstHalfSlotEnd;
-                  const secondHalfSlotEnd = secondHalfSlotStart.add(
-                    0.5,
-                    "hour"
-                  );
-
-                  // Combine both half-hour slots for easier iteration
-                  const halfHourSlots = [
-                    {
-                      slotStart: firstHalfSlotStart,
-                      slotEnd: firstHalfSlotEnd,
-                      position: "top-0",
-                    },
-                    {
-                      slotStart: secondHalfSlotStart,
-                      slotEnd: secondHalfSlotEnd,
-                      position: "bottom-0",
-                    },
-                  ];
 
                   return (
                     <div
                       key={hourIndex}
-                      className="relative flex h-16 cursor-pointer flex-col items-center gap-y-2 border-b border-gray-300 hover:bg-gray-100"
+                      className="relative flex h-8 flex-col items-center gap-y-2 border-b border-gray-300"
                     >
-                      {halfHourSlots.map(
-                        ({ slotStart, slotEnd, position }, slotIdx) => {
-                          // Only render if the event starts in this slot
-                          return events
-                            .filter((event) => {
-                              const eventStart = dayjs(event.start);
-                              return eventStart.isSame(slotStart);
-                            })
-                            .map((event) => {
-                              const eventStart = dayjs(event.start);
-                              const eventEnd = dayjs(event.end);
-                              const duration = eventEnd.diff(
-                                eventStart,
-                                "minute"
-                              );
-                              const slotCount = Math.ceil(duration / 30);
-                              return (
-                                <div
-                                  key={event.id}
-                                  className={`bg-blue-200 rounded px-2 py-1 text-xs w-full absolute ${position}`}
-                                  style={{
-                                    height: `${slotCount * 50}%`, // Each half-hour is 50% of the slot's height
-                                    zIndex: 10,
-                                  }}
-                                  title={event.description}
-                                >
-                                  <h1 className="text-gray-800">{event.name}</h1>
-                                  <p className="text-gray-500">{event.description}</p>
-                                </div>
-                              );
-                            });
-                        }
-                      )}
+                      {lessons
+                        .filter((lesson: Lesson) => lesson.day === dayIndex) // Filter by day
+                        .filter((lesson: Lesson) => {
+                          // Filter by time slot
+                          // Check if the lesson starts at or after the slot start time
+                          const lessonStart = dayDate
+                            .hour(Number(lesson.start.split(":")[0]))
+                            .minute(Number(lesson.start.split(":")[1]));
+                          return (
+                            (lessonStart.isSame(slotStart) ||
+                              lessonStart.isAfter(slotStart)) &&
+                            lessonStart.isBefore(slotStart.add(1, "hour"))
+                          );
+                        })
+                        .map((lesson: Lesson) => {
+                          const lessonStart = dayDate
+                            .hour(Number(lesson.start.split(":")[0]))
+                            .minute(Number(lesson.start.split(":")[1]));
+                          const lessonEnd = dayDate
+                            .hour(Number(lesson.end.split(":")[0]))
+                            .minute(Number(lesson.end.split(":")[1]));
+                          const duration = lessonEnd.diff(
+                            lessonStart,
+                            "minutes"
+                          );
+                          const isOClockLesson = lessonStart.minute() === 0;
+
+                          return (
+                            <div
+                              key={lesson.id}
+                              className="absolute left-0 w-full bg-blue-200 rounded px-2 py-1 text-xs"
+                              style={{
+                                top: `${isOClockLesson ? 0 : 50}%`,
+                                height: `${(duration / 59) * 100}%`,
+                              }}
+                            >
+                              <div className="font-semibold">{lesson.name}</div>
+                              <div className="text-gray-600">
+                                {lesson.description}
+                              </div>
+                            </div>
+                          );
+                        })}
                     </div>
                   );
                 })}
