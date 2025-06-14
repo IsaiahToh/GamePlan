@@ -13,7 +13,7 @@ type Lesson = {
 };
 
 type WeekviewProps = {
-  lessons: any;
+  lessons: Lesson[];
 };
 
 export default function Weekview({ lessons }: WeekviewProps) {
@@ -94,7 +94,7 @@ export default function Weekview({ lessons }: WeekviewProps) {
                             lessonStart.isBefore(slotStart.add(1, "hour"))
                           );
                         })
-                        .map((lesson: Lesson) => {
+                        .map((lesson: Lesson, lessonIndex: number) => {
                           const lessonStart = dayDate
                             .hour(Number(lesson.startTime.split(":")[0]))
                             .minute(Number(lesson.startTime.split(":")[1]));
@@ -109,6 +109,7 @@ export default function Weekview({ lessons }: WeekviewProps) {
 
                           return (
                             <div
+                              key={lessonIndex}
                               className="absolute left-0 w-full bg-blue-200 rounded px-2 py-1 text-xs"
                               style={{
                                 top: `${isOClockLesson ? 0 : 50}%`,

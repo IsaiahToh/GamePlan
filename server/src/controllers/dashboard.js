@@ -7,6 +7,7 @@ async function scrapeAndImportDashboard(req, res) {
   try {
     const userId = req.user.id;
     const url = req.body.url;
+    const groups = req.body.groups || [];
     await scrape(url);
 
     const events = JSON.parse(fs.readFileSync("dashboardData.json", "utf-8"));
@@ -16,7 +17,8 @@ async function scrapeAndImportDashboard(req, res) {
       { upsert: true, new: true }
     );
     res.json({
-      url: url,
+      url: url, // Just to confirm the URL used
+      groups: groups, // Just to confirm the groups used
       message: "Dashboard data scraped and imported for user",
       userId,
     });

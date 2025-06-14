@@ -10,7 +10,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 import {
   Form,
@@ -30,11 +29,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { defaultDateLib } from "react-day-picker";
 
-const group = ["cs2030s", "cs2040s", "cs2100"] as const;
+const group = ["cs2030s", "cs2040s", "cs2100"] as const; // eventually to be fetched from API
 
-export const taskSchema = z.object({
+const taskSchema = z.object({
   name: z
     .string()
     .min(1, "Name is required")
@@ -54,11 +52,8 @@ export const taskSchema = z.object({
   group: z.enum(group),
 });
 
-// Example usage:
-type TaskFormValues = z.infer<typeof taskSchema>;
-
 export function Create() {
-  const form = useForm<TaskFormValues>({
+  const form = useForm<z.infer<typeof taskSchema>>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
       name: "",
@@ -66,12 +61,13 @@ export function Create() {
       deadlineDate: "",
       deadlineTime: "",
       estimatedTimeTaken: 0,
-      minChunk: 1,
+      minChunk: 0,
       group: undefined,
     },
   });
-  const onSubmit = async (values: TaskFormValues) => {
+  const onSubmit = async (values: z.infer<typeof taskSchema>) => {
     console.log("Form submitted with values:", values);
+    form.reset();
   };
 
   return (

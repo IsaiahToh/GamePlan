@@ -16,6 +16,26 @@ import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { useState } from "react";
 import { Loader, Plus } from "lucide-react";
+import {
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+  Select,
+} from "@/components/ui/select";
+
+const colorOptions = [
+  { label: "Red", value: "red" },
+  { label: "Orange", value: "orange" },
+  { label: "Yellow", value: "yellow" },
+  { label: "Green", value: "green" },
+  { label: "Blue", value: "blue" },
+  { label: "Purple", value: "purple" },
+  { label: "Pink", value: "pink" },
+  { label: "Teal", value: "teal" },
+  { label: "Brown", value: "brown" },
+  { label: "Gray", value: "gray" },
+];
 
 const formSchema = z.object({
   blockOutTimings: z.array(
@@ -25,6 +45,23 @@ const formSchema = z.object({
     })
   ),
   url: z.string().min(1, "Link required").url("Invalid URL format"),
+  groups: z.array(
+    z.object({
+      name: z.string().min(1, "Group name required"),
+      color: z.enum([
+        "red",
+        "orange",
+        "yellow",
+        "green",
+        "blue",
+        "purple",
+        "pink",
+        "teal",
+        "brown",
+        "gray",
+      ]),
+    })
+  ),
 });
 
 export default function Settingsbar() {
@@ -32,13 +69,27 @@ export default function Settingsbar() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       blockOutTimings: [{ from: "", to: "" }],
-      url: "https://shorten.nusmods.com?shortUrl=75bsp5",
+      url: "",
+      groups: [{ name: "", color: "red" }],
     },
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const {
+    fields: timeFields,
+    append: appendTime,
+    remove: removeTime,
+  } = useFieldArray({
     control: form.control,
     name: "blockOutTimings",
+  });
+
+  const {
+    fields: groupFields,
+    append: appendGroup,
+    remove: removeGroup,
+  } = useFieldArray({
+    control: form.control,
+    name: "groups",
   });
 
   const [loading, setLoading] = useState(false);
@@ -59,6 +110,10 @@ export default function Settingsbar() {
           body: JSON.stringify({
             blockOutTimings: values.blockOutTimings,
             url: values.url,
+            groups: values.groups.map((group) => ({
+              name: group.name,
+              color: group.color,
+            })),
           }),
         }
       );
@@ -70,7 +125,7 @@ export default function Settingsbar() {
         message: "An unexpected error occurred. Please try again later.",
       });
     } finally {
-      window.location.reload();
+      //window.location.reload(); // eventually can reload to reflect changes
       setLoading(false);
     }
   };
@@ -94,7 +149,7 @@ export default function Settingsbar() {
                   <FormDescription>
                     Specify times when you are unavailable for tasks.
                   </FormDescription>
-                  {fields.map((field, index) => (
+                  {timeFields.map((field, index) => (
                     <div key={field.id} className="flex items-center gap-2 ">
                       <FormControl>
                         <Input
@@ -114,7 +169,7 @@ export default function Settingsbar() {
                       <Button
                         type="button"
                         variant="destructive"
-                        onClick={() => remove(index)}
+                        onClick={() => removeTime(index)}
                       >
                         Remove
                       </Button>
@@ -122,7 +177,7 @@ export default function Settingsbar() {
                   ))}
                   <Button
                     type="button"
-                    onClick={() => append({ from: "", to: "" })}
+                    onClick={() => appendTime({ from: "", to: "" })}
                     className="bg-white text-gray-500 w-1/4"
                     variant="link"
                   >
@@ -155,6 +210,103 @@ export default function Settingsbar() {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="groups"
+              render={() => (
+                <FormItem>
+                  <FormLabel className="text-black text-xl font-semibold">
+                    Groups
+                  </FormLabel>
+                  <FormDescription>
+                    Add groups and assign each a color.
+                  </FormDescription>
+                  {groupFields.map((field, index) => (
+                    <div
+                      key={field.id}
+                      className="flex items-center gap-2 mb-2"
+                    >
+                      <FormControl>
+                        <Input
+                          placeholder="Group name"
+                          {...form.register(`groups.${index}.name`)}
+                        />
+                      </FormControl>
+                      <FormControl>
+                        <Select
+                          onValueChange={(value) =>
+                            form.setValue(
+                              `groups.${index}.color`,
+                              value as
+                                | "red"
+                                | "orange"
+                                | "yellow"
+                                | "green"
+                                | "blue"
+                                | "purple"
+                                | "pink"
+                                | "teal"
+                                | "brown"
+                                | "gray"
+                            )
+                          }
+                          value={form.watch(`groups.${index}.color`)}
+                        >
+                          <SelectTrigger className="w-28">
+                            <SelectValue placeholder="Color" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {colorOptions.map((option) => (
+                              <SelectItem
+                                key={option.value}
+                                value={option.value}
+                              >
+                                <span
+                                  className={`inline-block w-4 h-4 rounded-full mr-2 align-middle
+          ${
+            {
+              red: "bg-red-500",
+              orange: "bg-orange-500",
+              yellow: "bg-yellow-400",
+              green: "bg-green-500",
+              blue: "bg-blue-500",
+              purple: "bg-purple-500",
+              pink: "bg-pink-400",
+              teal: "bg-teal-500",
+              brown: "bg-yellow-900",
+              gray: "bg-gray-500",
+            }[option.value]
+          }
+        `}
+                                />
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        onClick={() => removeGroup(index)}
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    type="button"
+                    onClick={() => appendGroup({ name: "", color: "red" })}
+                    className="bg-white text-gray-500 w-1/4"
+                    variant="link"
+                  >
+                    <Plus />
+                    <p>Add group</p>
+                  </Button>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <div className="flex justify-center">
               <Button
                 type="submit"
