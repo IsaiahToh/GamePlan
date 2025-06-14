@@ -30,7 +30,7 @@ function App() {
         setView={setView}
       />
       <div className="flex flex-1">
-        {localStorage.getItem("token") && isSidebarOpen && <Sidebar />}
+        { isSidebarOpen && <Sidebar />}
 
         <main className="flex-1">
           <Routes>

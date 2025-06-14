@@ -18,12 +18,21 @@ import {
   FormItem,
   FormLabel,
   FormControl,
-  FormDescription,
   FormMessage,
 } from "@/components/ui/form";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { defaultDateLib } from "react-day-picker";
+
+const group = ["cs2030s", "cs2040s", "cs2100"] as const;
 
 export const taskSchema = z.object({
   name: z
@@ -34,17 +43,15 @@ export const taskSchema = z.object({
     .string()
     .max(500, "Description must be at most 500 characters")
     .optional(),
-  deadline: z
-    .string()
-    .datetime({ message: "Invalid deadline format (expected ISO string)" }),
-  estimatedTimeTaken: z
+  deadlineDate: z.string(),
+  deadlineTime: z.string(),
+  estimatedTimeTaken: z.coerce
     .number()
-    .min(1, "Estimated time taken must be at least 1 minute")
-    .max(10000, "Estimated time taken is too large (minutes)"),
-  minChunk: z
+    .min(0.5, "Estimated time must be at least 0.5 hour"),
+  minChunk: z.coerce
     .number()
-    .min(1, "Minimum chunk must be at least 1 minute")
-    .max(10000, "Minimum chunk is too large (minutes)"),
+    .min(0.5, "Minimum chunk must be at least 0.5 hour"),
+  group: z.enum(group),
 });
 
 // Example usage:
@@ -56,11 +63,17 @@ export function Create() {
     defaultValues: {
       name: "",
       description: "",
-      deadline: "",
+      deadlineDate: "",
+      deadlineTime: "",
       estimatedTimeTaken: 0,
       minChunk: 1,
+      group: undefined,
     },
   });
+  const onSubmit = async (values: TaskFormValues) => {
+    console.log("Form submitted with values:", values);
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -76,19 +89,18 @@ export function Create() {
         </DialogHeader>
         <Form {...form}>
           <form
-            // onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-6 max-w-md mx-auto"
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-6 w-full"
           >
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Title</FormLabel>
                   <FormControl>
-                    <Input placeholder="John Doe" {...field} />
+                    <Input placeholder="TItle of task" {...field} />
                   </FormControl>
-                  <FormDescription>Enter your full name</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -99,34 +111,90 @@ export function Create() {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Description (optional)</FormLabel>
                   <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="johndoe@example.com"
-                      {...field}
-                    />
+                    <Input placeholder="Description of task" {...field} />
                   </FormControl>
-                  <FormDescription>Enter a valid email address</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
+            <div className="flex gap-4 w-full">
+              <FormField
+                control={form.control}
+                name="deadlineDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Date</FormLabel>
+                    <FormControl>
+                      <Input type="date" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="deadlineTime"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Time</FormLabel>
+                    <FormControl>
+                      <Input type="time" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
             <FormField
               control={form.control}
-              name="deadline"
+              name="estimatedTimeTaken"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Estimated time taken (h)</FormLabel>
                   <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="Enter your password"
-                      {...field}
-                    />
+                    <Input type="number" {...field} />
                   </FormControl>
-                  <FormDescription>Min. 8 characters</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="minChunk"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Min. chunk (h)</FormLabel>
+                  <FormControl>
+                    <Input type="number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="group"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Group</FormLabel>
+                  <FormControl>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a group" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {group.map((option) => (
+                          <SelectItem key={option} value={option}>
+                            {option}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -136,7 +204,7 @@ export function Create() {
               type="submit"
               className="w-full bg-gray-800 hover:bg-gray-700 active:bg-gray-600 cursor-pointer mb-2"
             >
-              Sign Up
+              Create Task
             </Button>
           </form>
         </Form>

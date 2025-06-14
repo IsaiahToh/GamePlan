@@ -3,32 +3,6 @@ import dayjs from "dayjs";
 import { ScrollArea } from "./ui/scroll-area";
 import { useEffect, useState } from "react";
 
-// const lessons = [
-//   {
-//     moduleCode: "MS2220",
-//     lessonType: "AS8-02-02",
-//     day: 2,
-//     startTime: "14:30",
-//     endTime: "17:30",
-//     weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-//   },
-//   {
-//     moduleCode: "CS2040S",
-//     lessonType: "Tut [01]",
-//     day: 3,
-//     startTime: "08:00",
-//     endTime: "09:30",
-//     weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-//   },
-//   {
-//     moduleCode: "CS2030S",
-//     lessonType: "KR lecture hall",
-//     day: 5,
-//     startTime: "08:30",
-//     endTime: "10:00",
-//     weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-//   },
-// ];
 type Lesson = {
   moduleCode: string;
   lessonType: string;
