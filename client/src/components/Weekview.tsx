@@ -2,6 +2,7 @@ import { cn, getHours, getWeek } from "@/lib/utils";
 import dayjs from "dayjs";
 import { ScrollArea } from "./ui/scroll-area";
 import { useEffect, useState } from "react";
+import { colorOptions } from "@/lib/utils";
 
 type Lesson = {
   moduleCode: string;
@@ -14,9 +15,10 @@ type Lesson = {
 
 type WeekviewProps = {
   lessons: Lesson[];
+  groups: { name: string; color: string }[];
 };
 
-export default function Weekview({ lessons }: WeekviewProps) {
+export default function Weekview({ lessons, groups }: WeekviewProps) {
   const date = dayjs();
   const [currentTime, setCurrentTime] = useState(dayjs());
 
@@ -106,11 +108,25 @@ export default function Weekview({ lessons }: WeekviewProps) {
                             "minutes"
                           );
                           const isOClockLesson = lessonStart.minute() === 0;
+                          const group = groups // Find exact group with corresponding module code
+                            ? groups.find(
+                                (g) =>
+                                  g.name.toLowerCase() ===
+                                  lesson.moduleCode.toLowerCase()
+                              )
+                            : undefined;
+                          const colorOption = group // Find exact colorOption with corresponding color
+                            ? colorOptions.find(
+                                (option) => option.value === group.color
+                              )
+                            : undefined;
 
                           return (
                             <div
                               key={lessonIndex}
-                              className="absolute left-0 w-full bg-blue-200 rounded px-2 py-1 text-xs"
+                              className={`absolute left-0 w-full ${
+                                colorOption ? colorOption.css : "bg-gray-300"
+                              } rounded px-2 py-1 text-xs z-2`}
                               style={{
                                 top: `${isOClockLesson ? 0 : 50}%`,
                                 height: `${(duration / 59) * 100}%`,

@@ -23,6 +23,8 @@ const Dashboard: React.FC<DashboardProps> = ({ view }: DashboardProps) => {
           },
         });
         const data = await res.json();
+        console.log(data.events);
+        console.log(data.groups);
         setDashboardData(data);
         console.log("Fetched data:", data);
       } catch (error) {
@@ -37,7 +39,10 @@ const Dashboard: React.FC<DashboardProps> = ({ view }: DashboardProps) => {
       <div className="flex flex-col justify-center items-center h-screen">
         {view == "Week" ? (
           dashboardData && dashboardData.events ? (
-            <Weekview lessons={dashboardData.events} />
+            <Weekview
+              lessons={dashboardData.events}
+              groups={dashboardData.groups}
+            />
           ) : (
             <div>Loading...</div>
           )

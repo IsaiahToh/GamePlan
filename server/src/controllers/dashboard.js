@@ -7,18 +7,22 @@ async function scrapeAndImportDashboard(req, res) {
   try {
     const userId = req.user.id;
     const url = req.body.url;
-    const groups = req.body.groups || [];
-    await scrape(url);
+    const groups = req.body.groups;
+
+    if (url) {
+      await scrape(url);
+    }
 
     const events = JSON.parse(fs.readFileSync("dashboardData.json", "utf-8"));
-    await Dashboard.findOneAndUpdate(
+    const doc = await Dashboard.findOneAndUpdate(
       { userId },
-      { userId, events },
+      { userId, events, groups },
       { upsert: true, new: true }
     );
+    console.log(doc);
     res.json({
       url: url, // Just to confirm the URL used
-      groups: groups, // Just to confirm the groups used
+      groups: groups,
       message: "Dashboard data scraped and imported for user",
       userId,
     });
@@ -43,14 +47,27 @@ async function getDashboard(req, res) {
   const userId = req.user.id;
   const dashboard = await Dashboard.findOne({ userId });
   if (dashboard) {
-    res.json({ events: dashboard.events });
+    res.json({ events: dashboard.events, groups: dashboard.groups });
   } else {
-    res.json({ events: [] });
+    res.json({ events: [], groups: [] });
   }
+}
+
+async function importGroups(req, res) {
+  const userId = req.user.id;
+  const groups = req.body.groups;
+
+  await Dashboard.findOneAndUpdate(
+    { userId },
+    { userId, groups },
+    { upsert: true, new: true }
+  );
+  res.json({ message: "Dashboard groups imported for user", userId });
 }
 
 module.exports = {
   getDashboard,
   importDashboardData,
   scrapeAndImportDashboard,
+  importGroups,
 };

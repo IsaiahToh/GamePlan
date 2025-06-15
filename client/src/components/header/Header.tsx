@@ -82,11 +82,6 @@ export default function Header({
         {token ? (
           <div className="flex items-center gap-4">
             <Dropdown setView={setView} />
-            <Search className="translate-x-11 hidden lg:block" />
-            <Input
-              placeholder="Search users..."
-              className="pl-9 text-gray-300 rounded-full hidden lg:block"
-            ></Input>
             <div className="group relative">
               <User className="cursor-pointer" />
               <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">

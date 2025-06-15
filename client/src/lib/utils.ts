@@ -18,15 +18,27 @@ export function getWeek(date: dayjs.Dayjs) {
     const currentDate = startOfWeek.add(i, "day");
     weekDates.push({
       currentDate,
-      today: 
-      currentDate.toDate().toDateString() === dayjs().toDate().toDateString(),
-      isCurrentDay
-    }
-    )
+      today:
+        currentDate.toDate().toDateString() === dayjs().toDate().toDateString(),
+      isCurrentDay,
+    });
   }
   return weekDates;
 }
 
-export const getHours = Array.from({ length: 24 }, (_, i) => 
-  dayjs().startOf("day").add(i, "hour"),
+export const getHours = Array.from({ length: 24 }, (_, i) =>
+  dayjs().startOf("day").add(i, "hour")
 );
+
+export const colorOptions = [
+  { label: "Red", value: "red", css: "bg-red-400" },
+  { label: "Orange", value: "orange", css: "bg-orange-400" },
+  { label: "Yellow", value: "yellow", css: "bg-yellow-300" },
+  { label: "Green", value: "green", css: "bg-green-500" },
+  { label: "Blue", value: "blue", css: "bg-blue-500" },
+  { label: "Purple", value: "purple", css: "bg-purple-500" },
+  { label: "Pink", value: "pink", css: "bg-pink-400" },
+  { label: "Teal", value: "teal", css: "bg-teal-500" },
+  { label: "Brown", value: "brown", css: "bg-yellow-600" },
+  { label: "Gray", value: "gray", css: "bg-gray-500" },
+];

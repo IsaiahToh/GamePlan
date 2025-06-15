@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Loader, Plus } from "lucide-react";
 import {
   SelectTrigger,
@@ -23,19 +23,7 @@ import {
   SelectItem,
   Select,
 } from "@/components/ui/select";
-
-const colorOptions = [
-  { label: "Red", value: "red" },
-  { label: "Orange", value: "orange" },
-  { label: "Yellow", value: "yellow" },
-  { label: "Green", value: "green" },
-  { label: "Blue", value: "blue" },
-  { label: "Purple", value: "purple" },
-  { label: "Pink", value: "pink" },
-  { label: "Teal", value: "teal" },
-  { label: "Brown", value: "brown" },
-  { label: "Gray", value: "gray" },
-];
+import { colorOptions } from "@/lib/utils";
 
 const formSchema = z.object({
   blockOutTimings: z.array(
@@ -44,34 +32,29 @@ const formSchema = z.object({
       to: z.string().min(1, "End time required"),
     })
   ),
-  url: z.string().min(1, "Link required").url("Invalid URL format"),
+  url: z.string(),
   groups: z.array(
     z.object({
       name: z.string().min(1, "Group name required"),
-      color: z.enum([
-        "red",
-        "orange",
-        "yellow",
-        "green",
-        "blue",
-        "purple",
-        "pink",
-        "teal",
-        "brown",
-        "gray",
-      ]),
+      color: z.string(),
     })
   ),
 });
 
+const defaultValues = {
+  blockOutTimings: [{ from: "", to: "" }],
+  url: "",
+  groups: [{ name: "", color: "red" }],
+};
+
 export default function Settingsbar() {
+  const [loading, setLoading] = useState(false);
+  const persisted = localStorage.getItem("myFormData");
+  const initialValues = persisted ? JSON.parse(persisted) : defaultValues;
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      blockOutTimings: [{ from: "", to: "" }],
-      url: "",
-      groups: [{ name: "", color: "red" }],
-    },
+    defaultValues: initialValues,
   });
 
   const {
@@ -92,7 +75,12 @@ export default function Settingsbar() {
     name: "groups",
   });
 
-  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const subscription = form.watch((value) => {
+      localStorage.setItem("myFormData", JSON.stringify(value));
+    });
+    return () => subscription.unsubscribe();
+  }, [form]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // Fetch NUSMods API, handle timings, etc.
@@ -117,15 +105,13 @@ export default function Settingsbar() {
           }),
         }
       );
-      const data = await res.json();
-      console.log(data);
     } catch (error) {
       form.setError("root", {
         type: "server",
         message: "An unexpected error occurred. Please try again later.",
       });
     } finally {
-      //window.location.reload(); // eventually can reload to reflect changes
+      window.location.reload();
       setLoading(false);
     }
   };
@@ -262,22 +248,7 @@ export default function Settingsbar() {
                                 value={option.value}
                               >
                                 <span
-                                  className={`inline-block w-4 h-4 rounded-full mr-2 align-middle
-          ${
-            {
-              red: "bg-red-500",
-              orange: "bg-orange-500",
-              yellow: "bg-yellow-400",
-              green: "bg-green-500",
-              blue: "bg-blue-500",
-              purple: "bg-purple-500",
-              pink: "bg-pink-400",
-              teal: "bg-teal-500",
-              brown: "bg-yellow-900",
-              gray: "bg-gray-500",
-            }[option.value]
-          }
-        `}
+                                  className={`inline-block w-4 h-4 rounded-full mr-2 align-middle ${option.css}`}
                                 />
                               </SelectItem>
                             ))}
