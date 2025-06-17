@@ -75,15 +75,16 @@ const LESSON_TYPE_MAP = {
   TUT: "Tutorial",
   REC: "Recitation",
   LAB: "Laboratory",
+  SEC: "Sectionals",
 };
 const dayOrder = [
+  "Sunday",
   "Monday",
   "Tuesday",
   "Wednesday",
   "Thursday",
   "Friday",
   "Saturday",
-  "Sunday",
 ];
 function parseLesson(lessonStr) {
   const parts = lessonStr.split("-");

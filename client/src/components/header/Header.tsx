@@ -97,7 +97,7 @@ export default function Header({
             </div>
             <Settings
               className="cursor-pointer"
-              size={40}
+              size={20}
               onClick={() => {
                 setIsSettingsbarOpen(!isSettingsbarOpen);
               }}
