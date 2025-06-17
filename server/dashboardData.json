@@ -34,6 +34,27 @@
     "day": 0
   },
   {
+    "moduleCode": "CS3230",
+    "lessonType": "Tutorial",
+    "startTime": "18:00",
+    "endTime": "19:00",
+    "weeks": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 0
+  },
+  {
     "moduleCode": "CS1101S",
     "lessonType": "Tutorial",
     "startTime": "14:00",
@@ -141,6 +162,28 @@
     "day": 3
   },
   {
+    "moduleCode": "CS1101S",
+    "lessonType": "Recitation",
+    "startTime": "11:00",
+    "endTime": "12:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 3
+  },
+  {
     "moduleCode": "CS1231S",
     "lessonType": "Lecture",
     "startTime": "14:00",
@@ -185,10 +228,10 @@
     "day": 3
   },
   {
-    "moduleCode": "CS1101S",
-    "lessonType": "Recitation",
+    "moduleCode": "CS3230",
+    "lessonType": "Lecture",
     "startTime": "14:00",
-    "endTime": "15:00",
+    "endTime": "16:00",
     "weeks": [
       1,
       2,

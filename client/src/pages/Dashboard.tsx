@@ -23,8 +23,6 @@ const Dashboard: React.FC<DashboardProps> = ({ view }: DashboardProps) => {
           },
         });
         const data = await res.json();
-        console.log(data.events);
-        console.log(data.groups);
         setDashboardData(data);
         console.log("Fetched data:", data);
       } catch (error) {
