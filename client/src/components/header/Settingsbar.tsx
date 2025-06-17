@@ -39,12 +39,14 @@ const formSchema = z.object({
       color: z.string(),
     })
   ),
+  firstSundayOfSem: z.string().min(1, "First Sunday of Sem required"),
 });
 
 const defaultValues = {
   blockOutTimings: [{ from: "", to: "" }],
   url: "",
   groups: [{ name: "", color: "red" }],
+  firstSundayOfSem: "",
 };
 
 export default function Settingsbar() {
@@ -102,9 +104,22 @@ export default function Settingsbar() {
               name: group.name,
               color: group.color,
             })),
+            firstSundayOfSem: values.firstSundayOfSem,
           }),
         }
       );
+      if (!res.ok) {
+        // Try to parse the error message from the response
+        const errorData = await res.json().catch(() => ({}));
+        console.error("Server error:", errorData); // Log the error for debugging
+        form.setError("root", {
+          type: "server",
+          message: errorData.message || "Server error occurred.",
+        });
+        return; // Stop further execution
+      } else {
+        console.log("Submit okay");
+      }
     } catch (error) {
       form.setError("root", {
         type: "server",
@@ -118,7 +133,7 @@ export default function Settingsbar() {
   return (
     <div className="flex">
       {/* Settingsbar */}
-      <aside className="bg-white text-gray-700 shadow-md shadow-gray-500">
+      <aside className="bg-white text-gray-700 shadow-md shadow-gray-500 h-[90vh] overflow-y-auto">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -191,7 +206,6 @@ export default function Settingsbar() {
                       {...field}
                     />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
@@ -277,7 +291,21 @@ export default function Settingsbar() {
                 </FormItem>
               )}
             />
-
+            <FormField
+              control={form.control}
+              name="firstSundayOfSem"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-xl font-semibold text-black">
+                    First Sunday of Sem
+                  </FormLabel>
+                  <FormControl>
+                    <Input type="date" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <div className="flex justify-center">
               <Button
                 type="submit"

@@ -40,6 +40,7 @@ const Dashboard: React.FC<DashboardProps> = ({ view }: DashboardProps) => {
             <Weekview
               lessons={dashboardData.events}
               groups={dashboardData.groups}
+              firstSundayOfSem={dashboardData.firstSundayOfSem}
             />
           ) : (
             <div>Loading...</div>

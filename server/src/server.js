@@ -5,6 +5,8 @@ require("dotenv").config({
 const express = require("express");
 const signupRoute = require("./routes/signup");
 const loginRoute = require("./routes/login");
+const dashboardRoutes = require("./routes/dashboard");
+
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const createAdminAccount = require("./scripts/admin");
@@ -20,8 +22,6 @@ app.use(cors());
 
 app.use("/user", signupRoute);
 app.use("/auth", loginRoute);
-
-const dashboardRoutes = require("./routes/dashboard");
 app.use("/api", dashboardRoutes);
 
 app.listen(port, () => {

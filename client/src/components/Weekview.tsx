@@ -16,9 +16,14 @@ type Lesson = {
 type WeekviewProps = {
   lessons: Lesson[];
   groups: { name: string; color: string }[];
+  firstSundayOfSem: string;
 };
 
-export default function Weekview({ lessons, groups }: WeekviewProps) {
+export default function Weekview({
+  lessons,
+  groups,
+  firstSundayOfSem,
+}: WeekviewProps) {
   const date = dayjs();
   const [currentTime, setCurrentTime] = useState(dayjs());
 
@@ -84,6 +89,11 @@ export default function Weekview({ lessons, groups }: WeekviewProps) {
                     >
                       {lessons
                         .filter((lesson: Lesson) => lesson.day === dayIndex) // Filter by day
+                        .filter((lesson: Lesson) =>
+                          lesson.weeks.includes(
+                            date.diff(dayjs(firstSundayOfSem), "week") + 1 // Filter by whether it exists on the week
+                          )
+                        )
                         .filter((lesson: Lesson) => {
                           // Filter by time slot
                           // Check if the lesson starts at or after the slot start time
