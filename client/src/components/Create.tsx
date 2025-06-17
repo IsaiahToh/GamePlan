@@ -52,7 +52,11 @@ const taskSchema = z.object({
   group: z.enum(group),
 });
 
-export function Create() {
+type CreateProps = {
+  onTaskCreated?: () => void;
+};
+
+export function Create({ onTaskCreated }: CreateProps) {
   const form = useForm<z.infer<typeof taskSchema>>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
@@ -65,9 +69,20 @@ export function Create() {
       group: undefined,
     },
   });
+
   const onSubmit = async (values: z.infer<typeof taskSchema>) => {
     console.log("Form submitted with values:", values);
+    const token = localStorage.getItem("token");
+    await fetch("http://localhost:3000/api/tasks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(values),
+    });
     form.reset();
+    if (onTaskCreated) onTaskCreated();
   };
 
   return (
