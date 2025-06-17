@@ -1,10 +1,11 @@
 [
   {
-    "moduleCode": "IS1108",
-    "lessonType": "Tutorial",
+    "moduleCode": "NM1101E",
+    "lessonType": "Lecture",
     "startTime": "10:00",
     "endTime": "12:00",
     "weeks": [
+      2,
       3,
       4,
       5,
@@ -14,10 +15,65 @@
       9,
       10,
       11,
-      12,
+      12
+    ],
+    "day": 1
+  },
+  {
+    "moduleCode": "NM1101E",
+    "lessonType": "Lecture",
+    "startTime": "10:00",
+    "endTime": "12:00",
+    "weeks": [
+      1,
       13
     ],
-    "day": 0
+    "day": 1
+  },
+  {
+    "moduleCode": "NM1101E",
+    "lessonType": "Lecture",
+    "startTime": "10:00",
+    "endTime": "12:00",
+    "weeks": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "day": 1
+  },
+  {
+    "moduleCode": "NM1101E",
+    "lessonType": "Lecture",
+    "startTime": "10:00",
+    "endTime": "12:00",
+    "weeks": [
+      1,
+      13
+    ],
+    "day": 1
+  },
+  {
+    "moduleCode": "NM1101E",
+    "lessonType": "Tutorial",
+    "startTime": "12:00",
+    "endTime": "14:00",
+    "weeks": [
+      3,
+      5,
+      7,
+      9,
+      11
+    ],
+    "day": 2
   },
   {
     "moduleCode": "GEA1000",
@@ -31,244 +87,6 @@
       10,
       12
     ],
-    "day": 0
-  },
-  {
-    "moduleCode": "CS3230",
-    "lessonType": "Tutorial",
-    "startTime": "18:00",
-    "endTime": "19:00",
-    "weeks": [
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 0
-  },
-  {
-    "moduleCode": "CS1101S",
-    "lessonType": "Tutorial",
-    "startTime": "14:00",
-    "endTime": "16:00",
-    "weeks": [
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 1
-  },
-  {
-    "moduleCode": "CS1231S",
-    "lessonType": "Tutorial",
-    "startTime": "10:00",
-    "endTime": "12:00",
-    "weeks": [
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
     "day": 2
-  },
-  {
-    "moduleCode": "CS1101S",
-    "lessonType": "Lecture",
-    "startTime": "12:00",
-    "endTime": "14:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 2
-  },
-  {
-    "moduleCode": "CS1231S",
-    "lessonType": "Lecture",
-    "startTime": "14:00",
-    "endTime": "15:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 2
-  },
-  {
-    "moduleCode": "CS1231S",
-    "lessonType": "Lecture",
-    "startTime": "12:00",
-    "endTime": "14:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 3
-  },
-  {
-    "moduleCode": "CS1101S",
-    "lessonType": "Recitation",
-    "startTime": "11:00",
-    "endTime": "12:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 3
-  },
-  {
-    "moduleCode": "CS1231S",
-    "lessonType": "Lecture",
-    "startTime": "14:00",
-    "endTime": "15:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 2
-  },
-  {
-    "moduleCode": "CS1231S",
-    "lessonType": "Lecture",
-    "startTime": "12:00",
-    "endTime": "14:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 3
-  },
-  {
-    "moduleCode": "CS3230",
-    "lessonType": "Lecture",
-    "startTime": "14:00",
-    "endTime": "16:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 3
-  },
-  {
-    "moduleCode": "IS1108",
-    "lessonType": "Lecture",
-    "startTime": "12:00",
-    "endTime": "14:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 4
   }
 ]
