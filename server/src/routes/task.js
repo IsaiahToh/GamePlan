@@ -35,12 +35,36 @@ router.delete('/:id', authenticateToken, async (req, res) => {
   }
 });
 
-router.get('/sorted/by-importance', authenticateToken, async (req, res) => {
+router.get('/sorted/by-deadline-and-importance', authenticateToken, async (req, res) => {
   const userId = req.user.id;
   const importanceOrder = ["Very High", "High", "Med", "Low"];
   const tasks = await Task.find({ userId }).lean();
+
   tasks.sort((a, b) => importanceOrder.indexOf(a.importance) - importanceOrder.indexOf(b.importance));
+
+  tasks.sort((a, b) => {
+    const dateA = new Date(a.deadlineDate);
+    const dateB = new Date(b.deadlineDate);
+    return dateA - dateB;
+  });
+
   res.json(tasks);
+});
+
+router.patch('/:id', authenticateToken, async (req, res) => {
+  const userId = req.user.id;
+  const { id } = req.params;
+  try {
+    const updated = await Task.findOneAndUpdate(
+      { _id: id, userId },
+      req.body,
+      { new: true }
+    );
+    if (!updated) return res.status(404).json({ message: "Task not found" });
+    res.json(updated);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update task", error: error.message });
+  }
 });
 
 module.exports = router;
