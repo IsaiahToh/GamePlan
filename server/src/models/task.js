@@ -8,6 +8,7 @@ const taskSchema = new mongoose.Schema({
   deadlineTime: { type: String, required: true },
   estimatedTimeTaken: { type: Number, required: true },
   minChunk: { type: Number, required: true },
+  importance: { type: String, enum: ["Low", "Med", "High", "Very High"], required: true },
   group: { type: String, required: true },
 });
 

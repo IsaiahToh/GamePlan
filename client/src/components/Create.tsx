@@ -31,6 +31,7 @@ import {
 } from "./ui/select";
 
 const group = ["cs2030s", "cs2040s", "cs2100"] as const; // eventually to be fetched from API
+const importanceLevels = ["Low", "Med", "High", "Very High"] as const;
 
 const taskSchema = z.object({
   name: z
@@ -50,6 +51,7 @@ const taskSchema = z.object({
     .number()
     .min(0.5, "Minimum chunk must be at least 0.5 hour"),
   group: z.enum(group),
+  importance: z.enum(importanceLevels),
 });
 
 type CreateProps = {
@@ -66,6 +68,7 @@ export function Create({ onTaskCreated }: CreateProps) {
       deadlineTime: "",
       estimatedTimeTaken: 0,
       minChunk: 0,
+      importance: "Low",
       group: undefined,
     },
   });
@@ -181,6 +184,30 @@ export function Create({ onTaskCreated }: CreateProps) {
                   <FormLabel>Min. chunk (h)</FormLabel>
                   <FormControl>
                     <Input type="number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="importance"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Importance</FormLabel>
+                  <FormControl>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select importance" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {importanceLevels.map((level) => (
+                          <SelectItem key={level} value={level}>
+                            {level}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
