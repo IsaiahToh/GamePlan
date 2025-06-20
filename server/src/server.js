@@ -24,6 +24,9 @@ app.use("/user", signupRoute);
 app.use("/auth", loginRoute);
 app.use("/api", dashboardRoutes);
 
+const taskRoutes = require("./routes/task");
+app.use("/api/tasks", taskRoutes);
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });

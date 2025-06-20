@@ -10,7 +10,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Plus } from "lucide-react";
 import {
   Form,
   FormField,
@@ -30,76 +29,72 @@ import {
   SelectValue,
 } from "./ui/select";
 
-const group = ["cs2030s", "cs2040s", "cs2100"] as const; // eventually to be fetched from API
+const group = ["cs2030s", "cs2040s", "cs2100"] as const;
 const importanceLevels = ["Low", "Med", "High", "Very High"] as const;
 
 const taskSchema = z.object({
-  name: z
-    .string()
-    .min(1, "Name is required")
-    .max(100, "Name must be at most 100 characters"),
-  description: z
-    .string()
-    .max(500, "Description must be at most 500 characters")
-    .optional(),
+  name: z.string().min(1).max(100),
+  description: z.string().max(500).optional(),
   deadlineDate: z.string(),
   deadlineTime: z.string(),
-  estimatedTimeTaken: z.coerce
-    .number()
-    .min(0.5, "Estimated time must be at least 0.5 hour"),
-  minChunk: z.coerce
-    .number()
-    .min(0.5, "Minimum chunk must be at least 0.5 hour"),
+  estimatedTimeTaken: z.coerce.number().min(0.5),
+  minChunk: z.coerce.number().min(0.5),
   group: z.enum(group),
   importance: z.enum(importanceLevels),
 });
 
-type CreateProps = {
-  onTaskCreated?: () => void;
+type EditTaskProps = {
+  task: any;
+  onTaskUpdated: () => void;
+  buttonClassName?: string;
 };
 
-export function Create({ onTaskCreated }: CreateProps) {
+export function EditTask({ task, onTaskUpdated, buttonClassName }: EditTaskProps) {
   const form = useForm<z.infer<typeof taskSchema>>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
-      name: "",
-      description: "",
-      deadlineDate: "",
-      deadlineTime: "",
-      estimatedTimeTaken: 0,
-      minChunk: 0,
-      importance: "Low",
-      group: undefined,
+      name: task.name,
+      description: task.description,
+      deadlineDate: task.deadlineDate,
+      deadlineTime: task.deadlineTime,
+      estimatedTimeTaken: task.estimatedTimeTaken,
+      minChunk: task.minChunk,
+      group: task.group,
+      importance: task.importance,
     },
   });
 
   const onSubmit = async (values: z.infer<typeof taskSchema>) => {
-    console.log("Form submitted with values:", values);
     const token = localStorage.getItem("token");
-    await fetch("http://localhost:3000/api/tasks", {
-      method: "POST",
-      headers: {
+    await fetch(`http://localhost:3000/api/tasks/${task._id}`, {
+        method: "PATCH",
+        headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(values),
+        },
+        body: JSON.stringify(values),
     });
-    form.reset();
-    if (onTaskCreated) onTaskCreated();
+    console.log("Task edited:", values);
+    if (onTaskUpdated) onTaskUpdated();
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">
-          <Plus />
-          <p>Create new task</p>
+        <Button
+          className={
+            buttonClassName ??
+            "text-xs bg-blue-500 hover:bg-blue-600 text-white px-2 py-0.5 rounded"
+          }
+          type="button"
+        >
+          Edit
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>New task</DialogTitle>
-          <DialogDescription>Add a new task to your GamePlan</DialogDescription>
+          <DialogTitle>Edit task</DialogTitle>
+          <DialogDescription>Edit your task details</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -113,13 +108,12 @@ export function Create({ onTaskCreated }: CreateProps) {
                 <FormItem>
                   <FormLabel>Title</FormLabel>
                   <FormControl>
-                    <Input placeholder="TItle of task" {...field} />
+                    <Input placeholder="Title of task" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="description"
@@ -133,7 +127,6 @@ export function Create({ onTaskCreated }: CreateProps) {
                 </FormItem>
               )}
             />
-
             <div className="flex gap-4 w-full">
               <FormField
                 control={form.control}
@@ -162,7 +155,6 @@ export function Create({ onTaskCreated }: CreateProps) {
                 )}
               />
             </div>
-
             <FormField
               control={form.control}
               name="estimatedTimeTaken"
@@ -237,12 +229,11 @@ export function Create({ onTaskCreated }: CreateProps) {
                 </FormItem>
               )}
             />
-
             <Button
               type="submit"
               className="w-full bg-gray-800 hover:bg-gray-700 active:bg-gray-600 cursor-pointer mb-2"
             >
-              Create Task
+              Save Changes
             </Button>
           </form>
         </Form>
