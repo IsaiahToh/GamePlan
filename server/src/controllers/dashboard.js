@@ -9,6 +9,8 @@ async function scrapeAndImportDashboard(req, res) {
     const url = req.body.url;
     const groups = req.body.groups;
     const firstSundayOfSem = req.body.firstSundayOfSem;
+    const blockOutTimings = req.body.blockOutTimings;
+
     console.log(firstSundayOfSem);
 
     if (url) {
@@ -27,6 +29,7 @@ async function scrapeAndImportDashboard(req, res) {
       url: url,
       groups: groups,
       firstSundayOfSem: firstSundayOfSem,
+      blockOutTimings: blockOutTimings,
       message: "Dashboard data scraped and imported for user",
     });
   } catch (error) {

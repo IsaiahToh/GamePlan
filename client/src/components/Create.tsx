@@ -29,8 +29,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { useEffect, useState } from "react";
 
-const group = ["cs2030s", "cs2040s", "cs2100"] as const; // eventually to be fetched from API
 const importanceLevels = ["Low", "Med", "High", "Very High"] as const;
 
 const taskSchema = z.object({
@@ -50,7 +50,7 @@ const taskSchema = z.object({
   minChunk: z.coerce
     .number()
     .min(0.5, "Minimum chunk must be at least 0.5 hour"),
-  group: z.enum(group),
+  group: z.string(),
   importance: z.enum(importanceLevels),
 });
 
@@ -59,6 +59,32 @@ type CreateProps = {
 };
 
 export function Create({ onTaskCreated }: CreateProps) {
+  const [groups, setGroups] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchGroups = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.log("No token found in localStorage");
+          return;
+        }
+        const res = await fetch("http://localhost:3000/api/dashboard", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await res.json();
+        const groupArray = data.groups.map(
+          (group: { name: string }) => group.name
+        );
+        setGroups(groupArray);
+      } catch (error) {
+        console.log("Error fetching group:", error);
+      }
+    };
+    fetchGroups();
+  }, []);
   const form = useForm<z.infer<typeof taskSchema>>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
@@ -225,7 +251,7 @@ export function Create({ onTaskCreated }: CreateProps) {
                         <SelectValue placeholder="Select a group" />
                       </SelectTrigger>
                       <SelectContent>
-                        {group.map((option) => (
+                        {groups.map((option) => (
                           <SelectItem key={option} value={option}>
                             {option}
                           </SelectItem>

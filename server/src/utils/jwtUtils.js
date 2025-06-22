@@ -1,17 +1,18 @@
-const jwt = require('jsonwebtoken');
-const { secretKey } = require('../config/jwt');
+const jwt = require("jsonwebtoken");
+const { secretKey } = require("../config/jwt");
+const crypto = require("crypto");
 
 function generateToken(user) {
-    const payload = {
-        id: user._id,
-        email: user.email,
-        role: user.role
-    };
-    
-    const options = {
-        expiresIn: '1h' // Token expires in 1 hour
-    };
-    
-    return jwt.sign(payload, secretKey, options);
+  const payload = {
+    id: user._id,
+    email: user.email,
+    role: user.role,
+    jti: crypto.randomBytes(16).toString("hex"), // Unique token id
+  };
+  const options = {
+    expiresIn: "1h",
+    // algorithm: 'HS256' // Default, specify if you want a different one
+  };
+  return jwt.sign(payload, secretKey, options);
 }
 module.exports = { generateToken };
