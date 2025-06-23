@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Create } from "../Create";
 import { EditTask } from "../EditTask";
-import { X } from "lucide-react";
+import { Loader, X } from "lucide-react";
 
 type Task = {
   _id: string;
@@ -15,6 +15,7 @@ type Task = {
 
 export default function Sidebar() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchTasks = async () => {
     const token = localStorage.getItem("token");
@@ -28,10 +29,11 @@ export default function Sidebar() {
       setTasks(data);
     } catch (error) {
       console.log("Error fetching tasks:", error);
-    }
+    } 
   };
 
   const fetchSortedTasks = async () => {
+    setIsLoading(true);
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
@@ -48,10 +50,14 @@ export default function Sidebar() {
       console.log("Sorted tasks:", tasks);
     } catch (error) {
       console.log("Error fetching sorted tasks:", error);
+    } finally {
+      setIsLoading(false);
+      window.location.reload();
     }
   };
 
   const fetchUnsortedTasks = async () => {
+    setIsLoading(true);
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
@@ -64,6 +70,9 @@ export default function Sidebar() {
       console.log("Unsorted tasks:", tasks);
     } catch (error) {
       console.log("Error fetching unsorted tasks:", error);
+    } finally {
+      setIsLoading(false);
+      window.location.reload();
     }
   };
 
@@ -107,13 +116,13 @@ export default function Sidebar() {
                 className="w-full bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white"
                 onClick={fetchSortedTasks}
               >
-                Schedule My Tasks
+                {isLoading ? <Loader className="animate-spin" /> : "Schedule tasks"}
               </Button>
               <Button
                 className="w-full bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white mt-2"
                 onClick={fetchUnsortedTasks}
               >
-                Unschedule tasks
+                {isLoading ? <Loader className="animate-spin" /> : "Unschedule tasks"}
               </Button>
             </li>
             {tasks.map((task) => {

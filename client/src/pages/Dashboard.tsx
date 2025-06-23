@@ -8,6 +8,7 @@ type DashboardProps = {
 
 const Dashboard: React.FC<DashboardProps> = ({ view }: DashboardProps) => {
   const [dashboardData, setDashboardData] = useState<any>(null);
+  const [tasks, setTasks] = useState<any>([]);
 
   useEffect(() => {
     const fetchDashboard = async () => {
@@ -32,6 +33,28 @@ const Dashboard: React.FC<DashboardProps> = ({ view }: DashboardProps) => {
     fetchDashboard();
   }, []);
 
+  useEffect(() => {
+    const fetchTasks = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      const res = await fetch(
+        "http://localhost:3000/api/tasks/sorted/by-deadline-and-importance",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (!res.ok) return;
+      const data = await res.json();
+      setTasks(data.scheduledTasks);
+      console.log("Sorted tasks:", tasks);
+    } catch (error) {
+      console.log("Error fetching sorted tasks:", error);
+    }
+  };
+    fetchTasks();
+  }, []);
+
   return (
     <>
       <div className="flex flex-col justify-center items-center h-screen">
@@ -41,6 +64,7 @@ const Dashboard: React.FC<DashboardProps> = ({ view }: DashboardProps) => {
               lessons={dashboardData.events}
               groups={dashboardData.groups}
               firstSundayOfSem={dashboardData.firstSundayOfSem}
+              tasks={tasks}
             />
           ) : (
             <div>Loading...</div>

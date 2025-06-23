@@ -86,28 +86,6 @@
   {
     "moduleCode": "CS2040",
     "lessonType": "Lecture",
-    "startTime": "13:00",
-    "endTime": "14:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 3
-  },
-  {
-    "moduleCode": "CS2040",
-    "lessonType": "Lecture",
     "startTime": "16:00",
     "endTime": "18:00",
     "weeks": [
@@ -126,6 +104,28 @@
       13
     ],
     "day": 1
+  },
+  {
+    "moduleCode": "CS2040",
+    "lessonType": "Lecture",
+    "startTime": "13:00",
+    "endTime": "14:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 3
   },
   {
     "moduleCode": "FIN2704",
@@ -173,28 +173,6 @@
   {
     "moduleCode": "CS2040",
     "lessonType": "Lecture",
-    "startTime": "13:00",
-    "endTime": "14:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 3
-  },
-  {
-    "moduleCode": "CS2040",
-    "lessonType": "Lecture",
     "startTime": "16:00",
     "endTime": "18:00",
     "weeks": [
@@ -213,6 +191,28 @@
       13
     ],
     "day": 1
+  },
+  {
+    "moduleCode": "CS2040",
+    "lessonType": "Lecture",
+    "startTime": "13:00",
+    "endTime": "14:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 3
   },
   {
     "moduleCode": "MNO1706B",
