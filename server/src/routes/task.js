@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const UserTasks = require("../models/task"); // This is your userTaskSchema model
+const UserTasks = require("../models/task");
+const Dashboard = require("../models/dashboard");
 const { authenticateToken } = require("../utils/authMiddleware");
+const { scheduleTasks } = require("../services/scheduleTasks");
+const dayjs = require("dayjs");
 
 // CREATE a new task for the user
 router.post("/", authenticateToken, async (req, res) => {
@@ -17,6 +20,7 @@ router.post("/", authenticateToken, async (req, res) => {
       userTasks.tasks.push(taskData);
     }
     await userTasks.save();
+    console.log(JSON.stringify(userTasks, null, 2));
     res.status(201).json(userTasks.tasks[userTasks.tasks.length - 1]); // Return the newly added task
   } catch (error) {
     res
@@ -77,7 +81,22 @@ router.get(
       return dateA - dateB;
     });
 
-    res.json(tasks);
+    const dashboard = await Dashboard.findOne({ userId });
+    const scheduledTasks = await scheduleTasks(
+      dashboard.freeTimes,
+      tasks,
+      dayjs()
+    );
+    const updatedDoc = await UserTasks.findOneAndUpdate(
+      { userId },
+      { $set: { sortedTasks: tasks, scheduledTasks } },
+      { new: true }
+    );
+    res.json({
+      tasks: userTasks.tasks,
+      sortedTasks: updatedDoc.sortedTasks,
+      scheduledTasks: updatedDoc.scheduledTasks,
+    });
   }
 );
 

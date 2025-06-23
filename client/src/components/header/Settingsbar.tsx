@@ -98,7 +98,10 @@ export default function Settingsbar() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            blockOutTimings: values.blockOutTimings,
+            blockOutTimings: values.blockOutTimings.map((time) => ({
+              from: time.from,
+              to: time.to,
+            })),
             url: values.url,
             groups: values.groups.map((group) => ({
               name: group.name,
@@ -118,7 +121,8 @@ export default function Settingsbar() {
         });
         return; // Stop further execution
       } else {
-        console.log("Submit okay");
+        const data = await res.json();
+        console.log("Sent data: ", data);
       }
     } catch (error) {
       form.setError("root", {
@@ -126,7 +130,7 @@ export default function Settingsbar() {
         message: "An unexpected error occurred. Please try again later.",
       });
     } finally {
-      window.location.reload();
+      //window.location.reload();
       setLoading(false);
     }
   };

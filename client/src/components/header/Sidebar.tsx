@@ -36,33 +36,36 @@ export default function Sidebar() {
     if (!token) return;
     try {
       logTasks();
-      const res = await fetch("http://localhost:3000/api/tasks/sorted/by-deadline-and-importance", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await fetch(
+        "http://localhost:3000/api/tasks/sorted/by-deadline-and-importance",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       if (!res.ok) return;
       const data = await res.json();
-      setTasks(data);
-      console.log("Sorted tasks:", data);
+      setTasks(data.sortedTasks);
+      console.log("Sorted tasks:", tasks);
     } catch (error) {
       console.log("Error fetching sorted tasks:", error);
     }
   };
 
   const fetchUnsortedTasks = async () => {
-  const token = localStorage.getItem("token");
-  if (!token) return;
-  try {
-    const res = await fetch("http://localhost:3000/api/tasks", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (!res.ok) return;
-    const data = await res.json();
-    setTasks(data);
-    console.log("Unsorted tasks:", data);
-  } catch (error) {
-    console.log("Error fetching unsorted tasks:", error);
-  }
-};
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      const res = await fetch("http://localhost:3000/api/tasks", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      setTasks(data);
+      console.log("Unsorted tasks:", tasks);
+    } catch (error) {
+      console.log("Error fetching unsorted tasks:", error);
+    }
+  };
 
   const deleteTask = async (id: string) => {
     const token = localStorage.getItem("token");
@@ -120,7 +123,10 @@ export default function Sidebar() {
               const daysLeft = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
               return (
-                <li key={task._id} className="relative border rounded p-2 mb-2 bg-blue-50">
+                <li
+                  key={task._id}
+                  className="relative border rounded p-2 mb-2 bg-blue-50"
+                >
                   <div className="absolute top-2 right-2 flex flex-col items-end gap-1">
                     <button
                       className="text-red-500 hover:text-red-700"
@@ -138,7 +144,9 @@ export default function Sidebar() {
                   </div>
                   <div className="font-semibold">{task.name}</div>
                   <div className="text-sm">{task.description}</div>
-                  <div className="text-xs text-gray-500">Due: {task.deadlineDate}</div>
+                  <div className="text-xs text-gray-500">
+                    Due: {task.deadlineDate}
+                  </div>
                   <div className="text-xs text-gray-700">
                     {daysLeft >= 0
                       ? `${daysLeft} day${daysLeft === 1 ? "" : "s"} left`

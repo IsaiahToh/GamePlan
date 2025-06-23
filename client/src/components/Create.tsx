@@ -55,7 +55,7 @@ const taskSchema = z.object({
 });
 
 type CreateProps = {
-  onTaskCreated?: () => void;
+  onTaskCreated: () => void;
 };
 
 export function Create({ onTaskCreated }: CreateProps) {

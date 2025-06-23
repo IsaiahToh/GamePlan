@@ -28,8 +28,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { useEffect, useState } from "react";
 
-const group = ["cs2030s", "cs2040s", "cs2100"] as const;
 const importanceLevels = ["Low", "Med", "High", "Very High"] as const;
 
 const taskSchema = z.object({
@@ -39,7 +39,7 @@ const taskSchema = z.object({
   deadlineTime: z.string(),
   estimatedTimeTaken: z.coerce.number().min(0.5),
   minChunk: z.coerce.number().min(0.5),
-  group: z.enum(group),
+  group: z.string(),
   importance: z.enum(importanceLevels),
 });
 
@@ -49,7 +49,11 @@ type EditTaskProps = {
   buttonClassName?: string;
 };
 
-export function EditTask({ task, onTaskUpdated, buttonClassName }: EditTaskProps) {
+export function EditTask({
+  task,
+  onTaskUpdated,
+  buttonClassName,
+}: EditTaskProps) {
   const form = useForm<z.infer<typeof taskSchema>>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
@@ -64,17 +68,44 @@ export function EditTask({ task, onTaskUpdated, buttonClassName }: EditTaskProps
     },
   });
 
+  const [groups, setGroups] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchGroups = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.log("No token found in localStorage");
+          return;
+        }
+        const res = await fetch("http://localhost:3000/api/dashboard", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await res.json();
+        const groupArray = data.groups.map(
+          (group: { name: string }) => group.name
+        );
+        setGroups(groupArray);
+      } catch (error) {
+        console.log("Error fetching group:", error);
+      }
+    };
+    fetchGroups();
+  }, []);
+
   const onSubmit = async (values: z.infer<typeof taskSchema>) => {
     const token = localStorage.getItem("token");
     await fetch(`http://localhost:3000/api/tasks/${task._id}`, {
-        method: "PATCH",
-        headers: {
+      method: "PATCH",
+      headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(values),
+      },
+      body: JSON.stringify(values),
     });
-    console.log("Task edited:", values);
+    console.log("Task edited:", JSON.stringify(values));
     if (onTaskUpdated) onTaskUpdated();
   };
 
@@ -217,9 +248,9 @@ export function EditTask({ task, onTaskUpdated, buttonClassName }: EditTaskProps
                         <SelectValue placeholder="Select a group" />
                       </SelectTrigger>
                       <SelectContent>
-                        {group.map((option) => (
-                          <SelectItem key={option} value={option}>
-                            {option}
+                        {groups.map((group) => (
+                          <SelectItem key={group} value={group}>
+                            {group}
                           </SelectItem>
                         ))}
                       </SelectContent>

@@ -9,7 +9,9 @@ const dashboardSchema = new mongoose.Schema({
   },
   events: { type: Array, default: [] },
   groups: { type: Array, default: [] },
+  blockOutTimings: { type: Array, default: [] },
   firstSundayOfSem: { type: String, default: "" },
+  freeTimes: { type: Array, default: [] },
 });
 
 module.exports = mongoose.model("Dashboard", dashboardSchema);

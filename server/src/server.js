@@ -6,6 +6,7 @@ const express = require("express");
 const signupRoute = require("./routes/signup");
 const loginRoute = require("./routes/login");
 const dashboardRoutes = require("./routes/dashboard");
+const taskRoutes = require("./routes/task");
 
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -23,8 +24,6 @@ app.use(cors());
 app.use("/user", signupRoute);
 app.use("/auth", loginRoute);
 app.use("/api", dashboardRoutes);
-
-const taskRoutes = require("./routes/task");
 app.use("/api/tasks", taskRoutes);
 
 app.listen(port, () => {

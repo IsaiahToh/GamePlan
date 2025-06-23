@@ -1,7 +1,8 @@
 const fs = require("fs");
 const { scrape } = require("../services/scrapers");
+const { getWeeklyFreeTimes } = require("../services/freeTimes");
 const Dashboard = require("../models/dashboard");
-const { url } = require("inspector");
+const dayjs = require("dayjs");
 
 async function scrapeAndImportDashboard(req, res) {
   try {
@@ -11,29 +12,34 @@ async function scrapeAndImportDashboard(req, res) {
     const firstSundayOfSem = req.body.firstSundayOfSem;
     const blockOutTimings = req.body.blockOutTimings;
 
-    console.log(firstSundayOfSem);
-
     if (url) {
       await scrape(url);
     }
 
     const events = JSON.parse(fs.readFileSync("dashboardData.json", "utf-8"));
+    const freeTimes = await getWeeklyFreeTimes(
+      firstSundayOfSem,
+      blockOutTimings,
+      events,
+      dayjs()
+    );
+    console.log(JSON.stringify(freeTimes, null, 2));
     const doc = await Dashboard.findOneAndUpdate(
       { userId },
-      { userId, events, groups, firstSundayOfSem },
+      { userId, events, groups, firstSundayOfSem, blockOutTimings, freeTimes },
       { upsert: true, new: true }
     );
-    console.log(doc);
     res.json({
       userId,
       url: url,
       groups: groups,
       firstSundayOfSem: firstSundayOfSem,
       blockOutTimings: blockOutTimings,
+      freeTimes: freeTimes,
       message: "Dashboard data scraped and imported for user",
     });
   } catch (error) {
-    console.log(error.message);
+    console.log("error:", error.message);
     res.status(500).json({ message: "Scraper failed", error: error.message });
   }
 }
@@ -46,6 +52,8 @@ async function getDashboard(req, res) {
       events: dashboard.events,
       groups: dashboard.groups,
       firstSundayOfSem: dashboard.firstSundayOfSem,
+      blockOutTimings: dashboard.blockOutTimings,
+      freeTimes: dashboard.freeTimes,
     });
   } else {
     res.json({ events: [], groups: [], firstSundayOfSem: "" });
