@@ -115,7 +115,7 @@ export function EditTask({
         <Button
           className={
             buttonClassName ??
-            "text-xs bg-blue-500 hover:bg-blue-600 text-white px-2 py-0.5 rounded"
+            "text-xs bg-blue-500 hover:bg-blue-600 text-white px-2 rounded"
           }
           type="button"
         >

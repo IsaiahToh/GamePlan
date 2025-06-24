@@ -6,9 +6,9 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Header from "./components/header/Header";
 import { useState, type JSX } from "react";
-import Sidebar from "./components/header/Sidebar";
 import { Navigate } from "react-router-dom";
 import Settingsbar from "./components/header/Settingsbar";
+import Sidebar from "./components/header/sidebar/Sidebar";
 
 function ProtectedRoute({ children }: { children: JSX.Element }) {
   const isAuthenticated = !!localStorage.getItem("token");
@@ -21,7 +21,7 @@ function App() {
   const [view, setView] = useState("Week");
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-full">
       <Header
         isSideBarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
@@ -30,8 +30,7 @@ function App() {
         setView={setView}
       />
       <div className="flex flex-1">
-        { isSidebarOpen && <Sidebar />}
-
+        {isSidebarOpen && <Sidebar />}
         <main className="flex-1">
           <Routes>
             <Route path="/login" element={<Login />}></Route>

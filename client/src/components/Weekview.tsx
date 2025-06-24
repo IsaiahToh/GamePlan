@@ -151,7 +151,7 @@ export default function Weekview({
                               key={lessonIndex}
                               className={`absolute left-0 w-full ${
                                 colorOption ? colorOption.css : "bg-gray-300"
-                              } rounded-lg px-2 py-1 text-xs z-3 shadow-[0_3px_5px_rgba(0,0,0,3)]`}
+                              } rounded-lg px-2 py-1 text-xs z-3 shadow-[0_3px_5px_rgba(0,0,0,1)]`}
                               style={{
                                 top: `${isOClockLesson ? 0 : 50}%`,
                                 height: `${(duration / 59) * 100}%`,
@@ -163,6 +163,7 @@ export default function Weekview({
                               <div className="text-gray-600">
                                 {lesson.lessonType}
                               </div>
+                             
                             </div>
                           );
                         })}
