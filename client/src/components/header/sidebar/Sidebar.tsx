@@ -17,7 +17,7 @@ const SidebarDropdown: React.FC<SidebarDropdownProps> = ({
   return (
     <div className="border-b">
       <button
-        className="w-full flex justify-between items-center px-4 py-2 text-left font-semibold hover:bg-gray-100 active:shadow-none shadow-[0_0px_3px_rgba(0,0,0,0.5)]"
+        className="w-full flex justify-between items-center px-4 py-2 text-left font-semibold hover:bg-gray-100 active:shadow-none shadow-[0_4px_6px_-4px_rgba(0,0,0,0.2)]"
         onClick={() => setOpen((x) => !x)}
         type="button"
         aria-expanded={open}
