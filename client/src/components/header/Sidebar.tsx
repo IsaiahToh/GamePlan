@@ -52,7 +52,6 @@ export default function Sidebar() {
       console.log("Error fetching sorted tasks:", error);
     } finally {
       setIsLoading(false);
-      window.location.reload();
     }
   };
 
@@ -72,7 +71,6 @@ export default function Sidebar() {
       console.log("Error fetching unsorted tasks:", error);
     } finally {
       setIsLoading(false);
-      window.location.reload();
     }
   };
 

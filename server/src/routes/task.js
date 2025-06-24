@@ -72,13 +72,15 @@ router.get(
 
     // Sort by importance, then by deadline
     tasks.sort((a, b) => {
-      const importanceDiff =
-        importanceOrder.indexOf(a.importance) -
-        importanceOrder.indexOf(b.importance);
-      if (importanceDiff !== 0) return importanceDiff;
       const dateA = new Date(a.deadlineDate);
       const dateB = new Date(b.deadlineDate);
-      return dateA - dateB;
+      const deadlineDiff = dateA - dateB;
+      if (deadlineDiff !== 0) return deadlineDiff;
+      const importanceOrder = ["Very High", "High", "Med", "Low"];
+      return (
+        importanceOrder.indexOf(a.importance) -
+        importanceOrder.indexOf(b.importance)
+      );
     });
 
     const dashboard = await Dashboard.findOne({ userId });
@@ -121,4 +123,4 @@ router.patch("/:id", authenticateToken, async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = router;
