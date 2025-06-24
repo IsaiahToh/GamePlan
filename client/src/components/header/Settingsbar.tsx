@@ -130,7 +130,7 @@ export default function Settingsbar() {
         message: "An unexpected error occurred. Please try again later.",
       });
     } finally {
-      //window.location.reload();
+      window.location.reload();
       setLoading(false);
     }
   };

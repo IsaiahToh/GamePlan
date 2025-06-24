@@ -66,9 +66,11 @@ router.get(
   authenticateToken,
   async (req, res) => {
     const userId = req.user.id;
-    const importanceOrder = ["Very High", "High", "Med", "Low"];
     const userTasks = await UserTasks.findOne({ userId }).lean();
     let tasks = userTasks ? userTasks.tasks : [];
+
+    //Filter out completed tasks
+    tasks = tasks.filter(task => !task.completed);
 
     // Sort by importance, then by deadline
     tasks.sort((a, b) => {
@@ -120,6 +122,44 @@ router.patch("/:id", authenticateToken, async (req, res) => {
     res
       .status(500)
       .json({ message: "Failed to update task", error: error.message });
+  }
+});
+
+// Mark a task as completed
+router.patch("/:id/complete", authenticateToken, async (req, res) => {
+  const userId = req.user.id;
+  const { id } = req.params;
+  try {
+    const userTasks = await UserTasks.findOne({ userId });
+    if (!userTasks) return res.status(404).json({ message: "Task not found" });
+
+    const task = userTasks.tasks.id(id);
+    if (!task) return res.status(404).json({ message: "Task not found" });
+
+    task.completed = true;
+    await userTasks.save();
+    res.json(task);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to complete task", error: error.message });
+  }
+});
+
+// Mark a task as not completed
+router.patch("/:id/uncomplete", authenticateToken, async (req, res) => {
+  const userId = req.user.id;
+  const { id } = req.params;
+  try {
+    const userTasks = await UserTasks.findOne({ userId });
+    if (!userTasks) return res.status(404).json({ message: "Task not found" });
+
+    const task = userTasks.tasks.id(id);
+    if (!task) return res.status(404).json({ message: "Task not found" });
+
+    task.completed = false;
+    await userTasks.save();
+    res.json(task);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to uncomplete task", error: error.message });
   }
 });
 

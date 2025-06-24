@@ -13,6 +13,7 @@ const taskSchema = new mongoose.Schema({
     required: true,
   },
   group: { type: String, required: true },
+  completed: { type: Boolean, default: false },
 });
 
 const scheduledTaskSchema = new mongoose.Schema({
