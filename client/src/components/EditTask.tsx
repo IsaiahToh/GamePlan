@@ -87,6 +87,7 @@ export function EditTask({
         const groupArray = data.groups.map(
           (group: { name: string }) => group.name
         );
+        groupArray.push("None");
         setGroups(groupArray);
       } catch (error) {
         console.log("Error fetching group:", error);

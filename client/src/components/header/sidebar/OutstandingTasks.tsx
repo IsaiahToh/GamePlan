@@ -16,21 +16,6 @@ type Task = {
 export default function TaskForm() {
   const [tasks, setTasks] = useState<Task[]>([]);
 
-  const fetchTasks = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    try {
-      const res = await fetch("http://localhost:3000/api/tasks", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) return;
-      const data = await res.json();
-      setTasks(data);
-    } catch (error) {
-      console.log("Error fetching tasks:", error);
-    }
-  };
-
   const fetchSortedTasks = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -81,7 +66,7 @@ export default function TaskForm() {
       });
       if (res.ok) {
         console.log("Task deleted:", id);
-        fetchTasks();
+        fetchUnsortedTasks();
       } else {
         console.log("Failed to delete task");
       }
@@ -91,7 +76,7 @@ export default function TaskForm() {
   };
 
   useEffect(() => {
-    fetchTasks();
+    fetchUnsortedTasks();
   }, []);
 
   const logTasks = () => {
@@ -102,7 +87,7 @@ export default function TaskForm() {
     <div>
       <ul className="pr-1 space-y-2 overflow-y-auto max-h-[84vh]">
         <li className="items-center">
-          <Create onTaskCreated={fetchTasks} />
+          <Create onTaskCreated={fetchUnsortedTasks} />
         </li>
         <li>
           <Button
@@ -157,7 +142,7 @@ export default function TaskForm() {
               <div className="mt-2">
                 <EditTask
                   task={task}
-                  onTaskUpdated={fetchTasks}
+                  onTaskUpdated={fetchUnsortedTasks}
                   buttonClassName="text-xs bg-blue-500 hover:bg-blue-600 text-white px-2 py-0.5 rounded"
                 />
               </div>

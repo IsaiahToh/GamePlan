@@ -78,6 +78,7 @@ export function Create({ onTaskCreated }: CreateProps) {
         const groupArray = data.groups.map(
           (group: { name: string }) => group.name
         );
+        groupArray.push("None");
         setGroups(groupArray);
       } catch (error) {
         console.log("Error fetching group:", error);
@@ -139,7 +140,7 @@ export function Create({ onTaskCreated }: CreateProps) {
                 <FormItem>
                   <FormLabel>Title</FormLabel>
                   <FormControl>
-                    <Input placeholder="TItle of task" {...field} />
+                    <Input placeholder="Title of task" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
