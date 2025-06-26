@@ -34,7 +34,7 @@ export default function OutstandingTasks({
   markTaskAsDone,
 }: OutstandingTasksProps) {
   return (
-    <ul className="pr-1 space-y-2 overflow-y-auto max-h-[84vh]">
+    <ul className="pr-1 space-y-2 overflow-y-auto max-h-[70vh]">
       <li className="items-center">
         <Create onTaskCreated={onTaskCreated} />
       </li>

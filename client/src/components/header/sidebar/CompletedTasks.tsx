@@ -17,7 +17,7 @@ type CompletedTasksProps = {
 export default function CompletedTasks({ tasks = [], markTaskAsUndone }: CompletedTasksProps) {
   if (!tasks.length) return <div>No completed tasks.</div>;
   return (
-    <div>
+    <div className="pr-1 space-y-2 overflow-y-auto max-h-[84vh]">
       <ul>
         {tasks.map((task) => (
           <li key={task._id} className="border rounded p-2 mb-2 bg-green-50">
@@ -35,6 +35,8 @@ export default function CompletedTasks({ tasks = [], markTaskAsUndone }: Complet
           </li>
         ))}
       </ul>
+      <div style={{ height: 48 }} aria-hidden="true"></div>
+      <div style={{ height: 48 }} aria-hidden="true"></div>
     </div>
   );
 }
