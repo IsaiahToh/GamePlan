@@ -41,7 +41,11 @@ const SidebarDropdown: React.FC<SidebarDropdownProps> = ({
   );
 };
 
-const Sidebar: React.FC = () => {
+type SidebarProps = {
+  fetchDashboardTasks: () => Promise<any>;
+};
+
+export default function Sidebar({ fetchDashboardTasks }: SidebarProps) {
   const [outstandingTasks, setOutstandingTasks] = useState<Task[]>([]);
   const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
 
@@ -57,7 +61,7 @@ const Sidebar: React.FC = () => {
       const data = await res.json();
       setOutstandingTasks(data.outstandingTasks || []);
       setCompletedTasks(data.completedTasks || []);
-      console.log("Outstanding tasks:", data.outstandingTasks);
+      console.log("fetchTasks", data.outstandingTasks);
     } catch (error) {
       console.log("Error fetching sorted tasks:", error);
     } finally {
@@ -67,6 +71,7 @@ const Sidebar: React.FC = () => {
 
   // Sort + Fetch tasks
   const sortAndFetchTasks = async () => {
+    console.log("sort starting");
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
@@ -79,7 +84,7 @@ const Sidebar: React.FC = () => {
       if (!res.ok) return;
       const data = await res.json();
       setOutstandingTasks(data.outstandingTasks || []);
-      console.log("Outstanding tasks:", data.outstandingTasks);
+      console.log("sortAndFetchTasks", data.outstandingTasks);
     } catch (error) {
       console.log("Error fetching sorted tasks:", error);
     } finally {
@@ -159,6 +164,7 @@ const Sidebar: React.FC = () => {
           sortAndFetchTasks={sortAndFetchTasks}
           deleteTask={deleteTask}
           markTaskAsDone={markTaskAsDone}
+          fetchDashboardTasks={fetchDashboardTasks}
         />
       </SidebarDropdown>
       <SidebarDropdown label="Completed tasks">
@@ -169,6 +175,4 @@ const Sidebar: React.FC = () => {
       </SidebarDropdown>
     </aside>
   );
-};
-
-export default Sidebar;
+}

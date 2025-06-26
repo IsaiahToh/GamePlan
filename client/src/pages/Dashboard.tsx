@@ -4,11 +4,12 @@ import Dayview from "@/components/Dayview";
 
 type DashboardProps = {
   view: String;
+  scheduledTasks: any[];
+  fetchDashboardTasks: () => Promise<any>
 };
 
-const Dashboard: React.FC<DashboardProps> = ({ view }: DashboardProps) => {
+const Dashboard: React.FC<DashboardProps> = ({ view, scheduledTasks, fetchDashboardTasks }: DashboardProps) => {
   const [dashboardData, setDashboardData] = useState<any>(null);
-  const [tasks, setTasks] = useState<any>([]);
 
   useEffect(() => {
     const fetchDashboard = async () => {
@@ -34,25 +35,7 @@ const Dashboard: React.FC<DashboardProps> = ({ view }: DashboardProps) => {
   }, []);
 
   useEffect(() => {
-    const fetchTasks = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    try {
-      const res = await fetch(
-        "http://localhost:3000/api/tasks/sorted/by-deadline-and-importance",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      if (!res.ok) return;
-      const data = await res.json();
-      setTasks(data.scheduledTasks);
-      console.log("Sorted tasks:", tasks);
-    } catch (error) {
-      console.log("Error fetching sorted tasks:", error);
-    }
-  };
-    fetchTasks();
+    fetchDashboardTasks();
   }, []);
 
   return (
@@ -64,7 +47,7 @@ const Dashboard: React.FC<DashboardProps> = ({ view }: DashboardProps) => {
               lessons={dashboardData.events}
               groups={dashboardData.groups}
               firstSundayOfSem={dashboardData.firstSundayOfSem}
-              tasks={tasks}
+              tasks={scheduledTasks}
             />
           ) : (
             <div>Loading...</div>

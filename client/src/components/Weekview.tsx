@@ -236,15 +236,21 @@ export default function Weekview({
 
                 {isCurrentDay(dayDate) && today && (
                   <div
-                    className={cn("absolute h-0.5 w-full bg-red-500")}
+                    className="absolute w-full flex items-center z-10 pointer-events-none"
                     style={{
                       top: `${
                         (currentTime.hour() / 24 +
                           currentTime.minute() / 30 / 48) *
                         100
                       }%`,
+                      transform: "translateY(-50%)",
                     }}
-                  />
+                  >
+                    {/* Red circle (bulb) */}
+                    <div className="w-3 h-3 bg-red-500 rounded-full shadow-md -ml-1 z-20" />
+                    {/* Red line */}
+                    <div className="h-0.5 bg-red-500 flex-1" />
+                  </div>
                 )}
               </div>
             );

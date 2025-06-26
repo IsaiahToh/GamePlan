@@ -19,6 +19,25 @@ function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSettingsbarOpen, setIsSettingsbarOpen] = useState(false);
   const [view, setView] = useState("Week");
+  const [scheduledTasks, setScheduledTasks] = useState<any[]>([]);
+  const fetchDashboardTasks = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+      try {
+        const res = await fetch(
+          "http://localhost:3000/api/tasks/sorted/by-deadline-and-importance",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        if (!res.ok) return;
+        const data = await res.json();
+        setScheduledTasks(data.scheduledTasks);
+        console.log("Scheduled tasks:", scheduledTasks);
+      } catch (error) {
+        console.log("Error fetching sorted tasks:", error);
+      }
+    };
 
   return (
     <div className="flex flex-col h-full">
@@ -30,7 +49,7 @@ function App() {
         setView={setView}
       />
       <div className="flex flex-1">
-        {isSidebarOpen && <Sidebar />}
+        {isSidebarOpen && <Sidebar fetchDashboardTasks={fetchDashboardTasks}/>}
         <main className="flex-1">
           <Routes>
             <Route path="/login" element={<Login />}></Route>
@@ -39,7 +58,7 @@ function App() {
               path="/dashboard"
               element={
                 <ProtectedRoute>
-                  <Dashboard view={view} />
+                  <Dashboard view={view} scheduledTasks={scheduledTasks} fetchDashboardTasks={fetchDashboardTasks}/>
                 </ProtectedRoute>
               }
             ></Route>

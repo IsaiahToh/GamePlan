@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Create } from "../../Create";
 import { EditTask } from "../../EditTask";
 import { X } from "lucide-react";
+import { useEffect } from "react";
 
 type Task = {
   _id: string;
@@ -20,6 +21,7 @@ type OutstandingTasksProps = {
   sortAndFetchTasks: () => Promise<any>;
   deleteTask: (id: string) => void;
   markTaskAsDone: (id: string) => void;
+  fetchDashboardTasks: () => Promise<any>;
 };
 
 export default function OutstandingTasks({
@@ -28,6 +30,7 @@ export default function OutstandingTasks({
   sortAndFetchTasks,
   deleteTask,
   markTaskAsDone,
+  fetchDashboardTasks,
 }: OutstandingTasksProps) {
   return (
     <ul className="pr-1 space-y-2 overflow-y-auto max-h-[70vh]">
@@ -37,7 +40,10 @@ export default function OutstandingTasks({
       <li>
         <Button
           className="w-full bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white"
-          onClick={sortAndFetchTasks}
+          onClick={() => {
+            sortAndFetchTasks();
+            fetchDashboardTasks();
+          }}
         >
           Schedule tasks
         </Button>
