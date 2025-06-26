@@ -16,38 +16,34 @@ type Task = {
 
 type OutstandingTasksProps = {
   tasks: Task[];
-  onTaskCreated: () => void;
-  onTaskUpdated: () => void;
-  fetchSortedTasks: () => void;
-  fetchUnsortedTasks: () => void;
+  fetchTasks: () => Promise<any>;
+  sortAndFetchTasks: () => Promise<any>;
   deleteTask: (id: string) => void;
   markTaskAsDone: (id: string) => void;
 };
 
 export default function OutstandingTasks({
   tasks,
-  onTaskCreated,
-  onTaskUpdated,
-  fetchSortedTasks,
-  fetchUnsortedTasks,
+  fetchTasks,
+  sortAndFetchTasks,
   deleteTask,
   markTaskAsDone,
 }: OutstandingTasksProps) {
   return (
     <ul className="pr-1 space-y-2 overflow-y-auto max-h-[70vh]">
       <li className="items-center">
-        <Create onTaskCreated={onTaskCreated} />
+        <Create onTaskCreated={fetchTasks} />
       </li>
       <li>
         <Button
           className="w-full bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white"
-          onClick={fetchSortedTasks}
+          onClick={sortAndFetchTasks}
         >
           Schedule tasks
         </Button>
         <Button
           className="w-full bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white mt-2"
-          onClick={fetchUnsortedTasks}
+          onClick={fetchTasks}
         >
           Unschedule tasks
         </Button>
@@ -88,7 +84,7 @@ export default function OutstandingTasks({
             <div className="mt-2 flex gap-2">
               <EditTask
                 task={task}
-                onTaskUpdated={onTaskUpdated}
+                onTaskUpdated={fetchTasks}
                 buttonClassName="text-xs bg-blue-500 hover:bg-blue-600 text-white px-2 py-0.5 rounded"
               />
               <Button

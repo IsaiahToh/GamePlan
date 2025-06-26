@@ -13,7 +13,6 @@ const taskSchema = new mongoose.Schema({
     required: true,
   },
   group: { type: String, required: true },
-  completed: { type: Boolean, default: false },
 });
 
 const scheduledTaskSchema = new mongoose.Schema({
@@ -42,8 +41,8 @@ const userTaskSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  tasks: { type: [taskSchema], default: [] },
-  sortedTasks: { type: [taskSchema], default: [] },
+  outstandingTasks: { type: [taskSchema], default: [] },
+  completedTasks: { type: [taskSchema], default: [] },
   scheduledTasks: { type: [scheduledTaskSchema], default: [] },
 });
 

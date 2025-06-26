@@ -6,22 +6,25 @@ const { authenticateToken } = require("../utils/authMiddleware");
 const { scheduleTasks } = require("../services/scheduleTasks");
 const dayjs = require("dayjs");
 
-// CREATE a new task for the user
+// CREATE a new task for the user (add to outstandingTasks)
 router.post("/", authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
     const taskData = req.body;
 
-    // Find or create the UserTasks document for this user
     let userTasks = await UserTasks.findOne({ userId });
     if (!userTasks) {
-      userTasks = new UserTasks({ userId, tasks: [taskData] });
+      userTasks = new UserTasks({
+        userId,
+        outstandingTasks: [taskData],
+        completedTasks: [],
+        scheduledTasks: [],
+      });
     } else {
-      userTasks.tasks.push(taskData);
+      userTasks.outstandingTasks.push(taskData);
     }
+
     await userTasks.save();
-    console.log(JSON.stringify(userTasks, null, 2));
-    res.status(201).json(userTasks.tasks[userTasks.tasks.length - 1]); // Return the newly added task
   } catch (error) {
     res
       .status(500)
@@ -29,28 +32,50 @@ router.post("/", authenticateToken, async (req, res) => {
   }
 });
 
-// READ all tasks for the user
+// READ all tasks (both outstanding and completed)
 router.get("/", authenticateToken, async (req, res) => {
   const userId = req.user.id;
   const userTasks = await UserTasks.findOne({ userId });
-  res.json(userTasks ? userTasks.tasks : []);
+
+  if (!userTasks) {
+    return res.json({ outstandingTasks: [], completedTasks: [] });
+  }
+
+  res.json({
+    outstandingTasks: userTasks.outstandingTasks,
+    completedTasks: userTasks.completedTasks,
+    scheduledTasks: userTasks.scheduledTasks,
+  });
 });
 
-// DELETE a task by id
+// DELETE a task by id (from either outstanding or completed)
 router.delete("/:id", authenticateToken, async (req, res) => {
   const userId = req.user.id;
   const { id } = req.params;
+
   try {
     const userTasks = await UserTasks.findOne({ userId });
-    if (!userTasks) return res.status(404).json({ message: "Task not found" });
+    if (!userTasks)
+      return res.status(404).json({ message: "User tasks not found" });
 
-    const initialLength = userTasks.tasks.length;
-    userTasks.tasks = userTasks.tasks.filter(
-      (task) => task._id.toString() !== id
+    // Check outstanding tasks
+    const outstandingIndex = userTasks.outstandingTasks.findIndex(
+      (task) => task._id.toString() === id
     );
-    if (userTasks.tasks.length === initialLength) {
+
+    // Check completed tasks
+    const completedIndex = userTasks.completedTasks.findIndex(
+      (task) => task._id.toString() === id
+    );
+
+    if (outstandingIndex !== -1) {
+      userTasks.outstandingTasks.splice(outstandingIndex, 1);
+    } else if (completedIndex !== -1) {
+      userTasks.completedTasks.splice(completedIndex, 1);
+    } else {
       return res.status(404).json({ message: "Task not found" });
     }
+
     await userTasks.save();
     res.json({ message: "Task deleted" });
   } catch (error) {
@@ -60,64 +85,89 @@ router.delete("/:id", authenticateToken, async (req, res) => {
   }
 });
 
-// GET all tasks sorted by deadline and importance
+// GET sorted outstandingTasks and schedule them
 router.get(
   "/sorted/by-deadline-and-importance",
   authenticateToken,
   async (req, res) => {
-    const userId = req.user.id;
-    const userTasks = await UserTasks.findOne({ userId }).lean();
-    let tasks = userTasks ? userTasks.tasks : [];
+    try {
+      const userId = req.user.id;
+      const userTasks = await UserTasks.findOne({ userId });
 
-    //Filter out completed tasks
-    tasks = tasks.filter(task => !task.completed);
+      if (!userTasks) {
+        return res.json({ outstandingTasks: [], scheduledTasks: [] });
+      }
 
-    // Sort by importance, then by deadline
-    tasks.sort((a, b) => {
-      const dateA = new Date(a.deadlineDate);
-      const dateB = new Date(b.deadlineDate);
-      const deadlineDiff = dateA - dateB;
-      if (deadlineDiff !== 0) return deadlineDiff;
-      const importanceOrder = ["Very High", "High", "Med", "Low"];
-      return (
-        importanceOrder.indexOf(a.importance) -
-        importanceOrder.indexOf(b.importance)
+      // Sort outstandingTasks by importance then deadline
+      userTasks.outstandingTasks.sort((a, b) => {
+        // Importance sorting
+        const importanceOrder = ["Very High", "High", "Med", "Low"];
+        const importanceDiff =
+          importanceOrder.indexOf(a.importance) -
+          importanceOrder.indexOf(b.importance);
+
+        if (importanceDiff !== 0) return importanceDiff;
+
+        // Deadline sorting
+        const dateA = new Date(`${a.deadlineDate}T${a.deadlineTime}`);
+        const dateB = new Date(`${b.deadlineDate}T${b.deadlineTime}`);
+        return dateA - dateB;
+      });
+
+      // Get dashboard and schedule tasks
+      const dashboard = await Dashboard.findOne({ userId });
+      const scheduledTasks = await scheduleTasks(
+        dashboard.freeTimes,
+        userTasks.outstandingTasks,
+        dayjs()
       );
-    });
 
-    const dashboard = await Dashboard.findOne({ userId });
-    const scheduledTasks = await scheduleTasks(
-      dashboard.freeTimes,
-      tasks,
-      dayjs()
-    );
-    const updatedDoc = await UserTasks.findOneAndUpdate(
-      { userId },
-      { $set: { sortedTasks: tasks, scheduledTasks } },
-      { new: true }
-    );
-    res.json({
-      tasks: userTasks.tasks,
-      sortedTasks: updatedDoc.sortedTasks,
-      scheduledTasks: updatedDoc.scheduledTasks,
-    });
+      // Save scheduled tasks
+      userTasks.scheduledTasks = scheduledTasks;
+      await userTasks.save();
+
+      res.json({
+        outstandingTasks: userTasks.outstandingTasks,
+        scheduledTasks: userTasks.scheduledTasks,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: "Failed to sort and schedule tasks",
+        error: error.message,
+      });
+    }
   }
 );
 
-// UPDATE a task by id
+// UPDATE a task in outstandingTasks
 router.patch("/:id", authenticateToken, async (req, res) => {
   const userId = req.user.id;
   const { id } = req.params;
+
   try {
     const userTasks = await UserTasks.findOne({ userId });
-    if (!userTasks) return res.status(404).json({ message: "Task not found" });
+    if (!userTasks)
+      return res.status(404).json({ message: "User tasks not found" });
 
-    const task = userTasks.tasks.id(id); // Mongoose subdocument accessor
-    if (!task) return res.status(404).json({ message: "Task not found" });
+    // Find task in outstandingTasks
+    const taskIndex = userTasks.outstandingTasks.findIndex(
+      (task) => task._id.toString() === id
+    );
 
-    Object.assign(task, req.body); // Update fields
+    if (taskIndex === -1) {
+      return res
+        .status(404)
+        .json({ message: "Task not found in outstanding tasks" });
+    }
+
+    // Update task
+    userTasks.outstandingTasks[taskIndex] = {
+      ...userTasks.outstandingTasks[taskIndex].toObject(),
+      ...req.body,
+    };
+
     await userTasks.save();
-    res.json(task);
+    res.json(userTasks.outstandingTasks[taskIndex]);
   } catch (error) {
     res
       .status(500)
@@ -125,41 +175,71 @@ router.patch("/:id", authenticateToken, async (req, res) => {
   }
 });
 
-// Mark a task as completed
+// Mark task as completed (move to completedTasks)
 router.patch("/:id/complete", authenticateToken, async (req, res) => {
   const userId = req.user.id;
   const { id } = req.params;
+
   try {
     const userTasks = await UserTasks.findOne({ userId });
-    if (!userTasks) return res.status(404).json({ message: "Task not found" });
+    if (!userTasks)
+      return res.status(404).json({ message: "User tasks not found" });
 
-    const task = userTasks.tasks.id(id);
-    if (!task) return res.status(404).json({ message: "Task not found" });
+    // Find task in outstandingTasks
+    const taskIndex = userTasks.outstandingTasks.findIndex(
+      (task) => task._id.toString() === id
+    );
 
-    task.completed = true;
+    if (taskIndex === -1) {
+      return res
+        .status(404)
+        .json({ message: "Task not found in outstanding tasks" });
+    }
+
+    // Move to completedTasks
+    const [completedTask] = userTasks.outstandingTasks.splice(taskIndex, 1);
+    userTasks.completedTasks.push(completedTask);
+
     await userTasks.save();
-    res.json(task);
+    res.json(completedTask);
   } catch (error) {
-    res.status(500).json({ message: "Failed to complete task", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to complete task", error: error.message });
   }
 });
 
-// Mark a task as not completed
+// Mark task as not completed (move back to outstandingTasks)
 router.patch("/:id/uncomplete", authenticateToken, async (req, res) => {
   const userId = req.user.id;
   const { id } = req.params;
+
   try {
     const userTasks = await UserTasks.findOne({ userId });
-    if (!userTasks) return res.status(404).json({ message: "Task not found" });
+    if (!userTasks)
+      return res.status(404).json({ message: "User tasks not found" });
 
-    const task = userTasks.tasks.id(id);
-    if (!task) return res.status(404).json({ message: "Task not found" });
+    // Find task in completedTasks
+    const taskIndex = userTasks.completedTasks.findIndex(
+      (task) => task._id.toString() === id
+    );
 
-    task.completed = false;
+    if (taskIndex === -1) {
+      return res
+        .status(404)
+        .json({ message: "Task not found in completed tasks" });
+    }
+
+    // Move to outstandingTasks
+    const [outstandingTask] = userTasks.completedTasks.splice(taskIndex, 1);
+    userTasks.outstandingTasks.push(outstandingTask);
+
     await userTasks.save();
-    res.json(task);
+    res.json(outstandingTask);
   } catch (error) {
-    res.status(500).json({ message: "Failed to uncomplete task", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to uncomplete task", error: error.message });
   }
 });
 

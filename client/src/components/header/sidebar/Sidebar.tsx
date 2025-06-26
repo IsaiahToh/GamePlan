@@ -42,12 +42,31 @@ const SidebarDropdown: React.FC<SidebarDropdownProps> = ({
 };
 
 const Sidebar: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [sortedTasks, setSortedTasks] = useState<Task[]>([]);
-  const [showSorted, setShowSorted] = useState(false);
+  const [outstandingTasks, setOutstandingTasks] = useState<Task[]>([]);
+  const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
 
-  // Fetch sorted tasks
-  const fetchSortedTasks = async () => {
+  // Fetch tasks
+  const fetchTasks = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      const res = await fetch("http://localhost:3000/api/tasks/", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      setOutstandingTasks(data.outstandingTasks || []);
+      setCompletedTasks(data.completedTasks || []);
+      console.log("Outstanding tasks:", data.outstandingTasks);
+    } catch (error) {
+      console.log("Error fetching sorted tasks:", error);
+    } finally {
+      // window.location.reload();
+    }
+  };
+
+  // Sort + Fetch tasks
+  const sortAndFetchTasks = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
@@ -59,31 +78,12 @@ const Sidebar: React.FC = () => {
       );
       if (!res.ok) return;
       const data = await res.json();
-      setSortedTasks(data.sortedTasks || []);
-      setShowSorted(true);
-      console.log("Sorted tasks:", data.sortedTasks);
+      setOutstandingTasks(data.outstandingTasks || []);
+      console.log("Outstanding tasks:", data.outstandingTasks);
     } catch (error) {
       console.log("Error fetching sorted tasks:", error);
     } finally {
       // window.location.reload();
-    }
-  };
-
-  // Fetch all tasks (unsorted)
-  const fetchUnsortedTasks = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    try {
-      const res = await fetch("http://localhost:3000/api/tasks", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) return;
-      const data = await res.json();
-      setTasks(data);
-      setShowSorted(false);
-      console.log("Unsorted tasks:", data);
-    } catch (error) {
-      console.log("Error fetching tasks:", error);
     }
   };
 
@@ -98,7 +98,7 @@ const Sidebar: React.FC = () => {
       });
       if (res.ok) {
         console.log("Task deleted successfully");
-        fetchUnsortedTasks();
+        fetchTasks();
       }
     } catch (error) {
       console.log("Error deleting task:", error);
@@ -119,7 +119,7 @@ const Sidebar: React.FC = () => {
       );
       if (res.ok) {
         console.log("Task marked as done successfully");
-        fetchUnsortedTasks();
+        fetchTasks();
       }
     } catch (error) {
       console.log("Error marking task as done:", error);
@@ -139,7 +139,7 @@ const Sidebar: React.FC = () => {
       );
       if (res.ok) {
         console.log("Task marked as undone successfully");
-        fetchUnsortedTasks();
+        fetchTasks();
       }
     } catch (error) {
       console.log("Error marking task as undone:", error);
@@ -147,30 +147,24 @@ const Sidebar: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchUnsortedTasks();
+    fetchTasks();
   }, []);
 
   return (
     <aside className="bg-white shadow-md shadow-gray-500 w-64 h-screen overflow-y-auto">
       <SidebarDropdown label="Outstanding tasks">
         <OutstandingTasks
-          tasks={
-            showSorted
-              ? sortedTasks.filter((task) => !task.completed)
-              : tasks.filter((task) => !task.completed)
-          }
-          onTaskCreated={fetchUnsortedTasks}
-          onTaskUpdated={fetchUnsortedTasks}
-          fetchSortedTasks={fetchSortedTasks}
-          fetchUnsortedTasks={fetchUnsortedTasks}
+          tasks={outstandingTasks}
+          fetchTasks={fetchTasks}
+          sortAndFetchTasks={sortAndFetchTasks}
           deleteTask={deleteTask}
           markTaskAsDone={markTaskAsDone}
         />
       </SidebarDropdown>
       <SidebarDropdown label="Completed tasks">
         <CompletedTasks
-        tasks={tasks.filter((task) => task.completed)}
-        markTaskAsUndone={markTaskAsUndone}
+          tasks={completedTasks}
+          markTaskAsUndone={markTaskAsUndone}
         />
       </SidebarDropdown>
     </aside>
