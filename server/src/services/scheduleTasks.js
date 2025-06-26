@@ -69,18 +69,23 @@
             .add(offset, "day")
             .add(slotStart, "minute");
           if (chunkStartDayjs.isAfter(deadline)) break outer;
-          let chunkEndDayjs = chunkStartDayjs.add(
-            Math.min(timeLeft, slotDuration, Math.max(minChunk, 0)),
-            "hour"
-          );
+          // Only schedule if slot can fit at least minChunk, or if it's the last chunk (timeLeft < minChunk)
+          let possibleChunk = Math.min(timeLeft, slotDuration);
+          if (possibleChunk < minChunk && timeLeft >= minChunk) continue; // Skip slots too small for minChunk unless it's the last chunk
+
+          let chunkHours = possibleChunk;
+          let chunkEndMins = slotStart + chunkHours * 60;
+
+          // Don't schedule past the deadline
+          let chunkEndDayjs = chunkStartDayjs.add(chunkHours, "hour");
           if (chunkEndDayjs.isAfter(deadline)) {
             chunkEndDayjs = deadline;
+            chunkHours = chunkEndDayjs.diff(chunkStartDayjs, "minute") / 60;
+            chunkEndMins = slotStart + chunkHours * 60;
+            if (chunkHours < minChunk && timeLeft >= minChunk) continue;
           }
-          let chunkHours = chunkEndDayjs.diff(chunkStartDayjs, "minute") / 60;
-          if (chunkHours < minChunk) continue;
 
           // Ensure chunk ends on or before slotEnd
-          let chunkEndMins = slotStart + chunkHours * 60;
           if (chunkEndMins > slotEnd) {
             chunkHours = (slotEnd - slotStart) / 60;
             chunkEndMins = slotEnd;
