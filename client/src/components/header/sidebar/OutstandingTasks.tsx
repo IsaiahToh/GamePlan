@@ -41,12 +41,6 @@ export default function OutstandingTasks({
         >
           Schedule tasks
         </Button>
-        <Button
-          className="w-full bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white mt-2"
-          onClick={fetchTasks}
-        >
-          Unschedule tasks
-        </Button>
       </li>
       {tasks.map((task) => {
         const today = new Date();
@@ -55,7 +49,10 @@ export default function OutstandingTasks({
         const daysLeft = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
         return (
-          <li key={task._id} className="relative border rounded p-2 mb-2 bg-blue-50">
+          <li
+            key={task._id}
+            className="relative border rounded p-2 mb-2 bg-blue-50"
+          >
             <div className="absolute top-2 right-2 flex flex-col items-end gap-1">
               <button
                 className="text-red-500 hover:text-red-700"
