@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -32,10 +33,10 @@ import { importanceLevels } from "@/lib/types";
 
 type EditTaskProps = {
   task: any;
-  onTaskUpdated: () => void;
+  fetchTasks: () => void;
 };
 
-export function EditTask({ task, onTaskUpdated }: EditTaskProps) {
+export function EditTask({ task, fetchTasks }: EditTaskProps) {
   const form = useForm<z.infer<typeof taskSchema>>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
@@ -89,7 +90,7 @@ export function EditTask({ task, onTaskUpdated }: EditTaskProps) {
       body: JSON.stringify(values),
     });
     console.log("Task edited:", JSON.stringify(values));
-    if (onTaskUpdated) onTaskUpdated();
+    if (fetchTasks) fetchTasks();
   };
 
   return (
@@ -240,12 +241,14 @@ export function EditTask({ task, onTaskUpdated }: EditTaskProps) {
                 </FormItem>
               )}
             />
-            <Button
-              type="submit"
-              className="w-full bg-gray-800 hover:bg-gray-700 active:bg-gray-600 cursor-pointer mb-2"
-            >
-              Save Changes
-            </Button>
+            <DialogClose asChild>
+              <Button
+                type="submit"
+                className="w-full bg-gray-800 hover:bg-gray-700 active:bg-gray-600 cursor-pointer mb-2"
+              >
+                Save Changes
+              </Button>
+            </DialogClose>
           </form>
         </Form>
       </DialogContent>

@@ -24,6 +24,7 @@ router.post("/", authenticateToken, async (req, res) => {
       userTasks.outstandingTasks.push(taskData);
     }
     await userTasks.save();
+    res.status(201).json({ message: "Task created successfully" });
   } catch (error) {
     res
       .status(500)

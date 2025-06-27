@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -32,10 +33,10 @@ import { taskSchema } from "@/lib/types";
 import { importanceLevels } from "@/lib/types";
 
 type CreateProps = {
-  onTaskCreated: () => Promise<any>;
+  fetchTasks: () => void;
 };
 
-export function Create({ onTaskCreated }: CreateProps) {
+export function Create({ fetchTasks }: CreateProps) {
   const [groups, setGroups] = useState<string[]>([]);
 
   useEffect(() => {
@@ -63,6 +64,7 @@ export function Create({ onTaskCreated }: CreateProps) {
     };
     fetchGroups();
   }, []);
+
   const form = useForm<z.infer<typeof taskSchema>>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
@@ -79,18 +81,20 @@ export function Create({ onTaskCreated }: CreateProps) {
 
   const onSubmit = async (values: z.infer<typeof taskSchema>) => {
     console.log("Form submitted with values:", values);
-    const token = localStorage.getItem("token");
-    const res = await fetch("http://localhost:3000/api/tasks", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(values),
-    });
-    if (res.ok) {
-      await onTaskCreated();
+    try {
+      const token = localStorage.getItem("token");
+      await fetch("http://localhost:3000/api/tasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(values),
+      });
+      if (fetchTasks) fetchTasks();
       form.reset();
+    } catch (error) {
+      console.error("Fetch failed: ", error);
     }
   };
 
@@ -146,7 +150,7 @@ export function Create({ onTaskCreated }: CreateProps) {
                 name="deadlineDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Date</FormLabel>
+                    <FormLabel>Due date</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -159,7 +163,7 @@ export function Create({ onTaskCreated }: CreateProps) {
                 name="deadlineTime"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Time</FormLabel>
+                    <FormLabel>Due time</FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>
@@ -244,12 +248,14 @@ export function Create({ onTaskCreated }: CreateProps) {
               )}
             />
 
-            <Button
-              type="submit"
-              className="w-full bg-gray-800 hover:bg-gray-700 active:bg-gray-600 cursor-pointer mb-2"
-            >
-              Create Task
-            </Button>
+            <DialogClose asChild>
+              <Button
+                type="submit"
+                className="w-full bg-gray-800 hover:bg-gray-700 active:bg-gray-600 cursor-pointer mb-2"
+              >
+                Create Task
+              </Button>
+            </DialogClose>
           </form>
         </Form>
       </DialogContent>

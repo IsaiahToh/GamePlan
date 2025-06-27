@@ -76,6 +76,7 @@ export default function Sidebar({ fetchDashboardTasks }: SidebarProps) {
       console.log("Error fetching sorted tasks:", error);
     }
   };
+  
 
   // Delete a task
   const deleteTask = async (id: string) => {

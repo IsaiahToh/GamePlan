@@ -25,7 +25,7 @@ function App() {
       if (!token) return;
       try {
         const res = await fetch(
-          "http://localhost:3000/api/tasks/sorted/by-deadline-and-importance",
+          "http://localhost:3000/api/tasks/",
           {
             headers: { Authorization: `Bearer ${token}` },
           }

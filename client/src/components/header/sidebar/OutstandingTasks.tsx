@@ -24,13 +24,13 @@
     return (
       <ul className="pr-1 space-y-2 overflow-y-auto max-h-[70vh]">
         <li className="items-center">
-          <Create onTaskCreated={fetchTasks} />
+          <Create fetchTasks={fetchTasks} />
         </li>
         <li>
           <Button
             className="w-full bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white"
-            onClick={() => {
-              sortAndFetchTasks();
+            onClick={async () => {
+              await sortAndFetchTasks();
               fetchDashboardTasks();
             }}
           >
@@ -74,7 +74,7 @@
                   : "Past due"}
               </div>
               <div className="mt-2 flex gap-2">
-                <EditTask task={task} onTaskUpdated={fetchTasks} />
+                <EditTask task={task} fetchTasks={fetchTasks} />
                 <Button
                   className="text-xs bg-green-500 hover:bg-green-600 text-white px-2 py-0.5 rounded"
                   onClick={() => markTaskAsDone(task._id)}
