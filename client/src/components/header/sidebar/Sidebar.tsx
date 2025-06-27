@@ -157,6 +157,7 @@ export default function Sidebar({ fetchDashboardTasks }: SidebarProps) {
         <CompletedTasks
           tasks={completedTasks}
           markTaskAsUndone={markTaskAsUndone}
+          fetchTasks={fetchTasks}
         />
       </SidebarDropdown>
     </aside>

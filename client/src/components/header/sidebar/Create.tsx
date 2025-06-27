@@ -68,14 +68,14 @@ export function Create({ fetchTasks }: CreateProps) {
   const form = useForm<z.infer<typeof taskSchema>>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
-      name: "",
+      name: "AAA",
       description: "",
-      deadlineDate: "",
-      deadlineTime: "",
-      estimatedTimeTaken: 0,
-      minChunk: 0,
+      deadlineDate: "2025-06-30",
+      deadlineTime: "23:59",
+      estimatedTimeTaken: 2,
+      minChunk: 1,
       importance: "Low",
-      group: "",
+      group: "None",
     },
   });
 
@@ -101,7 +101,7 @@ export function Create({ fetchTasks }: CreateProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">
+        <Button variant="outline" className="w-full">
           <Plus />
           <p>Create new task</p>
         </Button>

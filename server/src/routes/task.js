@@ -32,6 +32,27 @@ router.post("/", authenticateToken, async (req, res) => {
   }
 });
 
+router.delete("/clear-complete", authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    await UserTasks.findOneAndUpdate(
+      { userId },
+      { $set: { completedTasks: [] } },
+      { new: true }
+    );
+    if (!res) return res.status(404).json({ message: "User tasks not found" });
+
+    res.json({ message: "All completed tasks deleted" });
+  } catch (error) {
+    console.error("Error deleting completed tasks:", error);
+    res.status(500).json({
+      message: "Failed to delete completed tasks",
+      error: error.message,
+    });
+  }
+});
+
 // READ all tasks (both outstanding and completed)
 router.get("/", authenticateToken, async (req, res) => {
   const userId = req.user.id;
