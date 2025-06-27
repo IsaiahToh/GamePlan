@@ -6,10 +6,14 @@ import Logout from "@/components/header/Logout";
 type DashboardProps = {
   view: String;
   scheduledTasks: any[];
-  fetchDashboardTasks: () => Promise<any>
+  fetchDashboardTasks: () => Promise<any>;
 };
 
-const Dashboard: React.FC<DashboardProps> = ({ view, scheduledTasks, fetchDashboardTasks }: DashboardProps) => {
+const Dashboard: React.FC<DashboardProps> = ({
+  view,
+  scheduledTasks,
+  fetchDashboardTasks,
+}: DashboardProps) => {
   const [dashboardData, setDashboardData] = useState<any>(null);
 
   useEffect(() => {
@@ -52,10 +56,14 @@ const Dashboard: React.FC<DashboardProps> = ({ view, scheduledTasks, fetchDashbo
             />
           ) : (
             <Logout />
-
           )
         ) : (
-          <Dayview />
+          <Dayview
+            lessons={dashboardData.events}
+            groups={dashboardData.groups}
+            firstSundayOfSem={dashboardData.firstSundayOfSem}
+            tasks={scheduledTasks}
+          />
         )}
       </div>
     </>

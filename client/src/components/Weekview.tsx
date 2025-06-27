@@ -1,35 +1,13 @@
 import { cn, getHours, getWeek } from "@/lib/utils";
 import dayjs from "dayjs";
 import { ScrollArea } from "./ui/scroll-area";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { colorOptions } from "@/lib/utils";
-
-type Lesson = {
-  moduleCode: string;
-  lessonType: string;
-  startTime: string; // HH:mm format
-  endTime: string; // HH:mm format
-  weeks: Array<number>; // Array of week numbers (1-13)
-  day: number; // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-};
-
-type Task = {
-  name: string;
-  description: string;
-  deadlineDate: string; // YYYY-MM-DD format
-  deadlineTime: string; // HH:mm format
-  estimatedTimeTaken: number;
-  minChunk: number;
-  importance: string;
-  group: string;
-  day: number;
-  startTime: string; // HH:mm format
-  endTime: string; // HH:mm format
-};
+import { type ScheduledTask, type Lesson } from "@/lib/types";
 
 type WeekviewProps = {
   lessons: Lesson[];
-  tasks: Task[];
+  tasks: ScheduledTask[];
   groups: { name: string; color: string }[];
   firstSundayOfSem: string;
 };
@@ -42,6 +20,23 @@ export default function Weekview({
 }: WeekviewProps) {
   const date = dayjs();
   const [currentTime, setCurrentTime] = useState(dayjs());
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+      // Get current time as fraction of the day
+      const minutesPassed = date.hour() * 60 + date.minute();
+      const fractionOfDay = minutesPassed / (24 * 60);
+  
+      if (scrollAreaRef.current) {
+        const viewport = scrollAreaRef.current.querySelector(
+          "[data-radix-scroll-area-viewport]"
+        ) as HTMLDivElement | null;
+        if (viewport) {
+          const maxScrollTop = viewport.scrollHeight - viewport.clientHeight;
+          viewport.scrollTop = maxScrollTop * fractionOfDay;
+        }
+      }
+    }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -86,7 +81,7 @@ export default function Weekview({
           </div>
         ))}
       </div>
-      <ScrollArea className="h-[70vh]">
+      <ScrollArea className="h-[70vh]" ref={scrollAreaRef}>
         <div className="grid grid-cols-[auto_1fr_1fr_1fr_1fr_1fr_1fr_1fr] px-4 py-2">
           {/* Time Column */}
           <div className="w-16 border-r border-gray-300">
@@ -179,8 +174,8 @@ export default function Weekview({
                       {/* tasks view */}
 
                       {tasks
-                        .filter((task: Task) => task.day === dayIndex) // Filter by day
-                        .filter((task: Task) => {
+                        .filter((task: ScheduledTask) => task.day === dayIndex) // Filter by day
+                        .filter((task: ScheduledTask) => {
                           // Filter by time slot
                           // Check if the task starts at or after the slot start time
                           const taskStart = dayDate
@@ -192,7 +187,7 @@ export default function Weekview({
                             taskStart.isBefore(slotStart.add(1, "hour"))
                           );
                         })
-                        .map((task: Task, taskIndex: number) => {
+                        .map((task: ScheduledTask, taskIndex: number) => {
                           const taskStart = dayDate
                             .hour(Number(task.startTime.split(":")[0]))
                             .minute(Number(task.startTime.split(":")[1]));

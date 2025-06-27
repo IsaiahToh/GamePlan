@@ -13,6 +13,15 @@ export const taskSchema = z.object({
   importance: z.enum(importanceLevels),
 });
 
+export interface Lesson {
+  moduleCode: string;
+  lessonType: string;
+  startTime: string; // HH:mm format
+  endTime: string; // HH:mm format
+  weeks: Array<number>; // Array of week numbers (1-13)
+  day: number; // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+};
+
 // Base Task Interface (for outstanding/completed tasks)
 export interface Task {
   _id: string; // Optional for new objects before saving
