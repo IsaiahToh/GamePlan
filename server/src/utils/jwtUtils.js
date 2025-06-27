@@ -10,7 +10,7 @@ function generateToken(user) {
     jti: crypto.randomBytes(16).toString("hex"), // Unique token id
   };
   const options = {
-    expiresIn: "5s",
+    expiresIn: "1h",
     // algorithm: 'HS256' // Default, specify if you want a different one
   };
   return jwt.sign(payload, secretKey, options);

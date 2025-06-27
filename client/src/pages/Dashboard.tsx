@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Weekview from "@/components/Weekview";
 import Dayview from "@/components/Dayview";
+import Logout from "@/components/header/Logout";
 
 type DashboardProps = {
   view: String;
@@ -50,7 +51,8 @@ const Dashboard: React.FC<DashboardProps> = ({ view, scheduledTasks, fetchDashbo
               tasks={scheduledTasks}
             />
           ) : (
-            <div>Loading...</div>
+            <Logout />
+
           )
         ) : (
           <Dayview />
