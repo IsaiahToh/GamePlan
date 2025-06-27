@@ -143,7 +143,9 @@ export default function Dayview({
                             {lesson.moduleCode}
                           </div>
                           <div className="text-gray-600">
-                            {lesson.lessonType}
+                            <p>{lesson.lessonType}</p>
+                            <p>{lesson.startTime} - {lesson.endTime}</p>  
+                            <p>Weeks {lesson.weeks.join(", ")}</p>
                           </div>
                         </div>
                       );
@@ -185,6 +187,9 @@ export default function Dayview({
                             (option) => option.value === group.color
                           )
                         : undefined;
+                      const t1 = dayjs(task.endTime, "HH:mm");
+                      const t2 = dayjs(task.startTime, "HH:mm");
+                      const diff = t1.diff(t2, "minutes");
 
                       return (
                         <div
@@ -199,7 +204,10 @@ export default function Dayview({
                         >
                           <div className="font-semibold">{task.name}</div>
                           <div className="text-gray-600">
-                            {task.description}
+                            <p>{task.description}</p>
+                            <p>Due: {dayjs(task.deadlineDate).format("D MMM")} {task.deadlineTime}</p>
+                            <p>{task.startTime} - {task.endTime}</p>
+                            <p>{diff}</p>
                           </div>
                         </div>
                       );
