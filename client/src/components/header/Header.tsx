@@ -23,6 +23,8 @@ export default function Header({
 }: HeaderProps) {
   const navigate = useNavigate();
   const token = localStorage.getItem("token"); // Check if the user is authenticated
+  const isToken = token && JSON.parse(atob(token.split(".")[1])).exp * 1000 > Date.now();
+  
 
   const handleLogout = () => {
     setIsSidebarOpen(false); // Close sidebar if open
@@ -35,7 +37,7 @@ export default function Header({
     <>
       <header className="flex items-center justify-between p-4 bg-gray-800 text-white">
         <div className="flex items-center">
-          {token ? (
+          {isToken ? (
             <Menu
               className="cursor-pointer mx-3"
               size={20}
@@ -51,7 +53,7 @@ export default function Header({
             <p className="font-semibold">GamePlan</p>
           </div>
 
-          {token ? (
+          {isToken ? (
             <p className="text-md text-white px-4 py-1 border rounded-lg mx-2">
               {date.format("MMMM YYYY")}
             </p>
@@ -63,7 +65,7 @@ export default function Header({
             <p>HOME</p>
             <hr className="w-2/4 border-none h-[1.5px] bg-white" />
           </NavLink>
-          {token ? (
+          {isToken ? (
             <NavLink
               to="/dashboard"
               className="flex flex-col items-center gap-1"
@@ -78,7 +80,7 @@ export default function Header({
           </NavLink>
         </div>
 
-        {token ? (
+        {isToken ? (
           <div className="flex items-center gap-4">
             <Dropdown setView={setView} />
             <div className="group relative">
