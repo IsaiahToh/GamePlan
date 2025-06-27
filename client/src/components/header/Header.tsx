@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Calendar, Menu, Search, Settings, User } from "lucide-react";
+import { Calendar, Menu, Settings, User } from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { Input } from "../ui/input";
 import dayjs from "dayjs";
 import { Dropdown } from "./Dropdown";
 
@@ -53,7 +52,7 @@ export default function Header({
           </div>
 
           {token ? (
-            <p className="font-semibold text-xl text-white outline px-5 py-2 rounded-lg border-pink-200 border-3 mx-2">
+            <p className="text-md text-white px-4 py-1 border rounded-lg mx-2">
               {date.format("MMMM YYYY")}
             </p>
           ) : null}

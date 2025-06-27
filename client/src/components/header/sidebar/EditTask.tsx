@@ -1,16 +1,13 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Plus } from "lucide-react";
 import {
   Form,
   FormField,
@@ -19,7 +16,6 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -28,37 +24,32 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "../../ui/select";
 import { useEffect, useState } from "react";
+import z from "zod";
+import { taskSchema } from "@/lib/types";
+import { importanceLevels } from "@/lib/types";
 
-const importanceLevels = ["Low", "Med", "High", "Very High"] as const;
-
-const taskSchema = z.object({
-  name: z
-    .string()
-    .min(1, "Name is required")
-    .max(100, "Name must be at most 100 characters"),
-  description: z
-    .string()
-    .max(500, "Description must be at most 500 characters")
-    .optional(),
-  deadlineDate: z.string(),
-  deadlineTime: z.string(),
-  estimatedTimeTaken: z.coerce
-    .number()
-    .min(0.5, "Estimated time must be at least 0.5 hour"),
-  minChunk: z.coerce
-    .number()
-    .min(0.5, "Minimum chunk must be at least 0.5 hour"),
-  group: z.string(),
-  importance: z.enum(importanceLevels),
-});
-
-type CreateProps = {
-  onTaskCreated: () => void;
+type EditTaskProps = {
+  task: any;
+  onTaskUpdated: () => void;
 };
 
-export function Create({ onTaskCreated }: CreateProps) {
+export function EditTask({ task, onTaskUpdated }: EditTaskProps) {
+  const form = useForm<z.infer<typeof taskSchema>>({
+    resolver: zodResolver(taskSchema),
+    defaultValues: {
+      name: task.name,
+      description: task.description,
+      deadlineDate: task.deadlineDate,
+      deadlineTime: task.deadlineTime,
+      estimatedTimeTaken: task.estimatedTimeTaken,
+      minChunk: task.minChunk,
+      group: task.group,
+      importance: task.importance,
+    },
+  });
+
   const [groups, setGroups] = useState<string[]>([]);
 
   useEffect(() => {
@@ -86,47 +77,35 @@ export function Create({ onTaskCreated }: CreateProps) {
     };
     fetchGroups();
   }, []);
-  const form = useForm<z.infer<typeof taskSchema>>({
-    resolver: zodResolver(taskSchema),
-    defaultValues: {
-      name: "",
-      description: "",
-      deadlineDate: "",
-      deadlineTime: "",
-      estimatedTimeTaken: 0,
-      minChunk: 0,
-      importance: "Low",
-      group: undefined,
-    },
-  });
 
   const onSubmit = async (values: z.infer<typeof taskSchema>) => {
-    console.log("Form submitted with values:", values);
     const token = localStorage.getItem("token");
-    await fetch("http://localhost:3000/api/tasks", {
-      method: "POST",
+    await fetch(`http://localhost:3000/api/tasks/${task._id}`, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(values),
     });
-    form.reset();
-    if (onTaskCreated) onTaskCreated();
+    console.log("Task edited:", JSON.stringify(values));
+    if (onTaskUpdated) onTaskUpdated();
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">
-          <Plus />
-          <p>Create new task</p>
+        <Button
+          className="text-xs bg-blue-500 hover:bg-blue-600 text-white px-2 rounded"
+          type="button"
+        >
+          Edit
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>New task</DialogTitle>
-          <DialogDescription>Add a new task to your GamePlan</DialogDescription>
+          <DialogTitle>Edit task</DialogTitle>
+          <DialogDescription>Edit your task details</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -146,7 +125,6 @@ export function Create({ onTaskCreated }: CreateProps) {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="description"
@@ -160,7 +138,6 @@ export function Create({ onTaskCreated }: CreateProps) {
                 </FormItem>
               )}
             />
-
             <div className="flex gap-4 w-full">
               <FormField
                 control={form.control}
@@ -189,7 +166,6 @@ export function Create({ onTaskCreated }: CreateProps) {
                 )}
               />
             </div>
-
             <FormField
               control={form.control}
               name="estimatedTimeTaken"
@@ -252,9 +228,9 @@ export function Create({ onTaskCreated }: CreateProps) {
                         <SelectValue placeholder="Select a group" />
                       </SelectTrigger>
                       <SelectContent>
-                        {groups.map((option) => (
-                          <SelectItem key={option} value={option}>
-                            {option}
+                        {groups.map((group) => (
+                          <SelectItem key={group} value={group}>
+                            {group}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -264,22 +240,14 @@ export function Create({ onTaskCreated }: CreateProps) {
                 </FormItem>
               )}
             />
-
             <Button
               type="submit"
               className="w-full bg-gray-800 hover:bg-gray-700 active:bg-gray-600 cursor-pointer mb-2"
             >
-              Create Task
+              Save Changes
             </Button>
           </form>
         </Form>
-        <DialogFooter className="sm:justify-start">
-          <DialogClose asChild>
-            <Button type="button" variant="secondary">
-              Close
-            </Button>
-          </DialogClose>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

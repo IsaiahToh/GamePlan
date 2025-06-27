@@ -1,15 +1,14 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Plus } from "lucide-react";
 import {
   Form,
   FormField,
@@ -27,47 +26,16 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "../../ui/select";
 import { useEffect, useState } from "react";
+import { taskSchema } from "@/lib/types";
+import { importanceLevels } from "@/lib/types";
 
-const importanceLevels = ["Low", "Med", "High", "Very High"] as const;
-
-const taskSchema = z.object({
-  name: z.string().min(1).max(100),
-  description: z.string().max(500).optional(),
-  deadlineDate: z.string(),
-  deadlineTime: z.string(),
-  estimatedTimeTaken: z.coerce.number().min(0.5),
-  minChunk: z.coerce.number().min(0.5),
-  group: z.string(),
-  importance: z.enum(importanceLevels),
-});
-
-type EditTaskProps = {
-  task: any;
-  onTaskUpdated: () => void;
-  buttonClassName?: string;
+type CreateProps = {
+  onTaskCreated: () => Promise<any>;
 };
 
-export function EditTask({
-  task,
-  onTaskUpdated,
-  buttonClassName,
-}: EditTaskProps) {
-  const form = useForm<z.infer<typeof taskSchema>>({
-    resolver: zodResolver(taskSchema),
-    defaultValues: {
-      name: task.name,
-      description: task.description,
-      deadlineDate: task.deadlineDate,
-      deadlineTime: task.deadlineTime,
-      estimatedTimeTaken: task.estimatedTimeTaken,
-      minChunk: task.minChunk,
-      group: task.group,
-      importance: task.importance,
-    },
-  });
-
+export function Create({ onTaskCreated }: CreateProps) {
   const [groups, setGroups] = useState<string[]>([]);
 
   useEffect(() => {
@@ -95,38 +63,49 @@ export function EditTask({
     };
     fetchGroups();
   }, []);
+  const form = useForm<z.infer<typeof taskSchema>>({
+    resolver: zodResolver(taskSchema),
+    defaultValues: {
+      name: "",
+      description: "",
+      deadlineDate: "",
+      deadlineTime: "",
+      estimatedTimeTaken: 0,
+      minChunk: 0,
+      importance: "Low",
+      group: "",
+    },
+  });
 
   const onSubmit = async (values: z.infer<typeof taskSchema>) => {
+    console.log("Form submitted with values:", values);
     const token = localStorage.getItem("token");
-    await fetch(`http://localhost:3000/api/tasks/${task._id}`, {
-      method: "PATCH",
+    const res = await fetch("http://localhost:3000/api/tasks", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(values),
     });
-    console.log("Task edited:", JSON.stringify(values));
-    if (onTaskUpdated) onTaskUpdated();
+    if (res.ok) {
+      await onTaskCreated();
+      form.reset();
+    }
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          className={
-            buttonClassName ??
-            "text-xs bg-blue-500 hover:bg-blue-600 text-white px-2 rounded"
-          }
-          type="button"
-        >
-          Edit
+        <Button variant="outline">
+          <Plus />
+          <p>Create new task</p>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Edit task</DialogTitle>
-          <DialogDescription>Edit your task details</DialogDescription>
+          <DialogTitle>New task</DialogTitle>
+          <DialogDescription>Add a new task to your GamePlan</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -146,6 +125,7 @@ export function EditTask({
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="description"
@@ -159,6 +139,7 @@ export function EditTask({
                 </FormItem>
               )}
             />
+
             <div className="flex gap-4 w-full">
               <FormField
                 control={form.control}
@@ -187,6 +168,7 @@ export function EditTask({
                 )}
               />
             </div>
+
             <FormField
               control={form.control}
               name="estimatedTimeTaken"
@@ -249,9 +231,9 @@ export function EditTask({
                         <SelectValue placeholder="Select a group" />
                       </SelectTrigger>
                       <SelectContent>
-                        {groups.map((group) => (
-                          <SelectItem key={group} value={group}>
-                            {group}
+                        {groups.map((option) => (
+                          <SelectItem key={option} value={option}>
+                            {option}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -261,21 +243,15 @@ export function EditTask({
                 </FormItem>
               )}
             />
+
             <Button
               type="submit"
               className="w-full bg-gray-800 hover:bg-gray-700 active:bg-gray-600 cursor-pointer mb-2"
             >
-              Save Changes
+              Create Task
             </Button>
           </form>
         </Form>
-        <DialogFooter className="sm:justify-start">
-          <DialogClose asChild>
-            <Button type="button" variant="secondary">
-              Close
-            </Button>
-          </DialogClose>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

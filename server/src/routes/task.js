@@ -23,7 +23,6 @@ router.post("/", authenticateToken, async (req, res) => {
     } else {
       userTasks.outstandingTasks.push(taskData);
     }
-
     await userTasks.save();
   } catch (error) {
     res
@@ -128,6 +127,7 @@ router.get(
 
       res.json({
         outstandingTasks: userTasks.outstandingTasks,
+        completedTasks: userTasks.completedTasks,
         scheduledTasks: userTasks.scheduledTasks,
       });
     } catch (error) {

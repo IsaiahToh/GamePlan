@@ -8,7 +8,9 @@ async function getWeeklyFreeTimes(
 ) {
   // Determine the current week number (1-based)
   const firstSunday = dayjs(firstSundayOfSem);
-  const currentWeek = currentDayjs.diff(firstSunday, "week") + 1;
+  const weekNumber = dayjs(firstSundayOfSem).isAfter(currentDayjs, "day")
+    ? 0
+    : currentDayjs.diff(dayjs(firstSundayOfSem), "week") + 1;
 
   // Helper to convert 'HH:mm' to minutes since midnight
   const toMinutes = (t) => {
@@ -34,7 +36,7 @@ async function getWeeklyFreeTimes(
 
   // Add lesson timings to busy intervals if present in current week
   for (const event of events) {
-    if (event.weeks.includes(currentWeek)) {
+    if (event.weeks.includes(weekNumber)) {
       const dayIdx = event.day; // 0-based index
       busyByDay[dayIdx].push([
         toMinutes(event.startTime),

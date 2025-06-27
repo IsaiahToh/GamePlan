@@ -50,13 +50,19 @@ export default function Weekview({
     return () => clearInterval(interval);
   }, []);
 
+  const weekNumber = dayjs(firstSundayOfSem).isAfter(date, "day")
+    ? 0
+    : date.diff(dayjs(firstSundayOfSem), "week") + 1;
+
   return (
     <div className="flex flex-col h-screen w-full overflow-auto">
       {/* Header with dates of the current week */}
       <div className="grid grid-cols-[auto_1fr_1fr_1fr_1fr_1fr_1fr_1fr] place-items-center px-4 py-2 shadow-sm border-b">
         <div className="w-16 border-r border-gray-300">
-          <div className="relative h-16">
-            <div className="absolute top-2 text-xs text-gray-600">GMT +8</div>
+          <div className="flex h-16 items-center justify-center">
+            <div className="text-xs text-gray-600">
+              {weekNumber == 0 ? "Sem break" : `Week ${weekNumber}`}
+            </div>
           </div>
         </div>
         {getWeek(date).map(({ currentDate, today }, i) => (
@@ -112,10 +118,8 @@ export default function Weekview({
 
                       {lessons
                         .filter((lesson: Lesson) => lesson.day === dayIndex) // Filter by day
-                        .filter((lesson: Lesson) =>
-                          lesson.weeks.includes(
-                            date.diff(dayjs(firstSundayOfSem), "week") + 1 // Filter by whether it exists on the week
-                          )
+                        .filter(
+                          (lesson: Lesson) => lesson.weeks.includes(weekNumber) // Check that lesson falls into week
                         )
                         .filter((lesson: Lesson) => {
                           // Filter by time slot

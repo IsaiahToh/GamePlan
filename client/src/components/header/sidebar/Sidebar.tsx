@@ -2,17 +2,7 @@ import React, { useState, useEffect, type ReactNode } from "react";
 import OutstandingTasks from "./OutstandingTasks";
 import CompletedTasks from "./CompletedTasks";
 import { ChevronDown, ChevronUp } from "lucide-react";
-
-type Task = {
-  _id: string;
-  name: string;
-  description: string;
-  deadlineDate: string;
-  deadlineTime: string;
-  estimatedTimeTaken: number;
-  importance: string | number;
-  completed?: boolean;
-};
+import { type Task } from "@/lib/types";
 
 type SidebarDropdownProps = {
   label: string;
@@ -64,14 +54,11 @@ export default function Sidebar({ fetchDashboardTasks }: SidebarProps) {
       console.log("fetchTasks", data.outstandingTasks);
     } catch (error) {
       console.log("Error fetching sorted tasks:", error);
-    } finally {
-      // window.location.reload();
     }
   };
 
   // Sort + Fetch tasks
   const sortAndFetchTasks = async () => {
-    console.log("sort starting");
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
@@ -87,8 +74,6 @@ export default function Sidebar({ fetchDashboardTasks }: SidebarProps) {
       console.log("sortAndFetchTasks", data.outstandingTasks);
     } catch (error) {
       console.log("Error fetching sorted tasks:", error);
-    } finally {
-      // window.location.reload();
     }
   };
 
