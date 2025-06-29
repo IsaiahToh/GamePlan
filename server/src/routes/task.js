@@ -121,18 +121,18 @@ router.get(
 
       // Sort outstandingTasks by importance then deadline
       userTasks.outstandingTasks.sort((a, b) => {
-        // Importance sorting
-        const importanceOrder = ["Very High", "High", "Med", "Low"];
-        const importanceDiff =
-          importanceOrder.indexOf(a.importance) -
-          importanceOrder.indexOf(b.importance);
-
-        if (importanceDiff !== 0) return importanceDiff;
-
-        // Deadline sorting
+        // Deadline sorting (primary)
         const dateA = new Date(`${a.deadlineDate}T${a.deadlineTime}`);
         const dateB = new Date(`${b.deadlineDate}T${b.deadlineTime}`);
-        return dateA - dateB;
+        const deadlineDiff = dateA - dateB;
+        if (deadlineDiff !== 0) return deadlineDiff;
+
+        // Importance sorting (secondary)
+        const importanceOrder = ["Very High", "High", "Med", "Low"];
+        return (
+          importanceOrder.indexOf(a.importance) -
+          importanceOrder.indexOf(b.importance)
+        );
       });
 
       // Get dashboard and schedule tasks

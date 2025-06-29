@@ -161,6 +161,7 @@ export default function Settingsbar() {
                       <FormControl>
                         <Input
                           type="time"
+                          className = "w-30"
                           {...form.register(`blockOutTimings.${index}.from`)}
                           placeholder="From"
                         />
@@ -169,6 +170,7 @@ export default function Settingsbar() {
                       <FormControl>
                         <Input
                           type="time"
+                          className = "w-30"
                           {...form.register(`blockOutTimings.${index}.to`)}
                           placeholder="To"
                         />
@@ -177,7 +179,7 @@ export default function Settingsbar() {
                         <Input
                           type="text"
                           {...form.register(`blockOutTimings.${index}.label`)}
-                          placeholder="Label (e.g. Sleep, CCA)"
+                          placeholder="Title"
                           className="w-32"
                         />
                       </FormControl>
