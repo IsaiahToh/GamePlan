@@ -30,6 +30,7 @@ const formSchema = z.object({
     z.object({
       from: z.string().min(1, "Start time required"),
       to: z.string().min(1, "End time required"),
+      label: z.string().optional(),
     })
   ),
   url: z.string(),
@@ -43,7 +44,7 @@ const formSchema = z.object({
 });
 
 const defaultValues = {
-  blockOutTimings: [{ from: "", to: "" }],
+  blockOutTimings: [{ from: "", to: "", label: "" }],
   url: "",
   groups: [{ name: "", color: "red" }],
   firstSundayOfSem: "",
@@ -101,6 +102,7 @@ export default function Settingsbar() {
             blockOutTimings: values.blockOutTimings.map((time) => ({
               from: time.from,
               to: time.to,
+              label: time.label,
             })),
             url: values.url,
             groups: values.groups.map((group) => ({
@@ -169,6 +171,14 @@ export default function Settingsbar() {
                           type="time"
                           {...form.register(`blockOutTimings.${index}.to`)}
                           placeholder="To"
+                        />
+                      </FormControl>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          {...form.register(`blockOutTimings.${index}.label`)}
+                          placeholder="Label (e.g. Sleep, CCA)"
+                          className="w-32"
                         />
                       </FormControl>
                       <Button

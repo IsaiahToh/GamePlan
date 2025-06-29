@@ -11,6 +11,7 @@ type DayviewProps = {
   tasks: ScheduledTask[];
   groups: { name: string; color: string }[];
   firstSundayOfSem: string;
+  blockOutTimings: { from: string; to: string; label?: string }[];
 };
 
 export default function Dayview({

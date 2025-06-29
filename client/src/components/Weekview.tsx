@@ -10,6 +10,7 @@ type WeekviewProps = {
   tasks: ScheduledTask[];
   groups: { name: string; color: string }[];
   firstSundayOfSem: string;
+  blockOutTimings: { from: string; to: string; label?: string }[];
 };
 
 export default function Weekview({
@@ -17,6 +18,7 @@ export default function Weekview({
   tasks,
   groups,
   firstSundayOfSem,
+  blockOutTimings = [],
 }: WeekviewProps) {
   const date = dayjs();
   const [currentTime, setCurrentTime] = useState(dayjs());
@@ -109,6 +111,44 @@ export default function Weekview({
                       key={hourIndex}
                       className="relative flex h-12 flex-col items-center gap-y-2 border-b border-gray-300"
                     >
+                      
+                      {/* Blockout timings view */}
+                      {blockOutTimings &&
+                        blockOutTimings.map((block, blockIdx) => {
+                          // Parse blockout times
+                          const [blockStartHour, blockStartMin] = block.from.split(":").map(Number);
+                          const [blockEndHour, blockEndMin] = block.to.split(":").map(Number);
+
+                          // Calculate block start and end as minutes since midnight
+                          const blockStart = blockStartHour * 60 + blockStartMin;
+                          const blockEnd = blockEndHour * 60 + blockEndMin;
+
+                          // Calculate current slot start and end as minutes since midnight
+                          const slotStartMins = hour.hour() * 60;
+                          const slotEndMins = (hour.hour() + 1) * 60;
+
+                          // If this slot overlaps with the blockout timing, render it
+                          if (
+                            slotEndMins > blockStart &&
+                            slotStartMins < blockEnd // overlap
+                          ) {
+                            return (
+                              <div
+                                key={blockIdx}
+                                className="absolute left-0 w-full bg-gray-400 bg-opacity-60 rounded-lg px-2 py-1 text-xs z-0 flex items-center"
+                                style={{
+                                  top: 0,
+                                  height: "100%",
+                                }}
+                                title={block.label}
+                              >
+                                <span className="font-semibold text-gray-800">{block.label || "Blocked"}</span>
+                              </div>
+                            );
+                          }
+                          return null;
+                        })}
+                      
                       {/* lessons view */}
 
                       {lessons

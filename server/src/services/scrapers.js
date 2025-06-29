@@ -75,7 +75,7 @@ const LESSON_TYPE_MAP = {
   TUT: "Tutorial",
   REC: "Recitation",
   LAB: "Laboratory",
-  SEC: "Project",
+  SEC: "Sectional Teaching",
 };
 const dayOrder = [
   "Sunday",

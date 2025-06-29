@@ -53,6 +53,7 @@ const Dashboard: React.FC<DashboardProps> = ({
               groups={dashboardData.groups}
               firstSundayOfSem={dashboardData.firstSundayOfSem}
               tasks={scheduledTasks}
+              blockOutTimings={dashboardData.blockOutTimings}
             />
           ) : (
             <Logout />
@@ -63,6 +64,7 @@ const Dashboard: React.FC<DashboardProps> = ({
             groups={dashboardData.groups}
             firstSundayOfSem={dashboardData.firstSundayOfSem}
             tasks={scheduledTasks}
+            blockOutTimings={dashboardData.blockOutTimings}
           />
         )}
       </div>
