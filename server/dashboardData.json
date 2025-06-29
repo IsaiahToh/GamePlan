@@ -1,10 +1,12 @@
 [
   {
-    "moduleCode": "CS2100",
-    "lessonType": "Tutorial",
-    "startTime": "09:00",
+    "moduleCode": "MA1521",
+    "lessonType": "Lecture",
+    "startTime": "08:00",
     "endTime": "10:00",
     "weeks": [
+      1,
+      2,
       3,
       4,
       5,
@@ -18,6 +20,28 @@
       13
     ],
     "day": 1
+  },
+  {
+    "moduleCode": "MA1521",
+    "lessonType": "Lecture",
+    "startTime": "08:00",
+    "endTime": "10:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 4
   },
   {
     "moduleCode": "CS2100",
@@ -42,7 +66,7 @@
     "day": 1
   },
   {
-    "moduleCode": "MA1521",
+    "moduleCode": "CS2040S",
     "lessonType": "Lecture",
     "startTime": "14:00",
     "endTime": "16:00",
@@ -64,54 +88,10 @@
     "day": 1
   },
   {
-    "moduleCode": "MA1521",
+    "moduleCode": "CS2040S",
     "lessonType": "Lecture",
     "startTime": "14:00",
-    "endTime": "16:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 4
-  },
-  {
-    "moduleCode": "CS2040S",
-    "lessonType": "Lecture",
-    "startTime": "16:00",
-    "endTime": "18:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 1
-  },
-  {
-    "moduleCode": "CS2040S",
-    "lessonType": "Lecture",
-    "startTime": "13:00",
-    "endTime": "14:00",
+    "endTime": "15:00",
     "weeks": [
       1,
       2,
@@ -128,6 +108,26 @@
       13
     ],
     "day": 3
+  },
+  {
+    "moduleCode": "CS2100",
+    "lessonType": "Tutorial",
+    "startTime": "17:00",
+    "endTime": "18:00",
+    "weeks": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 1
   },
   {
     "moduleCode": "MA1521",
@@ -172,8 +172,8 @@
   {
     "moduleCode": "CS2100",
     "lessonType": "Laboratory",
-    "startTime": "14:00",
-    "endTime": "15:00",
+    "startTime": "15:00",
+    "endTime": "16:00",
     "weeks": [
       3,
       4,
@@ -234,8 +234,8 @@
   {
     "moduleCode": "CS2040S",
     "lessonType": "Lecture",
-    "startTime": "16:00",
-    "endTime": "18:00",
+    "startTime": "14:00",
+    "endTime": "16:00",
     "weeks": [
       1,
       2,
@@ -256,8 +256,8 @@
   {
     "moduleCode": "CS2040S",
     "lessonType": "Lecture",
-    "startTime": "13:00",
-    "endTime": "14:00",
+    "startTime": "14:00",
+    "endTime": "15:00",
     "weeks": [
       1,
       2,
@@ -276,32 +276,10 @@
     "day": 3
   },
   {
-    "moduleCode": "MA1522",
-    "lessonType": "Lecture",
-    "startTime": "10:00",
-    "endTime": "12:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 4
-  },
-  {
     "moduleCode": "MA1521",
     "lessonType": "Lecture",
-    "startTime": "14:00",
-    "endTime": "16:00",
+    "startTime": "08:00",
+    "endTime": "10:00",
     "weeks": [
       1,
       2,
@@ -322,8 +300,30 @@
   {
     "moduleCode": "MA1521",
     "lessonType": "Lecture",
-    "startTime": "14:00",
-    "endTime": "16:00",
+    "startTime": "08:00",
+    "endTime": "10:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 4
+  },
+  {
+    "moduleCode": "MA1522",
+    "lessonType": "Lecture",
+    "startTime": "10:00",
+    "endTime": "12:00",
     "weeks": [
       1,
       2,
@@ -364,8 +364,8 @@
   {
     "moduleCode": "ES2660",
     "lessonType": "Sectional Teaching",
-    "startTime": "12:00",
-    "endTime": "15:00",
+    "startTime": "15:00",
+    "endTime": "18:00",
     "weeks": [
       2,
       3,

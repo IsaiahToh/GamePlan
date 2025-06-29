@@ -31,6 +31,7 @@ const formSchema = z.object({
       from: z.string().min(1, "Start time required"),
       to: z.string().min(1, "End time required"),
       label: z.string().optional(),
+      day: z.string().optional(),
     })
   ),
   url: z.string(),
@@ -44,7 +45,7 @@ const formSchema = z.object({
 });
 
 const defaultValues = {
-  blockOutTimings: [{ from: "", to: "", label: "" }],
+  blockOutTimings: [{ from: "", to: "", label: "", day: "all" }],
   url: "",
   groups: [{ name: "", color: "red" }],
   firstSundayOfSem: "",
@@ -103,6 +104,7 @@ export default function Settingsbar() {
               from: time.from,
               to: time.to,
               label: time.label,
+              day: time.day,
             })),
             url: values.url,
             groups: values.groups.map((group) => ({
@@ -161,7 +163,7 @@ export default function Settingsbar() {
                       <FormControl>
                         <Input
                           type="time"
-                          className = "w-30"
+                          className="w-28"
                           {...form.register(`blockOutTimings.${index}.from`)}
                           placeholder="From"
                         />
@@ -170,7 +172,7 @@ export default function Settingsbar() {
                       <FormControl>
                         <Input
                           type="time"
-                          className = "w-30"
+                          className="w-28"
                           {...form.register(`blockOutTimings.${index}.to`)}
                           placeholder="To"
                         />
@@ -183,6 +185,28 @@ export default function Settingsbar() {
                           className="w-32"
                         />
                       </FormControl>
+                      <FormControl>
+                        <Select
+                          onValueChange={(value) =>
+                            form.setValue(`blockOutTimings.${index}.day`, value)
+                          }
+                          value={form.watch(`blockOutTimings.${index}.day`) || "all"}
+                        >
+                          <SelectTrigger className="w-28">
+                            <SelectValue placeholder="All Days" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All Days</SelectItem>
+                            <SelectItem value="Sunday">Sunday</SelectItem>
+                            <SelectItem value="Monday">Monday</SelectItem>
+                            <SelectItem value="Tuesday">Tuesday</SelectItem>
+                            <SelectItem value="Wednesday">Wednesday</SelectItem>
+                            <SelectItem value="Thursday">Thursday</SelectItem>
+                            <SelectItem value="Friday">Friday</SelectItem>
+                            <SelectItem value="Saturday">Saturday</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
                       <Button
                         type="button"
                         variant="destructive"
@@ -194,7 +218,7 @@ export default function Settingsbar() {
                   ))}
                   <Button
                     type="button"
-                    onClick={() => appendTime({ from: "", to: "" })}
+                    onClick={() => appendTime({ from: "", to: "", label: "", day: "" })}
                     className="bg-white text-gray-500 w-1/4"
                     variant="link"
                   >

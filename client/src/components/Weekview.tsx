@@ -10,7 +10,7 @@ type WeekviewProps = {
   tasks: ScheduledTask[];
   groups: { name: string; color: string }[];
   firstSundayOfSem: string;
-  blockOutTimings: { from: string; to: string; label?: string }[];
+  blockOutTimings: { from: string; to: string; label?: string; day?: string }[];
 };
 
 export default function Weekview({
@@ -25,25 +25,24 @@ export default function Weekview({
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-      // Get current time as fraction of the day
-      const minutesPassed = date.hour() * 60 + date.minute();
-      const fractionOfDay = minutesPassed / (24 * 60);
-  
-      if (scrollAreaRef.current) {
-        const viewport = scrollAreaRef.current.querySelector(
-          "[data-radix-scroll-area-viewport]"
-        ) as HTMLDivElement | null;
-        if (viewport) {
-          const maxScrollTop = viewport.scrollHeight - viewport.clientHeight;
-          viewport.scrollTop = maxScrollTop * fractionOfDay;
-        }
+    const minutesPassed = date.hour() * 60 + date.minute();
+    const fractionOfDay = minutesPassed / (24 * 60);
+
+    if (scrollAreaRef.current) {
+      const viewport = scrollAreaRef.current.querySelector(
+        "[data-radix-scroll-area-viewport]"
+      ) as HTMLDivElement | null;
+      if (viewport) {
+        const maxScrollTop = viewport.scrollHeight - viewport.clientHeight;
+        viewport.scrollTop = maxScrollTop * fractionOfDay;
       }
-    }, []);
+    }
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(dayjs());
-    }, 60000); // Update every minute
+    }, 60000);
     return () => clearInterval(interval);
   }, []);
 
@@ -95,13 +94,49 @@ export default function Weekview({
               </div>
             ))}
           </div>
-          {getWeek(date).map(({ isCurrentDay, today }, dayIndex) => {
-            const dayDate = date.startOf("week").add(dayIndex, "day");
+          {getWeek(date).map(({ isCurrentDay, today, currentDate }, dayIndex) => {
+            // Use currentDate.format("dddd") to get the day name (e.g. "Monday")
+            const dayName = currentDate.format("dddd");
+
+            // Filter blockouts for this day
+            const relevantBlockouts = blockOutTimings.filter(
+              (block) => block.day === "all" || !block.day || block.day === dayName
+            );
 
             return (
-              <div key={dayIndex} className="relative border-r border-gray-300">
+              <div key={dayIndex} className="relative border-r border-gray-300 h-full">
+                {/* Blockout timings as single absolute blocks */}
+                {relevantBlockouts.map((block, blockIdx) => {
+                  const [blockStartHour, blockStartMin] = block.from.split(":").map(Number);
+                  const [blockEndHour, blockEndMin] = block.to.split(":").map(Number);
+
+                  const blockStart = blockStartHour * 60 + blockStartMin;
+                  const blockEnd = blockEndHour * 60 + blockEndMin;
+                  const dayStart = 0;
+                  const dayEnd = 24 * 60;
+
+                  const top = ((blockStart - dayStart) / (dayEnd - dayStart)) * 100;
+                  const height = ((blockEnd - blockStart) / (dayEnd - dayStart)) * 100;
+
+                  return (
+                    <div
+                      key={blockIdx}
+                      className="absolute left-0 w-full bg-gray-400 bg-opacity-60 rounded-lg px-2 py-1 text-xs z-1 flex flex-col items-start"
+                      style={{
+                        top: `${top}%`,
+                        height: `${height}%`,
+                      }}
+                      title={block.label}
+                    >
+                      <span className="font-semibold text-gray-800">{block.label || "Blocked"}</span>
+                      <span className="text-gray-600">{block.from} - {block.to}</span>
+                    </div>
+                  );
+                })}
+
+                {/* Hour slots */}
                 {getHours.map((hour, hourIndex) => {
-                  const slotStart = dayDate
+                  const slotStart = currentDate
                     .hour(hour.hour())
                     .minute(0)
                     .second(0);
@@ -111,55 +146,12 @@ export default function Weekview({
                       key={hourIndex}
                       className="relative flex h-12 flex-col items-center gap-y-2 border-b border-gray-300"
                     >
-                      
-                      {/* Blockout timings view */}
-                      {blockOutTimings &&
-                        blockOutTimings.map((block, blockIdx) => {
-                          // Parse blockout times
-                          const [blockStartHour, blockStartMin] = block.from.split(":").map(Number);
-                          const [blockEndHour, blockEndMin] = block.to.split(":").map(Number);
-
-                          // Calculate block start and end as minutes since midnight
-                          const blockStart = blockStartHour * 60 + blockStartMin;
-                          const blockEnd = blockEndHour * 60 + blockEndMin;
-
-                          // Calculate current slot start and end as minutes since midnight
-                          const slotStartMins = hour.hour() * 60;
-                          const slotEndMins = (hour.hour() + 1) * 60;
-
-                          // If this slot overlaps with the blockout timing, render it
-                          if (
-                            slotEndMins > blockStart &&
-                            slotStartMins < blockEnd // overlap
-                          ) {
-                            return (
-                              <div
-                                key={blockIdx}
-                                className="absolute left-0 w-full bg-gray-400 bg-opacity-60 rounded-lg px-2 py-1 text-xs z-0 flex items-center"
-                                style={{
-                                  top: 0,
-                                  height: "100%",
-                                }}
-                                title={block.label}
-                              >
-                                <span className="font-semibold text-gray-800">{block.label || "Blocked"}</span>
-                              </div>
-                            );
-                          }
-                          return null;
-                        })}
-                      
                       {/* lessons view */}
-
                       {lessons
-                        .filter((lesson: Lesson) => lesson.day === dayIndex) // Filter by day
-                        .filter(
-                          (lesson: Lesson) => lesson.weeks.includes(weekNumber) // Check that lesson falls into week
-                        )
+                        .filter((lesson: Lesson) => lesson.day === dayIndex)
+                        .filter((lesson: Lesson) => lesson.weeks.includes(weekNumber))
                         .filter((lesson: Lesson) => {
-                          // Filter by time slot
-                          // Check if the lesson starts at or after the slot start time
-                          const taskStart = dayDate
+                          const taskStart = currentDate
                             .hour(Number(lesson.startTime.split(":")[0]))
                             .minute(Number(lesson.startTime.split(":")[1]));
                           return (
@@ -169,22 +161,22 @@ export default function Weekview({
                           );
                         })
                         .map((lesson: Lesson, lessonIndex: number) => {
-                          const taskStart = dayDate
+                          const taskStart = currentDate
                             .hour(Number(lesson.startTime.split(":")[0]))
                             .minute(Number(lesson.startTime.split(":")[1]));
-                          const lessonEnd = dayDate
+                          const lessonEnd = currentDate
                             .hour(Number(lesson.endTime.split(":")[0]))
                             .minute(Number(lesson.endTime.split(":")[1]));
                           const duration = lessonEnd.diff(taskStart, "minutes");
                           const isOClockLesson = taskStart.minute() === 0;
-                          const group = groups // Find exact group with corresponding module code
+                          const group = groups
                             ? groups.find(
                                 (g) =>
                                   g.name.toLowerCase() ===
                                   lesson.moduleCode.toLowerCase()
                               )
                             : undefined;
-                          const colorOption = group // Find exact colorOption with corresponding color
+                          const colorOption = group
                             ? colorOptions.find(
                                 (option) => option.value === group.color
                               )
@@ -212,13 +204,10 @@ export default function Weekview({
                         })}
 
                       {/* tasks view */}
-
                       {tasks
-                        .filter((task: ScheduledTask) => task.day === dayIndex) // Filter by day
+                        .filter((task: ScheduledTask) => task.day === dayIndex)
                         .filter((task: ScheduledTask) => {
-                          // Filter by time slot
-                          // Check if the task starts at or after the slot start time
-                          const taskStart = dayDate
+                          const taskStart = currentDate
                             .hour(Number(task.startTime.split(":")[0]))
                             .minute(Number(task.startTime.split(":")[1]));
                           return (
@@ -228,22 +217,22 @@ export default function Weekview({
                           );
                         })
                         .map((task: ScheduledTask, taskIndex: number) => {
-                          const taskStart = dayDate
+                          const taskStart = currentDate
                             .hour(Number(task.startTime.split(":")[0]))
                             .minute(Number(task.startTime.split(":")[1]));
-                          const taskEnd = dayDate
+                          const taskEnd = currentDate
                             .hour(Number(task.endTime.split(":")[0]))
                             .minute(Number(task.endTime.split(":")[1]));
                           const duration = taskEnd.diff(taskStart, "minutes");
                           const isOClockTask = taskStart.minute() === 0;
-                          const group = groups // Find exact group with corresponding module code
+                          const group = groups
                             ? groups.find(
                                 (g) =>
                                   g.name.toLowerCase() ===
                                   task.group.toLowerCase()
                               )
                             : undefined;
-                          const colorOption = group // Find exact colorOption with corresponding color
+                          const colorOption = group
                             ? colorOptions.find(
                                 (option) => option.value === group.color
                               )
@@ -272,10 +261,9 @@ export default function Weekview({
                 })}
 
                 {/* Current time indicator */}
-
-                {isCurrentDay(dayDate) && today && (
+                {isCurrentDay(currentDate) && today && (
                   <div
-                    className="absolute w-full flex items-center z-10 pointer-events-none"
+                    className="absolute w-full flex items-center z-50 pointer-events-none"
                     style={{
                       top: `${
                         (currentTime.hour() / 24 +
@@ -286,7 +274,7 @@ export default function Weekview({
                     }}
                   >
                     {/* Red circle (bulb) */}
-                    <div className="w-3 h-3 bg-red-500 rounded-full shadow-md -ml-1 z-20" />
+                    <div className="w-3 h-3 bg-red-500 rounded-full shadow-md -ml-1 z-50" />
                     {/* Red line */}
                     <div className="h-0.5 bg-red-500 flex-1" />
                   </div>

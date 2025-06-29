@@ -27,10 +27,28 @@ async function getWeeklyFreeTimes(
   // Prepare busy intervals for each day (1-7)
   const busyByDay = Array.from({ length: 7 }, () => []);
 
-  // Add blockout timings to every day
+  // Add blockout timings to correct days
   for (let d = 0; d < 7; d++) {
     for (const block of blockOutTimings) {
-      busyByDay[d].push([toMinutes(block.from), toMinutes(block.to)]);
+      if (!block.day) {
+        // No day specified: applies to all days
+        busyByDay[d].push([toMinutes(block.from), toMinutes(block.to)]);
+      } else {
+        // Day specified: only apply to matching day
+        // Map day string to number: Sunday=0, Monday=1, ..., Saturday=6
+        const dayMap = {
+          Sunday: 0,
+          Monday: 1,
+          Tuesday: 2,
+          Wednesday: 3,
+          Thursday: 4,
+          Friday: 5,
+          Saturday: 6,
+        };
+        if (dayMap[block.day] === d) {
+          busyByDay[d].push([toMinutes(block.from), toMinutes(block.to)]);
+        }
+      }
     }
   }
 

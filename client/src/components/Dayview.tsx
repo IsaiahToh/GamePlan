@@ -11,7 +11,7 @@ type DayviewProps = {
   tasks: ScheduledTask[];
   groups: { name: string; color: string }[];
   firstSundayOfSem: string;
-  blockOutTimings: { from: string; to: string; label?: string }[];
+  blockOutTimings: { from: string; to: string; label?: string; day?: string }[];
 };
 
 export default function Dayview({
@@ -19,6 +19,7 @@ export default function Dayview({
   tasks,
   groups,
   firstSundayOfSem,
+  blockOutTimings = [],
 }: DayviewProps) {
   const date = dayjs();
   const weekNumber = dayjs(firstSundayOfSem).isAfter(date, "day")
@@ -28,7 +29,6 @@ export default function Dayview({
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Get current time as fraction of the day
     const minutesPassed = date.hour() * 60 + date.minute();
     const fractionOfDay = minutesPassed / (24 * 60);
 
@@ -46,9 +46,17 @@ export default function Dayview({
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(dayjs());
-    }, 60000); // Update every minute
+    }, 60000);
     return () => clearInterval(interval);
   }, []);
+
+  // Use date.format("dddd") to get the day name (e.g. "Monday")
+  const dayName = date.format("dddd");
+  const relevantBlockouts = blockOutTimings
+    ? blockOutTimings.filter(
+        (block) => block.day === "all" || !block.day || block.day === dayName
+      )
+    : [];
 
   return (
     <div className="flex h-screen w-full flex-col overflow-auto">
@@ -80,6 +88,35 @@ export default function Dayview({
 
           {/* Day/Boxes Column */}
           <div className="relative border-r border-gray-300">
+            {/* Blockout timings as single absolute blocks */}
+            {relevantBlockouts.map((block, blockIdx) => {
+              const [blockStartHour, blockStartMin] = block.from.split(":").map(Number);
+              const [blockEndHour, blockEndMin] = block.to.split(":").map(Number);
+
+              const blockStart = blockStartHour * 60 + blockStartMin;
+              const blockEnd = blockEndHour * 60 + blockEndMin;
+              const dayStart = 0;
+              const dayEnd = 24 * 60;
+
+              const top = ((blockStart - dayStart) / (dayEnd - dayStart)) * 100;
+              const height = ((blockEnd - blockStart) / (dayEnd - dayStart)) * 100;
+
+              return (
+                <div
+                  key={blockIdx}
+                  className="absolute left-0 w-full bg-gray-400 bg-opacity-60 rounded-lg px-2 py-1 text-xs z-1 flex flex-col items-start"
+                  style={{
+                    top: `${top}%`,
+                    height: `${height}%`,
+                  }}
+                  title={block.label}
+                >
+                  <span className="font-semibold text-gray-800">{block.label || "Blocked"}</span>
+                  <span className="text-gray-600">{block.from} - {block.to}</span>
+                </div>
+              );
+            })}
+
             {getHours.map((hour, hourIndex) => {
               const slotStart = date.hour(hour.hour()).minute(0).second(0);
 
@@ -89,15 +126,10 @@ export default function Dayview({
                   className="relative flex h-12 flex-col items-center gap-y-2 border-b border-gray-300"
                 >
                   {/* lessons view */}
-
                   {lessons
-                    .filter((lesson: Lesson) => lesson.day === date.day()) // Filter by day
-                    .filter(
-                      (lesson: Lesson) => lesson.weeks.includes(weekNumber) // Check that lesson falls into week
-                    )
+                    .filter((lesson: Lesson) => lesson.day === date.day())
+                    .filter((lesson: Lesson) => lesson.weeks.includes(weekNumber))
                     .filter((lesson: Lesson) => {
-                      // Filter by time slot
-                      // Check if the lesson starts at or after the slot start time
                       const taskStart = date
                         .hour(Number(lesson.startTime.split(":")[0]))
                         .minute(Number(lesson.startTime.split(":")[1]));
@@ -116,14 +148,14 @@ export default function Dayview({
                         .minute(Number(lesson.endTime.split(":")[1]));
                       const duration = lessonEnd.diff(taskStart, "minutes");
                       const isOClockLesson = taskStart.minute() === 0;
-                      const group = groups // Find exact group with corresponding module code
+                      const group = groups
                         ? groups.find(
                             (g) =>
                               g.name.toLowerCase() ===
                               lesson.moduleCode.toLowerCase()
                           )
                         : undefined;
-                      const colorOption = group // Find exact colorOption with corresponding color
+                      const colorOption = group
                         ? colorOptions.find(
                             (option) => option.value === group.color
                           )
@@ -145,7 +177,7 @@ export default function Dayview({
                           </div>
                           <div className="text-gray-600">
                             <p>{lesson.lessonType}</p>
-                            <p>{lesson.startTime} - {lesson.endTime}</p>  
+                            <p>{lesson.startTime} - {lesson.endTime}</p>
                             <p>Weeks {lesson.weeks.join(", ")}</p>
                           </div>
                         </div>
@@ -153,12 +185,9 @@ export default function Dayview({
                     })}
 
                   {/* tasks view */}
-
                   {tasks
-                    .filter((task: ScheduledTask) => task.day === date.day()) // Filter by day
+                    .filter((task: ScheduledTask) => task.day === date.day())
                     .filter((task: ScheduledTask) => {
-                      // Filter by time slot
-                      // Check if the task starts at or after the slot start time
                       const taskStart = date
                         .hour(Number(task.startTime.split(":")[0]))
                         .minute(Number(task.startTime.split(":")[1]));
@@ -177,13 +206,13 @@ export default function Dayview({
                         .minute(Number(task.endTime.split(":")[1]));
                       const duration = taskEnd.diff(taskStart, "minutes");
                       const isOClockTask = taskStart.minute() === 0;
-                      const group = groups // Find exact group with corresponding module code
+                      const group = groups
                         ? groups.find(
                             (g) =>
                               g.name.toLowerCase() === task.group.toLowerCase()
                           )
                         : undefined;
-                      const colorOption = group // Find exact colorOption with corresponding color
+                      const colorOption = group
                         ? colorOptions.find(
                             (option) => option.value === group.color
                           )
@@ -219,17 +248,18 @@ export default function Dayview({
 
             {/* Current time indicator */}
             <div
-              className="absolute w-full flex items-center z-10 pointer-events-none"
+              className="absolute w-full flex items-center z-50 pointer-events-none"
               style={{
                 top: `${
-                  (currentTime.hour() / 24 + currentTime.minute() / 30 / 48) *
+                  (currentTime.hour() / 24 +
+                    currentTime.minute() / 30 / 48) *
                   100
                 }%`,
                 transform: "translateY(-50%)",
               }}
             >
               {/* Red circle (bulb) */}
-              <div className="w-3 h-3 bg-red-500 rounded-full shadow-md -ml-1 z-20" />
+              <div className="w-3 h-3 bg-red-500 rounded-full shadow-md -ml-1 z-50" />
               {/* Red line */}
               <div className="h-0.5 bg-red-500 flex-1" />
             </div>

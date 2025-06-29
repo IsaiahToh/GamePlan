@@ -4,6 +4,7 @@ const blockOutTimingSchema = new mongoose.Schema({
   from: { type: String, required: true },
   to: { type: String, required: true },
   label: { type: String, default: "" },
+  day: { type: String, default: "" },
 }, { _id: false });
 
 const dashboardSchema = new mongoose.Schema({
