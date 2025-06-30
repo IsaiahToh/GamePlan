@@ -21,23 +21,20 @@ function App() {
   const [view, setView] = useState("Week");
   const [scheduledTasks, setScheduledTasks] = useState<any[]>([]);
   const fetchDashboardTasks = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-      try {
-        const res = await fetch(
-          "http://localhost:3000/api/tasks/",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        if (!res.ok) return;
-        const data = await res.json();
-        setScheduledTasks(data.scheduledTasks);
-        console.log("Scheduled tasks:", scheduledTasks);
-      } catch (error) {
-        console.log("Error fetching sorted tasks:", error);
-      }
-    };
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      const res = await fetch("http://localhost:3000/api/tasks/", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      setScheduledTasks(data.scheduledTasks);
+      console.log("Scheduled tasks:", scheduledTasks);
+    } catch (error) {
+      console.log("Error fetching sorted tasks:", error);
+    }
+  };
 
   return (
     <div className="flex flex-col h-full">
@@ -49,7 +46,7 @@ function App() {
         setView={setView}
       />
       <div className="flex flex-1">
-        {isSidebarOpen && <Sidebar fetchDashboardTasks={fetchDashboardTasks}/>}
+        {isSidebarOpen && <Sidebar fetchDashboardTasks={fetchDashboardTasks} />}
         <main className="flex-1">
           <Routes>
             <Route path="/login" element={<Login />}></Route>
@@ -58,7 +55,11 @@ function App() {
               path="/dashboard"
               element={
                 <ProtectedRoute>
-                  <Dashboard view={view} scheduledTasks={scheduledTasks} fetchDashboardTasks={fetchDashboardTasks}/>
+                  <Dashboard
+                    view={view}
+                    scheduledTasks={scheduledTasks}
+                    fetchDashboardTasks={fetchDashboardTasks}
+                  />
                 </ProtectedRoute>
               }
             ></Route>

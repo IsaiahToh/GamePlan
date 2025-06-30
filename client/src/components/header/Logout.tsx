@@ -50,11 +50,11 @@ const Logout: React.FC = () => {
           x.closePath();
 
           const l = x.createLinearGradient(p, q - f, p + s, q);
-          l.addColorStop(0, "rgba(31, 41, 55, 1)");
-          l.addColorStop(1, "rgba(255,0,255,.8)");
+          l.addColorStop(0, "rgba(255, 255, 255, 1)");
+          l.addColorStop(1, "rgba(190,190,192,1)");
           x.fillStyle = l;
           x.fill();
-          x.strokeStyle = "rgba(255,255,0,.5)";
+          x.strokeStyle = "rgba(31,41,55,1)";
           x.stroke();
 
           x.beginPath();
@@ -64,7 +64,7 @@ const Logout: React.FC = () => {
           x.lineTo(p + s, q - f);
           x.moveTo(p + s / 2, q + s / 2);
           x.lineTo(p + s / 2, q - s / 2 - f);
-          x.strokeStyle = "rgba(255,255,255,0)";
+          x.strokeStyle = "rgba(31,41,51,0)";
           x.stroke();
         }
       }
@@ -72,7 +72,7 @@ const Logout: React.FC = () => {
 
     const a = () => {
       if (!canvas || !x) return;
-      x.fillStyle = "rgba(0,0,0,.1)";
+      x.fillStyle = "rgba(31,41,51,1)";
       x.fillRect(0, 0, canvas.width, canvas.height);
       d();
       t += 0.05;
@@ -98,7 +98,7 @@ const Logout: React.FC = () => {
       />
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <h1
-          className="text-white text-2xl md:text-4xl font-bold text-center drop-shadow-lg"
+          className="text-black text-2xl md:text-4xl font-bold text-center drop-shadow-lg"
           style={{
             animation: "bob 4.5s infinite cubic-bezier(.1, .1, .1, .1)",
           }}

@@ -204,7 +204,7 @@ export default function Weekview({
                         })}
 
                       {/* tasks view */}
-                      {tasks
+                      {(tasks || [])
                         .filter((task: ScheduledTask) => task.day === dayIndex)
                         .filter((task: ScheduledTask) => {
                           const taskStart = currentDate

@@ -11,7 +11,7 @@ function generateToken(user) {
   };
   const options = {
     expiresIn: "1h",
-    // algorithm: 'HS256' // Default, specify if you want a different one
+    // algorithm: 'HS256' 
   };
   return jwt.sign(payload, secretKey, options);
 }

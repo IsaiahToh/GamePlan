@@ -8,7 +8,7 @@ require("dotenv").config({
 mongoose.connect(process.env.MONGODB_URI);
 
 mongoose.connection.on("connected", () => {
-  console.log("Connected to MongoDB");
+  console.log("Connected to MongoDB Atlas");
 });
 mongoose.connection.on("error", (err) => {
   console.error("Error connecting to MongoDB:", err);

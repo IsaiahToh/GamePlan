@@ -19,6 +19,6 @@ const dashboardSchema = new mongoose.Schema({
   blockOutTimings: { type: [blockOutTimingSchema], default: [] },
   firstSundayOfSem: { type: String, default: "" },
   freeTimes: { type: Array, default: [] },
-});
+})
 
 module.exports = mongoose.model("Dashboard", dashboardSchema);
