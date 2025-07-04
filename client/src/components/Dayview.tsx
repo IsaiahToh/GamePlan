@@ -1,8 +1,7 @@
-import { cn } from "@/lib/utils";
 import dayjs from "dayjs";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ScrollArea } from "./ui/scroll-area";
-import { getHours, isCurrentDay } from "@/lib/utils";
+import { getHours } from "@/lib/utils";
 import { type ScheduledTask, type Lesson } from "@/lib/types";
 import { colorOptions } from "@/lib/utils";
 
@@ -185,7 +184,7 @@ export default function Dayview({
                     })}
 
                   {/* tasks view */}
-                  {tasks
+                  {(tasks || [])
                     .filter((task: ScheduledTask) => task.day === date.day())
                     .filter((task: ScheduledTask) => {
                       const taskStart = date

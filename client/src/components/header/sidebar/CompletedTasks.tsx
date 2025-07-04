@@ -18,13 +18,13 @@ type CompletedTasksProps = {
 };
 
 export default function CompletedTasks({ tasks = [], markTaskAsUndone, fetchTasks}: CompletedTasksProps) {
-  if (!tasks.length) return <div>No completed tasks.</div>;
+  if (!tasks.length) return<div>No completed tasks.</div>;
 
   const deleteCompletedTasks = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
-      const res = await fetch(`http://localhost:3000/api/tasks/clear-complete`, {
+      const res = await fetch(`http://localhost:3000/api/tasks/clear`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

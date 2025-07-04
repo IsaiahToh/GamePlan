@@ -21,9 +21,9 @@ app.get("/", (req, res) => {
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use("/user", signupRoute);
-app.use("/auth", loginRoute);
-app.use("/api", dashboardRoutes);
+app.use("/api/auth", signupRoute);
+app.use("/api/auth", loginRoute);
+app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/tasks", taskRoutes);
 
 app.listen(port, () => {

@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function Day({ day, rowIdx }: { day: any; rowIdx: number }) {
   function getCurrentDayClass() {
     const today = new Date();
