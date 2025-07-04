@@ -3,6 +3,7 @@ import OutstandingTasks from "./OutstandingTasks";
 import CompletedTasks from "./CompletedTasks";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { type Task } from "@/lib/types";
+import toast from "react-hot-toast";
 
 type SidebarDropdownProps = {
   label: string;
@@ -140,6 +141,31 @@ export default function Sidebar({ fetchDashboardTasks }: SidebarProps) {
   useEffect(() => {
     fetchTasks();
   }, []);
+
+  useEffect(() => {
+    const now = new Date();
+    outstandingTasks.forEach((task) => {
+      const deadline = new Date(`${task.deadlineDate}T${task.deadlineTime}`);
+      const diffMs = deadline.getTime() - now.getTime();
+      const diffHrs = diffMs / (1000 * 60 * 60);
+      if (diffHrs > 0 && diffHrs <= 24) {
+        toast.custom((t) => (
+          <div className="bg-white rounded shadow px-4 py-2 flex items-center gap-2 relative min-w-[250px] pr-8">
+            <span className="text-lg">⏰</span>
+            <span className="flex-1">
+              Task "<b>{task.name}</b>" is due in less than 24 hours!
+            </span>
+            <button
+              className="absolute top-1 right-2 text-gray-400 hover:text-gray-700 text-lg"
+              onClick={() => toast.dismiss(t.id)}
+            >
+              ×
+            </button>
+          </div>
+        ), { duration: 6000 });
+      }
+    });
+  }, [outstandingTasks]);
 
   return (
     <aside className="bg-white shadow-md shadow-gray-500 w-64 h-screen overflow-y-auto">

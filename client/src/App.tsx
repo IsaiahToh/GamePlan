@@ -9,6 +9,7 @@ import { useState, type JSX } from "react";
 import { Navigate } from "react-router-dom";
 import Settingsbar from "./components/header/Settingsbar";
 import Sidebar from "./components/header/sidebar/Sidebar";
+import { Toaster } from "react-hot-toast";
 
 function ProtectedRoute({ children }: { children: JSX.Element }) {
   const isAuthenticated = !!localStorage.getItem("token");
@@ -37,39 +38,42 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <Header
-        isSideBarOpen={isSidebarOpen}
-        setIsSidebarOpen={setIsSidebarOpen}
-        isSettingsbarOpen={isSettingsbarOpen}
-        setIsSettingsbarOpen={setIsSettingsbarOpen}
-        setView={setView}
-      />
-      <div className="flex flex-1">
-        {isSidebarOpen && <Sidebar fetchDashboardTasks={fetchDashboardTasks} />}
-        <main className="flex-1">
-          <Routes>
-            <Route path="/login" element={<Login />}></Route>
-            <Route path="/signup" element={<Signup />}></Route>
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard
-                    view={view}
-                    scheduledTasks={scheduledTasks}
-                    fetchDashboardTasks={fetchDashboardTasks}
-                  />
-                </ProtectedRoute>
-              }
-            ></Route>
-            <Route path="/" element={<Home />}></Route>
-            <Route path="/about" element={<About />}></Route>
-          </Routes>
-        </main>
-        {isSettingsbarOpen && <Settingsbar />}
+    <>
+      <Toaster position="top-right" />
+      <div className="flex flex-col h-full">
+        <Header
+          isSideBarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+          isSettingsbarOpen={isSettingsbarOpen}
+          setIsSettingsbarOpen={setIsSettingsbarOpen}
+          setView={setView}
+        />
+        <div className="flex flex-1">
+          {isSidebarOpen && <Sidebar fetchDashboardTasks={fetchDashboardTasks} />}
+          <main className="flex-1">
+            <Routes>
+              <Route path="/login" element={<Login />}></Route>
+              <Route path="/signup" element={<Signup />}></Route>
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard
+                      view={view}
+                      scheduledTasks={scheduledTasks}
+                      fetchDashboardTasks={fetchDashboardTasks}
+                    />
+                  </ProtectedRoute>
+                }
+              ></Route>
+              <Route path="/" element={<Home />}></Route>
+              <Route path="/about" element={<About />}></Route>
+            </Routes>
+          </main>
+          {isSettingsbarOpen && <Settingsbar />}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
