@@ -44,7 +44,7 @@ export default function Sidebar({ fetchDashboardTasks }: SidebarProps) {
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
-      const res = await fetch("http://localhost:3000/api/tasks/", {
+      const res = await fetch("http://localhost:3000/api/tasks", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) return;
@@ -63,7 +63,7 @@ export default function Sidebar({ fetchDashboardTasks }: SidebarProps) {
     if (!token) return;
     try {
       const res = await fetch(
-        "http://localhost:3000/api/tasks/sorted/by-deadline-and-importance",
+        "http://localhost:3000/api/tasks?sort=true",
         {
           headers: { Authorization: `Bearer ${token}` },
         }

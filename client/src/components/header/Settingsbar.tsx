@@ -92,7 +92,7 @@ export default function Settingsbar() {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        "http://localhost:3000/api/dashboard/scrape-and-import",
+        "http://localhost:3000/api/dashboard",
         {
           method: "POST",
           headers: {

@@ -6,11 +6,7 @@ const {
 } = require("../controllers/dashboard");
 const { authenticateToken } = require("../utils/authMiddleware");
 
-router.get("/dashboard", authenticateToken, getDashboard);
-router.post(
-  "/dashboard/scrape-and-import",
-  authenticateToken,
-  scrapeAndImportDashboard
-);
+router.get("/", authenticateToken, getDashboard);
+router.post("/", authenticateToken, scrapeAndImportDashboard);
 
 module.exports = router;
