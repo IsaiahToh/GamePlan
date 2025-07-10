@@ -2,6 +2,7 @@ const fs = require("fs");
 const { scrape } = require("../services/scrapers");
 const { getWeeklyFreeTimes } = require("../services/freeTimes");
 const Dashboard = require("../models/dashboard");
+const User = require("../models/user");
 const dayjs = require("dayjs");
 
 async function scrapeAndImportDashboard(req, res) {
@@ -45,7 +46,8 @@ async function scrapeAndImportDashboard(req, res) {
 }
 
 async function getDashboard(req, res) {
-  const userId = req.user.id;
+  const email = req.query.email;
+  const userId = await User.findOne({ email }).then(user => user._id);
   const dashboard = await Dashboard.findOne({ userId });
   if (dashboard) {
     res.json({

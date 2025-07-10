@@ -6,13 +6,15 @@ import { useNavigate } from "react-router-dom";
 interface ProfileProps {
   setIsSidebarOpen: (open: boolean) => void;
   setIsSettingsbarOpen: (open: boolean) => void;
-  setToken: (token: string | null) => void; 
+  setToken: (token: string | null) => void;
+  fetchDashboard: (email: string) => Promise<void>;
 }
 
 export default function Profile({
   setIsSidebarOpen,
   setIsSettingsbarOpen,
   setToken,
+  fetchDashboard,
 }: ProfileProps) {
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
@@ -21,7 +23,7 @@ export default function Profile({
     setIsSettingsbarOpen(false); // Close settings bar if open
     setToken(null);
     navigate("/login"); // Redirect to login page
-  };
+  }
   return (
     <div className="group relative">
       <User className="cursor-pointer" />
@@ -30,7 +32,7 @@ export default function Profile({
           <p className="text-black text-xs underline my-2">{email}</p>
 
           <AddFriend />
-          <ViewFriend />
+          <ViewFriend fetchDashboard={fetchDashboard}/>
           <p className="cursor-pointer hover:text-black" onClick={handleLogout}>
             Logout
           </p>

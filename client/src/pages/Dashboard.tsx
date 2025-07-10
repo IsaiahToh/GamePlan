@@ -2,41 +2,26 @@ import React, { useEffect, useState } from "react";
 import Weekview from "@/components/Weekview";
 import Dayview from "@/components/Dayview";
 import Logout from "@/components/header/Logout";
+import { type ScheduledTask, type dashboardData } from "@/lib/types";
 
 type DashboardProps = {
   view: String;
-  scheduledTasks: any[];
+  scheduledTasks: ScheduledTask[];
   fetchDashboardTasks: () => Promise<any>;
+  fetchDashboard: (email: string) => Promise<void>;
+  dashboardData: dashboardData;
 };
 
 const Dashboard: React.FC<DashboardProps> = ({
   view,
   scheduledTasks,
   fetchDashboardTasks,
+  fetchDashboard,
+  dashboardData,
 }: DashboardProps) => {
-  const [dashboardData, setDashboardData] = useState<any>(null);
 
   useEffect(() => {
-    const fetchDashboard = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          console.log("No token found in localStorage");
-          return;
-        }
-        const res = await fetch("http://localhost:3000/api/dashboard", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await res.json();
-        setDashboardData(data);
-        console.log("Fetched data:", data);
-      } catch (error) {
-        console.log("Error fetching dashboard data:", error);
-      }
-    };
-    fetchDashboard();
+    fetchDashboard(localStorage.getItem("email") || "");
   }, []);
 
   useEffect(() => {

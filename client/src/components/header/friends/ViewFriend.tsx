@@ -11,7 +11,11 @@ import { useState, useEffect } from "react";
 import { type FriendRequest } from "@/lib/types";
 import { Calendar, Check, X } from "lucide-react";
 
-export function ViewFriend() {
+type ViewFriendProps = {
+    fetchDashboard: (email: string) => Promise<void>;
+}
+
+export function ViewFriend({fetchDashboard}: ViewFriendProps) {
   const [received, setReceived] = useState<FriendRequest[]>([]);
   const [friends, setFriends] = useState<FriendRequest[]>([]);
   const token = localStorage.getItem("token");
@@ -134,6 +138,13 @@ export function ViewFriend() {
                     <Calendar
                       className="h-5 cursor-pointer"
                       color="blue"
+                      onClick={() => {
+                        fetchDashboard(
+                          req.requester.email === email
+                            ? req.recipient.email
+                            : req.requester.email
+                        );
+                      }}
                     />
                     <X
                       className="h-5 cursor-pointer "

@@ -71,3 +71,12 @@ export interface FriendRequest {
   createdAt: string;
   updatedAt: string;
 };
+
+export interface dashboardData {
+  userId: string;
+  blockOutTimings: any[];
+  events: Lesson[];
+  firstSundayOfSem: string;
+  freeTimeSlots: any[];
+  groups: any[];
+}

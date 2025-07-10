@@ -15,6 +15,7 @@ interface HeaderProps {
   setView: React.Dispatch<React.SetStateAction<string>>;
   token: string | null;
   setToken: (token: string | null) => void;
+  fetchDashboard: (email: string) => Promise<void>;
 }
 
 const date = dayjs();
@@ -26,7 +27,8 @@ export default function Header({
   setIsSettingsbarOpen,
   setView,
   token,
-  setToken
+  setToken,
+  fetchDashboard,
 }: HeaderProps) {
 
   return (
@@ -75,7 +77,7 @@ export default function Header({
       {!!token ? (
         <div className="flex items-center gap-4">
           <Dropdown setView={setView} />
-          <Profile setIsSidebarOpen={setIsSidebarOpen} setIsSettingsbarOpen={setIsSettingsbarOpen} setToken={setToken}/>
+          <Profile setIsSidebarOpen={setIsSidebarOpen} setIsSettingsbarOpen={setIsSettingsbarOpen} setToken={setToken} fetchDashboard={fetchDashboard}/>
           <Settings
             className="cursor-pointer"
             size={20}
