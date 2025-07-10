@@ -9,6 +9,8 @@ import { useState, type JSX } from "react";
 import { Navigate } from "react-router-dom";
 import Settingsbar from "./components/header/Settingsbar";
 import Sidebar from "./components/header/sidebar/Sidebar";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ProtectedRoute({ children }: { children: JSX.Element }) {
   const isAuthenticated = !!localStorage.getItem("token");
@@ -69,6 +71,7 @@ function App() {
         </main>
         {isSettingsbarOpen && <Settingsbar />}
       </div>
+      <ToastContainer />
     </div>
   );
 }

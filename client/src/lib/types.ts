@@ -20,7 +20,7 @@ export interface Lesson {
   endTime: string; // HH:mm format
   weeks: Array<number>; // Array of week numbers (1-13)
   day: number; // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-};
+}
 
 // Base Task Interface (for outstanding/completed tasks)
 export interface Task {
@@ -37,9 +37,9 @@ export interface Task {
 
 // Scheduled Task Interface (extends base Task)
 export interface ScheduledTask extends Task {
-  day: number;       // 0-6 (Sunday-Saturday)
+  day: number; // 0-6 (Sunday-Saturday)
   startTime: string; // Format: "HH:MM"
-  endTime: string;   // Format: "HH:MM"
+  endTime: string; // Format: "HH:MM"
 }
 
 // Main User Tasks Document
@@ -50,3 +50,20 @@ export interface UserTasks {
   completedTasks: Task[];
   scheduledTasks: ScheduledTask[];
 }
+
+export const FriendForm = z.object({
+  email: z.string().min(1),
+});
+
+export interface FriendRequest {
+  _id: string;
+  requester: string;
+  recipient: {
+    _id: string;
+    email: string;
+    name: string;
+  };
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+};

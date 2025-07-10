@@ -7,10 +7,11 @@ const signupRoute = require("./routes/signup");
 const loginRoute = require("./routes/login");
 const dashboardRoutes = require("./routes/dashboard");
 const taskRoutes = require("./routes/task");
+const friendRoutes = require("./routes/friendRequest")
 
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const createAdminAccount = require("./scripts/admin");
+// const createAdminAccount = require("./scripts/admin");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -25,6 +26,7 @@ app.use("/api/auth", signupRoute);
 app.use("/api/auth", loginRoute);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/tasks", taskRoutes);
+app.use("/api/friend", friendRoutes)
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

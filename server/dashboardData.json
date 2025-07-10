@@ -1,31 +1,9 @@
 [
   {
-    "moduleCode": "BSP1702",
-    "lessonType": "Sectional Teaching",
-    "startTime": "12:00",
-    "endTime": "15:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 1
-  },
-  {
-    "moduleCode": "CS2040",
+    "moduleCode": "CS2103T",
     "lessonType": "Lecture",
-    "startTime": "13:00",
-    "endTime": "14:00",
+    "startTime": "12:00",
+    "endTime": "13:00",
     "weeks": [
       1,
       2,
@@ -44,7 +22,29 @@
     "day": 3
   },
   {
-    "moduleCode": "CS2040",
+    "moduleCode": "CS2103T",
+    "lessonType": "Lecture",
+    "startTime": "12:00",
+    "endTime": "15:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 2
+  },
+  {
+    "moduleCode": "CS2103T",
     "lessonType": "Lecture",
     "startTime": "16:00",
     "endTime": "18:00",
@@ -63,13 +63,13 @@
       12,
       13
     ],
-    "day": 1
+    "day": 5
   },
   {
-    "moduleCode": "MNO1706A",
-    "lessonType": "Sectional Teaching",
-    "startTime": "08:30",
-    "endTime": "11:30",
+    "moduleCode": "CS2100",
+    "lessonType": "Lecture",
+    "startTime": "10:00",
+    "endTime": "12:00",
     "weeks": [
       1,
       2,
@@ -85,7 +85,7 @@
       12,
       13
     ],
-    "day": 2
+    "day": 1
   },
   {
     "moduleCode": "CS2103T",
@@ -154,143 +154,33 @@
     "day": 5
   },
   {
-    "moduleCode": "ACC1701A",
-    "lessonType": "Sectional Teaching",
-    "startTime": "15:00",
-    "endTime": "18:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 2
-  },
-  {
-    "moduleCode": "CS2103T",
-    "lessonType": "Lecture",
-    "startTime": "12:00",
-    "endTime": "13:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 3
-  },
-  {
-    "moduleCode": "CS2103T",
-    "lessonType": "Lecture",
-    "startTime": "12:00",
-    "endTime": "15:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 2
-  },
-  {
-    "moduleCode": "CS2103T",
-    "lessonType": "Lecture",
-    "startTime": "16:00",
-    "endTime": "18:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 5
-  },
-  {
-    "moduleCode": "CS2040",
-    "lessonType": "Lecture",
-    "startTime": "13:00",
-    "endTime": "14:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 3
-  },
-  {
-    "moduleCode": "CS2040",
-    "lessonType": "Lecture",
-    "startTime": "16:00",
-    "endTime": "18:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 1
-  },
-  {
-    "moduleCode": "CS2040",
+    "moduleCode": "CS2100",
     "lessonType": "Tutorial",
-    "startTime": "12:00",
-    "endTime": "13:00",
+    "startTime": "09:00",
+    "endTime": "10:00",
     "weeks": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 1
+  },
+  {
+    "moduleCode": "ST2334",
+    "lessonType": "Lecture",
+    "startTime": "18:00",
+    "endTime": "20:00",
+    "weeks": [
+      1,
+      2,
       3,
       4,
       5,
@@ -304,47 +194,6 @@
       13
     ],
     "day": 4
-  },
-  {
-    "moduleCode": "ES2660",
-    "lessonType": "Sectional Teaching",
-    "startTime": "09:00",
-    "endTime": "12:00",
-    "weeks": [
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 5
-  },
-  {
-    "moduleCode": "CS2040",
-    "lessonType": "Laboratory",
-    "startTime": "12:00",
-    "endTime": "14:00",
-    "weeks": [
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 5
   },
   {
     "moduleCode": "CS2103T",

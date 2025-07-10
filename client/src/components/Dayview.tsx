@@ -59,8 +59,12 @@ export default function Dayview({
 
   return (
     <div className="flex h-screen w-full flex-col overflow-auto">
-      <div className="grid grid-cols-[auto_1fr] px-4">
-        <div className="w-16 border-r border-gray-300 text-xs">GMT +8</div>
+      <div className="grid grid-cols-[auto_1fr] px-4 py-2 shadow-sm">
+        <div className="h-full border-r border-gray-300 flex items-center justify-center">
+          <div className="text-xs text-gray-600 pr-5 pl-1">
+            {weekNumber == 0 ? "Sem break" : `Week ${weekNumber}`}
+          </div>
+        </div>
         <div className="flex w-16 flex-col items-center">
           <div className="text-xs flex items-center justify-center text-blue-600">
             {date.format("ddd")}
