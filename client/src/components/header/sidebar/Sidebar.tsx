@@ -89,7 +89,7 @@ export default function Sidebar({ fetchDashboardTasks }: SidebarProps) {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
-        console.log("Task deleted successfully");
+        toast.success("Task deleted!");
         fetchTasks();
       }
     } catch (error) {
@@ -110,7 +110,7 @@ export default function Sidebar({ fetchDashboardTasks }: SidebarProps) {
         }
       );
       if (res.ok) {
-        console.log("Task marked as done successfully");
+        toast.success("Task completed!");
         fetchTasks();
       }
     } catch (error) {
@@ -130,7 +130,7 @@ export default function Sidebar({ fetchDashboardTasks }: SidebarProps) {
         }
       );
       if (res.ok) {
-        console.log("Task marked as undone successfully");
+        toast.success("Task marked uncomplete!");
         fetchTasks();
       }
     } catch (error) {

@@ -39,13 +39,9 @@ async function getSent(req, res) {
   try {
     const userId = req.user.id;
     const sentRequests = await FriendRequest.find({ requester: userId, status: "pending" })
-      .populate("recipient", "email");
+      .populate("recipient", "email name");
 
-    if (!sentRequests || sentRequests.length === 0) {
-      return res.status(404).json({ message: "No sent friend requests found" });
-    }
-
-    res.status(200).json(sentRequests);
+    res.status(200).json(sentRequests || []);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }

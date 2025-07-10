@@ -3,7 +3,7 @@ import { Calendar, Menu, Settings, User } from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import { Dropdown } from "./Dropdown";
-// import { AddFriend } from "./friends/AddFriend";
+import { AddFriend } from "./friends/AddFriend";
 
 
 interface HeaderProps {
@@ -85,7 +85,7 @@ export default function Header({
             <User className="cursor-pointer" />
             <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
               <div className="flex flex-col gap-1 w-36 py-2 px-3 bg-white text-gray-500 rounded shadow-lg">
-                {/* <AddFriend /> */}
+                <AddFriend />
                 <p
                   className="cursor-pointer hover:text-black"
                   onClick={handleLogout}

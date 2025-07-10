@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast";
 
 type Task = {
   _id: string;
@@ -29,7 +30,7 @@ export default function CompletedTasks({ tasks = [], markTaskAsUndone, fetchTask
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
-        console.log("Task deleted successfully");
+        toast.success("Completed tasks cleared!", { duration: 2000 });
         fetchTasks();
       }
     } catch (error) {

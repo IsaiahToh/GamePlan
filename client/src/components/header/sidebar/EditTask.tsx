@@ -30,6 +30,7 @@ import { useEffect, useState } from "react";
 import z from "zod";
 import { taskSchema } from "@/lib/types";
 import { importanceLevels } from "@/lib/types";
+import toast from "react-hot-toast";
 
 type EditTaskProps = {
   task: any;
@@ -81,7 +82,7 @@ export function EditTask({ task, fetchTasks }: EditTaskProps) {
 
   const onSubmit = async (values: z.infer<typeof taskSchema>) => {
     const token = localStorage.getItem("token");
-    await fetch(`http://localhost:3000/api/tasks/${task._id}`, {
+    const response = await fetch(`http://localhost:3000/api/tasks/${task._id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -89,7 +90,10 @@ export function EditTask({ task, fetchTasks }: EditTaskProps) {
       },
       body: JSON.stringify(values),
     });
-    console.log("Task edited:", JSON.stringify(values));
+    if (!response.ok) {
+      return toast.error("Failed to update task.", { duration: 2000 });
+    }
+    toast.success("Task updated!", { duration: 2000 });
     if (fetchTasks) fetchTasks();
   };
 
