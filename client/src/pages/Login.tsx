@@ -31,7 +31,11 @@ const formSchema = z.object({
     .min(8, { message: "Password must be at least 8 characters." }),
 });
 
-const Login = () => {
+interface LoginProps {
+  setToken: (token: string | null) => void;
+}
+
+const Login = ({ setToken } : LoginProps) => {
   // Set up form with useForm and zodResolver
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -71,9 +75,10 @@ const Login = () => {
           message: "An unexpected error occurred. Please try again later.",
         });
       } else {
-        // Handle successful login
         const data = await response.json();
         localStorage.setItem("token", data.token); // Store token in local storage
+        localStorage.setItem("email", values.email); // Store email in local storage
+        setToken(data.token); // Update token state
         navigate("/dashboard"); // Redirect to dashboard page after successful login
       }
     } catch (error) {

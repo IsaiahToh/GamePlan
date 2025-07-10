@@ -4,7 +4,7 @@ async function login(req, res) {
   try {
     const { email, password } = req.body;
     const token = await authService.login(email, password);
-    res.json({ token: token });
+    res.json({ email: email, token: token });
   } catch (error) {
     if (error.message === "User not found") {
         res.status(404).json({ message: "User not found" });

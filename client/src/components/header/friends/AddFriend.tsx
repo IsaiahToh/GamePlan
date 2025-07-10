@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -32,19 +31,22 @@ export function AddFriend() {
       email: "",
     },
   });
-  const [pendingRequests, setPendingRequests] = useState<FriendRequest[]>([]);
+  const [sent, setSent] = useState<FriendRequest[]>([]);
   const token = localStorage.getItem("token");
 
-  async function fetchPendingRequests() {
+  async function fetchSent() {
     try {
-      const response = await fetch("http://localhost:3000/api/friend", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        "http://localhost:3000/api/friend?type=sent",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (!response.ok) throw new Error("Failed to fetch");
       const data = await response.json();
-      setPendingRequests(data === null ? [] : data);
+      setSent(data === null ? [] : data);
     } catch (error) {
       // handle error (e.g., show toast)
     } finally {
@@ -66,7 +68,7 @@ export function AddFriend() {
         toast.success("Friend request deleted successfully.", {
           duration: 2000,
         });
-        fetchPendingRequests();
+        fetchSent();
       } else {
         toast.error("Server error.", { duration: 2000 });
       }
@@ -76,7 +78,7 @@ export function AddFriend() {
   }
 
   useEffect(() => {
-    fetchPendingRequests();
+    fetchSent();
   }, []);
 
   async function onSubmit(data: z.infer<typeof FriendForm>) {
@@ -102,8 +104,12 @@ export function AddFriend() {
           toast.error("You cannot add yourself as a friend.", {
             duration: 2000,
           });
-        } else {
+        } else if (errData.code === "ALREADY_SENT") {
           toast.error("Friend request already sent.", { duration: 2000 });
+        } else {
+          toast.error("You are already friends with this user.", {
+            duration: 2000,
+          });
         }
       } else if (response.status === 201) {
         toast.success("Friend request sent successfully!", { duration: 2000 });
@@ -113,7 +119,7 @@ export function AddFriend() {
     } catch (error) {
       toast.error("Server error.", { duration: 2000 });
     } finally {
-      fetchPendingRequests();
+      fetchSent();
       form.reset();
     }
   }
@@ -150,11 +156,11 @@ export function AddFriend() {
             </Button>
           </form>
         </Form>
-        {pendingRequests.length > 0 ? (
+        {sent.length > 0 ? (
           <div>
             <p className="text-sm mb-1">Pending sent requests:</p>
             <ul>
-              {pendingRequests.map((req) => (
+              {sent.map((req) => (
                 <li
                   key={req._id}
                   className="text-gray-600 text-sm flex border border-gray mb-1 rounded-lg px-1"

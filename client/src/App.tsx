@@ -21,6 +21,8 @@ function App() {
   const [isSettingsbarOpen, setIsSettingsbarOpen] = useState(false);
   const [view, setView] = useState("Week");
   const [scheduledTasks, setScheduledTasks] = useState<any[]>([]);
+  const [ token, setToken ] = useState(localStorage.getItem("token"));
+
   const fetchDashboardTasks = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -47,12 +49,14 @@ function App() {
           isSettingsbarOpen={isSettingsbarOpen}
           setIsSettingsbarOpen={setIsSettingsbarOpen}
           setView={setView}
+          token={token}
+          setToken={setToken}
         />
         <div className="flex flex-1">
           {isSidebarOpen && <Sidebar fetchDashboardTasks={fetchDashboardTasks} />}
           <main className="flex-1">
             <Routes>
-              <Route path="/login" element={<Login />}></Route>
+              <Route path="/login" element={<Login setToken={setToken}/>}></Route>
               <Route path="/signup" element={<Signup />}></Route>
               <Route
                 path="/dashboard"

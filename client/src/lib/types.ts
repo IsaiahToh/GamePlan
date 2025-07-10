@@ -57,7 +57,11 @@ export const FriendForm = z.object({
 
 export interface FriendRequest {
   _id: string;
-  requester: string;
+  requester: {
+    _id: string;
+    email: string;
+    name: string;
+  };
   recipient: {
     _id: string;
     email: string;

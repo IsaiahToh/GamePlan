@@ -295,7 +295,7 @@ export default function Weekview({
                   {/* Current time indicator */}
                   {isCurrentDay(currentDate) && today && (
                     <div
-                      className="absolute w-full flex items-center z-50 pointer-events-none"
+                      className="absolute w-full flex items-center z-4 pointer-events-none"
                       style={{
                         top: `${
                           (currentTime.hour() / 24 +
