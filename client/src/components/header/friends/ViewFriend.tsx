@@ -11,6 +11,8 @@ import { useState, useEffect } from "react";
 import { type FriendRequest } from "@/lib/types";
 import { Calendar, Check, X } from "lucide-react";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 type ViewFriendProps = {
     fetchDashboard: (email: string) => Promise<void>;
 }
@@ -24,7 +26,7 @@ export function ViewFriend({fetchDashboard}: ViewFriendProps) {
   async function fetchReceived() {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/friend?type=received",
+        "${API_URL}/api/friend?type=received",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -42,7 +44,7 @@ export function ViewFriend({fetchDashboard}: ViewFriendProps) {
   async function fetchFriends() {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/friend?type=friends",
+        "${API_URL}/api/friend?type=friends",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -59,7 +61,7 @@ export function ViewFriend({fetchDashboard}: ViewFriendProps) {
 
   async function deleteFriendRequest(id: string) {
     try {
-      const response = await fetch(`http://localhost:3000/api/friend/${id}`, {
+      const response = await fetch(`${API_URL}/api/friend/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -84,7 +86,7 @@ export function ViewFriend({fetchDashboard}: ViewFriendProps) {
 
   async function addFriend(id: string) {
     try {
-      const response = await fetch(`http://localhost:3000/api/friend/${id}`, {
+      const response = await fetch(`${API_URL}/api/friend/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

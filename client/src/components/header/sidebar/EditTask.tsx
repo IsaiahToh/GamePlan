@@ -32,6 +32,8 @@ import { taskSchema } from "@/lib/types";
 import { importanceLevels } from "@/lib/types";
 import toast from "react-hot-toast";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 type EditTaskProps = {
   task: any;
   fetchTasks: () => void;
@@ -62,7 +64,7 @@ export function EditTask({ task, fetchTasks }: EditTaskProps) {
           console.log("No token found in localStorage");
           return;
         }
-        const res = await fetch("http://localhost:3000/api/dashboard", {
+        const res = await fetch("${API_URL}/api/dashboard", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -82,7 +84,7 @@ export function EditTask({ task, fetchTasks }: EditTaskProps) {
 
   const onSubmit = async (values: z.infer<typeof taskSchema>) => {
     const token = localStorage.getItem("token");
-    const response = await fetch(`http://localhost:3000/api/tasks/${task._id}`, {
+    const response = await fetch(`${API_URL}/api/tasks/${task._id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

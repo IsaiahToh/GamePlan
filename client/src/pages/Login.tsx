@@ -23,6 +23,8 @@ import {
 } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 // Define Zod schema
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address." }),
@@ -51,7 +53,7 @@ const Login = ({ setToken } : LoginProps) => {
   // Handle form submission
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const response = await fetch(`http://localhost:3000/api/auth/login`, {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

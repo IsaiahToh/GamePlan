@@ -11,6 +11,8 @@ import Settingsbar from "./components/header/Settingsbar";
 import Sidebar from "./components/header/sidebar/Sidebar";
 import { Toaster } from "react-hot-toast";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function ProtectedRoute({ children }: { children: JSX.Element }) {
   const isAuthenticated = !!localStorage.getItem("token");
   return isAuthenticated ? children : <Navigate to="/login" replace />;
@@ -31,7 +33,7 @@ function App() {
           console.log("No token found in localStorage");
           return;
         }
-        const res = await fetch(`http://localhost:3000/api/dashboard?email=${email}`, {
+        const res = await fetch(`${API_URL}/api/dashboard?email=${email}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -48,7 +50,7 @@ function App() {
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
-      const res = await fetch("http://localhost:3000/api/tasks?sort=true", {
+      const res = await fetch("${API_URL}/api/tasks?sort=true", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) return;

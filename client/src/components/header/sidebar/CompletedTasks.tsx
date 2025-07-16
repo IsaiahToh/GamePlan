@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 type Task = {
   _id: string;
   name: string;
@@ -25,7 +27,7 @@ export default function CompletedTasks({ tasks = [], markTaskAsUndone, fetchTask
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
-      const res = await fetch(`http://localhost:3000/api/tasks/clear`, {
+      const res = await fetch(`${API_URL}/api/tasks/clear`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

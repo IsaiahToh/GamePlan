@@ -5,6 +5,8 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { type Task } from "@/lib/types";
 import toast from "react-hot-toast";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 type SidebarDropdownProps = {
   label: string;
   children: ReactNode;
@@ -45,7 +47,7 @@ export default function Sidebar({ fetchDashboardTasks }: SidebarProps) {
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
-      const res = await fetch("http://localhost:3000/api/tasks", {
+      const res = await fetch("${API_URL}/api/tasks", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) return;
@@ -64,7 +66,7 @@ export default function Sidebar({ fetchDashboardTasks }: SidebarProps) {
     if (!token) return;
     try {
       const res = await fetch(
-        "http://localhost:3000/api/tasks?sort=true",
+        "${API_URL}/api/tasks?sort=true",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -84,7 +86,7 @@ export default function Sidebar({ fetchDashboardTasks }: SidebarProps) {
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
-      const res = await fetch(`http://localhost:3000/api/tasks/${id}`, {
+      const res = await fetch(`${API_URL}/api/tasks/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -103,7 +105,7 @@ export default function Sidebar({ fetchDashboardTasks }: SidebarProps) {
     if (!token) return;
     try {
       const res = await fetch(
-        `http://localhost:3000/api/tasks/${taskId}/complete`,
+        `${API_URL}/api/tasks/${taskId}/complete`,
         {
           method: "PATCH",
           headers: { Authorization: `Bearer ${token}` },
@@ -123,7 +125,7 @@ export default function Sidebar({ fetchDashboardTasks }: SidebarProps) {
     if (!token) return;
     try {
       const res = await fetch(
-        `http://localhost:3000/api/tasks/${taskId}/uncomplete`,
+        `${API_URL}/api/tasks/${taskId}/uncomplete`,
         {
           method: "PATCH",
           headers: { Authorization: `Bearer ${token}` },

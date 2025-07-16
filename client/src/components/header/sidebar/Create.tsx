@@ -32,6 +32,8 @@ import { useEffect, useState } from "react";
 import { taskSchema } from "@/lib/types";
 import { importanceLevels } from "@/lib/types";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 type CreateProps = {
   fetchTasks: () => void;
 };
@@ -47,7 +49,7 @@ export function Create({ fetchTasks }: CreateProps) {
           console.log("No token found in localStorage");
           return;
         }
-        const res = await fetch("http://localhost:3000/api/dashboard", {
+        const res = await fetch("${API_URL}/api/dashboard", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -83,7 +85,7 @@ export function Create({ fetchTasks }: CreateProps) {
     console.log("Form submitted with values:", values);
     try {
       const token = localStorage.getItem("token");
-      await fetch("http://localhost:3000/api/tasks", {
+      await fetch("${API_URL}/api/tasks", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

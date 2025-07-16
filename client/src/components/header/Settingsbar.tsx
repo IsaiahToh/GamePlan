@@ -25,6 +25,8 @@ import {
 } from "@/components/ui/select";
 import { colorOptions } from "@/lib/utils";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const formSchema = z.object({
   blockOutTimings: z.array(
     z.object({
@@ -92,7 +94,7 @@ export default function Settingsbar() {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        "http://localhost:3000/api/dashboard",
+        "${API_URL}/api/dashboard",
         {
           method: "POST",
           headers: {

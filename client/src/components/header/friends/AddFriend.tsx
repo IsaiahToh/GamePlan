@@ -24,6 +24,8 @@ import { useState, useEffect } from "react";
 import { type FriendRequest } from "@/lib/types";
 import { X } from "lucide-react";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export function AddFriend() {
   const form = useForm<z.infer<typeof FriendForm>>({
     resolver: zodResolver(FriendForm),
@@ -37,7 +39,7 @@ export function AddFriend() {
   async function fetchSent() {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/friend?type=sent",
+        "${API_URL}/api/friend?type=sent",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -55,7 +57,7 @@ export function AddFriend() {
 
   async function deleteFriendRequest(id: string) {
     try {
-      const response = await fetch(`http://localhost:3000/api/friend/${id}`, {
+      const response = await fetch(`${API_URL}/api/friend/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
