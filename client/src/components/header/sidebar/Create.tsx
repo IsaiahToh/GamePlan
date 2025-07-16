@@ -32,8 +32,6 @@ import { useEffect, useState } from "react";
 import { taskSchema } from "@/lib/types";
 import { importanceLevels } from "@/lib/types";
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 type CreateProps = {
   fetchTasks: () => void;
 };

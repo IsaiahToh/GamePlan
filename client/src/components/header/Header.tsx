@@ -4,8 +4,6 @@ import { Link, NavLink } from "react-router-dom";
 import dayjs from "dayjs";
 import { Dropdown } from "./Dropdown";
 import Profile from "./Profile";
-import { useState } from "react";
-
 
 interface HeaderProps {
   isSideBarOpen: boolean;

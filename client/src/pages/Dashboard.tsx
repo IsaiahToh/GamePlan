@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, } from "react";
 import Weekview from "@/components/Weekview";
 import Dayview from "@/components/Dayview";
 import Logout from "@/components/header/Logout";
