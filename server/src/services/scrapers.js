@@ -2,9 +2,7 @@ const puppeteer = require("puppeteer");
 const fs = require("fs");
 
 async function scrapeLessonClassNamesInKRfrugFP(url) {
-  const browser = await puppeteer.launch({
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-  });
+  const browser = await puppeteer.launch({executablePath: '/path/to/Chrome'});
   const page = await browser.newPage();
   await page.goto(url, { waitUntil: "networkidle2", timeout: 60000 });
 
