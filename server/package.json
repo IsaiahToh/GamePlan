@@ -7,8 +7,7 @@
   "type": "commonjs",
   "main": "server.js",
   "scripts": {
-    "start": "node src/server.js", 
-    "postinstall": "npx puppeteer browsers install chrome"
+    "start": "node src/server.js" 
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
