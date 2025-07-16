@@ -47,7 +47,7 @@ export default function Sidebar({ fetchDashboardTasks }: SidebarProps) {
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
-      const res = await fetch("${API_URL}/api/tasks", {
+      const res = await fetch(`${API_URL}/api/tasks`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) return;
@@ -66,7 +66,7 @@ export default function Sidebar({ fetchDashboardTasks }: SidebarProps) {
     if (!token) return;
     try {
       const res = await fetch(
-        "${API_URL}/api/tasks?sort=true",
+        `${API_URL}/api/tasks?sort=true`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

@@ -26,7 +26,7 @@ export function ViewFriend({fetchDashboard}: ViewFriendProps) {
   async function fetchReceived() {
     try {
       const response = await fetch(
-        "${API_URL}/api/friend?type=received",
+        `${API_URL}/api/friend?type=received`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -44,7 +44,7 @@ export function ViewFriend({fetchDashboard}: ViewFriendProps) {
   async function fetchFriends() {
     try {
       const response = await fetch(
-        "${API_URL}/api/friend?type=friends",
+        `${API_URL}/api/friend?type=friends`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

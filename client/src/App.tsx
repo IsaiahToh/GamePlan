@@ -50,7 +50,7 @@ function App() {
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
-      const res = await fetch("${API_URL}/api/tasks?sort=true", {
+      const res = await fetch(`${API_URL}/api/tasks?sort=true`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) return;

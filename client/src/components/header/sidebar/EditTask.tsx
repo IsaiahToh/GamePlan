@@ -64,7 +64,7 @@ export function EditTask({ task, fetchTasks }: EditTaskProps) {
           console.log("No token found in localStorage");
           return;
         }
-        const res = await fetch("${API_URL}/api/dashboard", {
+        const res = await fetch(`${API_URL}/api/dashboard`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

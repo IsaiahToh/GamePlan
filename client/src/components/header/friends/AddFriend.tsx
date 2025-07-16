@@ -39,7 +39,7 @@ export function AddFriend() {
   async function fetchSent() {
     try {
       const response = await fetch(
-        "${API_URL}/api/friend?type=sent",
+        `${API_URL}/api/friend?type=sent`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
