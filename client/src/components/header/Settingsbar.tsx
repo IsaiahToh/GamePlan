@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -14,7 +15,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
-import { useEffect, useState } from "react";
 import { Loader, Plus } from "lucide-react";
 import {
   SelectTrigger,
@@ -53,7 +53,12 @@ const defaultValues = {
   firstSundayOfSem: "",
 };
 
-export default function Settingsbar() {
+type SettingsbarProps = {
+  fetchDashboard: (email: string) => Promise<void>;
+  setIsSettingsbarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const Settingsbar: React.FC<SettingsbarProps> = ({ fetchDashboard, setIsSettingsbarOpen }) => {
   const [loading, setLoading] = useState(false);
   const persisted = localStorage.getItem("myFormData");
   const initialValues = persisted ? JSON.parse(persisted) : defaultValues;
@@ -127,8 +132,9 @@ export default function Settingsbar() {
         });
         return; // Stop further execution
       } else {
-        const data = await res.json();
-        console.log("Sent data: ", data);
+        await res.json();
+        await fetchDashboard(localStorage.getItem("email") || "");
+        setIsSettingsbarOpen(false);
       }
     } catch (error) {
       form.setError("root", {
@@ -136,7 +142,6 @@ export default function Settingsbar() {
         message: "An unexpected error occurred. Please try again later.",
       });
     } finally {
-      window.location.reload();
       setLoading(false);
     }
   };
@@ -362,3 +367,5 @@ export default function Settingsbar() {
     </div>
   );
 }
+
+export default Settingsbar;

@@ -10,6 +10,8 @@ type DashboardProps = {
   fetchDashboardTasks: () => Promise<any>;
   fetchDashboard: (email: string) => Promise<void>;
   dashboardData: dashboardData;
+  isSettingsbarOpen: boolean;
+  setIsSettingsbarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const Dashboard: React.FC<DashboardProps> = ({

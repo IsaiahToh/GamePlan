@@ -97,6 +97,8 @@ function App() {
                       fetchDashboardTasks={fetchDashboardTasks}
                       dashboardData={dashboardData}
                       fetchDashboard={fetchDashboard}
+                      isSettingsbarOpen={isSettingsbarOpen}
+                      setIsSettingsbarOpen={setIsSettingsbarOpen}
                     />
                   </ProtectedRoute>
                 }
@@ -105,7 +107,12 @@ function App() {
               <Route path="/about" element={<About />}></Route>
             </Routes>
           </main>
-          {isSettingsbarOpen && <Settingsbar />}
+          {isSettingsbarOpen && (
+            <Settingsbar
+              fetchDashboard={fetchDashboard}
+              setIsSettingsbarOpen={setIsSettingsbarOpen}
+            />
+          )}
         </div>
       </div>
     </>
