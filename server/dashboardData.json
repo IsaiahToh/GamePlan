@@ -2,8 +2,30 @@
   {
     "moduleCode": "CS2103T",
     "lessonType": "Lecture",
-    "startTime": "12:00",
-    "endTime": "13:00",
+    "startTime": "16:00",
+    "endTime": "18:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 5
+  },
+  {
+    "moduleCode": "CS2103T",
+    "lessonType": "Lecture",
+    "startTime": "09:00",
+    "endTime": "10:00",
     "weeks": [
       1,
       2,
@@ -24,8 +46,8 @@
   {
     "moduleCode": "CS2103T",
     "lessonType": "Lecture",
-    "startTime": "12:00",
-    "endTime": "15:00",
+    "startTime": "09:00",
+    "endTime": "12:00",
     "weeks": [
       1,
       2,
@@ -44,10 +66,10 @@
     "day": 2
   },
   {
-    "moduleCode": "CS2103T",
-    "lessonType": "Lecture",
-    "startTime": "16:00",
-    "endTime": "18:00",
+    "moduleCode": "FIN2704",
+    "lessonType": "Tutorial",
+    "startTime": "09:30",
+    "endTime": "10:30",
     "weeks": [
       1,
       2,
@@ -63,7 +85,27 @@
       12,
       13
     ],
-    "day": 5
+    "day": 1
+  },
+  {
+    "moduleCode": "ST2334",
+    "lessonType": "Tutorial",
+    "startTime": "17:00",
+    "endTime": "18:00",
+    "weeks": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 2
   },
   {
     "moduleCode": "CS2100",
@@ -88,32 +130,10 @@
     "day": 1
   },
   {
-    "moduleCode": "CS2103T",
+    "moduleCode": "FIN2704",
     "lessonType": "Lecture",
-    "startTime": "12:00",
-    "endTime": "13:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 3
-  },
-  {
-    "moduleCode": "CS2103T",
-    "lessonType": "Lecture",
-    "startTime": "12:00",
-    "endTime": "15:00",
+    "startTime": "10:00",
+    "endTime": "12:00",
     "weeks": [
       1,
       2,
@@ -154,11 +174,13 @@
     "day": 5
   },
   {
-    "moduleCode": "CS2100",
-    "lessonType": "Tutorial",
+    "moduleCode": "CS2103T",
+    "lessonType": "Lecture",
     "startTime": "09:00",
     "endTime": "10:00",
     "weeks": [
+      1,
+      2,
       3,
       4,
       5,
@@ -171,7 +193,29 @@
       12,
       13
     ],
-    "day": 1
+    "day": 3
+  },
+  {
+    "moduleCode": "CS2103T",
+    "lessonType": "Lecture",
+    "startTime": "09:00",
+    "endTime": "12:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 2
   },
   {
     "moduleCode": "ST2334",
@@ -198,8 +242,30 @@
   {
     "moduleCode": "CS2103T",
     "lessonType": "Lecture",
-    "startTime": "12:00",
-    "endTime": "13:00",
+    "startTime": "16:00",
+    "endTime": "18:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 5
+  },
+  {
+    "moduleCode": "CS2103T",
+    "lessonType": "Lecture",
+    "startTime": "09:00",
+    "endTime": "10:00",
     "weeks": [
       1,
       2,
@@ -220,8 +286,8 @@
   {
     "moduleCode": "CS2103T",
     "lessonType": "Lecture",
-    "startTime": "12:00",
-    "endTime": "15:00",
+    "startTime": "09:00",
+    "endTime": "12:00",
     "weeks": [
       1,
       2,
@@ -238,27 +304,5 @@
       13
     ],
     "day": 2
-  },
-  {
-    "moduleCode": "CS2103T",
-    "lessonType": "Lecture",
-    "startTime": "16:00",
-    "endTime": "18:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 5
   }
 ]

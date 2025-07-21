@@ -93,8 +93,12 @@ export default function Dayview({
           <div className="relative border-r border-gray-300">
             {/* Blockout timings as single absolute blocks */}
             {relevantBlockouts.map((block, blockIdx) => {
-              const [blockStartHour, blockStartMin] = block.from.split(":").map(Number);
-              const [blockEndHour, blockEndMin] = block.to.split(":").map(Number);
+              const [blockStartHour, blockStartMin] = block.from
+                .split(":")
+                .map(Number);
+              const [blockEndHour, blockEndMin] = block.to
+                .split(":")
+                .map(Number);
 
               const blockStart = blockStartHour * 60 + blockStartMin;
               const blockEnd = blockEndHour * 60 + blockEndMin;
@@ -102,7 +106,8 @@ export default function Dayview({
               const dayEnd = 24 * 60;
 
               const top = ((blockStart - dayStart) / (dayEnd - dayStart)) * 100;
-              const height = ((blockEnd - blockStart) / (dayEnd - dayStart)) * 100;
+              const height =
+                ((blockEnd - blockStart) / (dayEnd - dayStart)) * 100;
 
               return (
                 <div
@@ -114,8 +119,12 @@ export default function Dayview({
                   }}
                   title={block.label}
                 >
-                  <span className="font-semibold text-gray-800">{block.label || "Blocked"}</span>
-                  <span className="text-gray-600">{block.from} - {block.to}</span>
+                  <span className="font-semibold text-gray-800">
+                    {block.label || "Blocked"}
+                  </span>
+                  <span className="text-gray-600">
+                    {block.from} - {block.to}
+                  </span>
                 </div>
               );
             })}
@@ -131,7 +140,9 @@ export default function Dayview({
                   {/* lessons view */}
                   {lessons
                     .filter((lesson: Lesson) => lesson.day === date.day())
-                    .filter((lesson: Lesson) => lesson.weeks.includes(weekNumber))
+                    .filter((lesson: Lesson) =>
+                      lesson.weeks.includes(weekNumber)
+                    )
                     .filter((lesson: Lesson) => {
                       const taskStart = date
                         .hour(Number(lesson.startTime.split(":")[0]))
@@ -180,7 +191,9 @@ export default function Dayview({
                           </div>
                           <div className="text-gray-600">
                             <p>{lesson.lessonType}</p>
-                            <p>{lesson.startTime} - {lesson.endTime}</p>
+                            <p>
+                              {lesson.startTime} - {lesson.endTime}
+                            </p>
                             <p>Weeks {lesson.weeks.join(", ")}</p>
                           </div>
                         </div>
@@ -220,9 +233,17 @@ export default function Dayview({
                             (option) => option.value === group.color
                           )
                         : undefined;
-                      const t1 = dayjs(task.endTime, "HH:mm");
-                      const t2 = dayjs(task.startTime, "HH:mm");
-                      const diff = t1.diff(t2, "minutes");
+                      const [h1, m1] = task.startTime.split(":").map(Number);
+                      const [h2, m2] = task.endTime.split(":").map(Number);
+
+                      // Convert both times to total minutes
+                      const minutes1 = h1 * 60 + m1;
+                      const minutes2 = h2 * 60 + m2;
+
+                      // Return the absolute difference
+                      const minutes = minutes2 - minutes1;
+                      const hoursLeft = Math.floor(minutes / 60);
+                      const minutesLeft = minutes % 60;
 
                       return (
                         <div
@@ -238,9 +259,14 @@ export default function Dayview({
                           <div className="font-semibold">{task.name}</div>
                           <div className="text-gray-600">
                             <p>{task.description}</p>
-                            <p>Due: {dayjs(task.deadlineDate).format("D MMM")} {task.deadlineTime}</p>
-                            <p>{task.startTime} - {task.endTime}</p>
-                            <p>{diff}</p>
+                            <p>
+                              Due: {dayjs(task.deadlineDate).format("D MMM")}{" "}
+                              {task.deadlineTime}
+                            </p>
+                            <p>
+                              {task.startTime} - {task.endTime}
+                            </p>
+                            <p>{hoursLeft === 0 ? "" : `${hoursLeft}h`}{minutesLeft === 0 ? "" : `${minutesLeft}min`}</p>
                           </div>
                         </div>
                       );
@@ -254,8 +280,7 @@ export default function Dayview({
               className="absolute w-full flex items-center z-50 pointer-events-none"
               style={{
                 top: `${
-                  (currentTime.hour() / 24 +
-                    currentTime.minute() / 30 / 48) *
+                  (currentTime.hour() / 24 + currentTime.minute() / 30 / 48) *
                   100
                 }%`,
                 transform: "translateY(-50%)",

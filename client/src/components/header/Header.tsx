@@ -1,10 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Calendar, Menu, Settings } from "lucide-react";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import { Dropdown } from "./Dropdown";
 import Profile from "./Profile";
-import { useState } from "react";
 
 
 interface HeaderProps {
@@ -55,23 +54,6 @@ export default function Header({
             {date.format("MMMM YYYY")}
           </p>
         ) : null}
-      </div>
-
-      <div className="lg:flex hidden pt-2 justify-between gap-5 text-sm text-white absolute left-1/2 -translate-x-1/2">
-        <NavLink to="/" className="flex flex-col items-center gap-1">
-          <p>HOME</p>
-          <hr className="w-2/4 border-none h-[1.5px] bg-white" />
-        </NavLink>
-        {!!token ? (
-          <NavLink to="/dashboard" className="flex flex-col items-center gap-1">
-            <p>DASHBOARD</p>
-            <hr className="w-2/4 border-none h-[1.5px] bg-white" />
-          </NavLink>
-        ) : null}
-        <NavLink to="/about" className="flex flex-col items-center gap-1">
-          <p>ABOUT</p>
-          <hr className="w-2/4 border-none h-[1.5px] bg-white" />
-        </NavLink>
       </div>
 
       {!!token ? (

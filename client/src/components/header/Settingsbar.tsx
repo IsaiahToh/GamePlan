@@ -91,30 +91,27 @@ export default function Settingsbar() {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(
-        "http://localhost:3000/api/dashboard",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            blockOutTimings: values.blockOutTimings.map((time) => ({
-              from: time.from,
-              to: time.to,
-              label: time.label,
-              day: time.day,
-            })),
-            url: values.url,
-            groups: values.groups.map((group) => ({
-              name: group.name,
-              color: group.color,
-            })),
-            firstSundayOfSem: values.firstSundayOfSem,
-          }),
-        }
-      );
+      const res = await fetch("http://localhost:3000/api/dashboard", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          blockOutTimings: values.blockOutTimings.map((time) => ({
+            from: time.from,
+            to: time.to,
+            label: time.label,
+            day: time.day,
+          })),
+          url: values.url,
+          groups: values.groups.map((group) => ({
+            name: group.name,
+            color: group.color,
+          })),
+          firstSundayOfSem: values.firstSundayOfSem,
+        }),
+      });
       if (!res.ok) {
         // Try to parse the error message from the response
         const errorData = await res.json().catch(() => ({}));
@@ -134,7 +131,6 @@ export default function Settingsbar() {
         message: "An unexpected error occurred. Please try again later.",
       });
     } finally {
-      window.location.reload();
       setLoading(false);
     }
   };
@@ -159,7 +155,7 @@ export default function Settingsbar() {
                     Specify times when you are unavailable for tasks.
                   </FormDescription>
                   {timeFields.map((field, index) => (
-                    <div key={field.id} className="flex items-center gap-2 ">
+                    <div key={field.id} className="flex items-center gap-2 mb-2">
                       <FormControl>
                         <Input
                           type="time"
@@ -188,9 +184,21 @@ export default function Settingsbar() {
                       <FormControl>
                         <Select
                           onValueChange={(value) =>
-                            form.setValue(`blockOutTimings.${index}.day`, value)
+                            form.setValue(
+                              `blockOutTimings.${index}.day`,
+                              value as
+                                | "all"
+                                | "Sunday"
+                                | "Monday"
+                                | "Tuesday"
+                                | "Wednesday"
+                                | "Thursday"
+                                | "Friday"
+                                | "Saturday"
+                                | "Sunday"
+                            )
                           }
-                          value={form.watch(`blockOutTimings.${index}.day`) || "all"}
+                          value={form.watch(`blockOutTimings.${index}.day`)}
                         >
                           <SelectTrigger className="w-28">
                             <SelectValue placeholder="All Days" />
@@ -218,7 +226,9 @@ export default function Settingsbar() {
                   ))}
                   <Button
                     type="button"
-                    onClick={() => appendTime({ from: "", to: "", label: "", day: "" })}
+                    onClick={() =>
+                      appendTime({ from: "", to: "", label: "", day: "all" })
+                    }
                     className="bg-white text-gray-500 w-1/4"
                     variant="link"
                   >
