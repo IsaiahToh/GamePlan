@@ -47,7 +47,11 @@ async function scrapeAndImportDashboard(req, res) {
 
 async function getDashboard(req, res) {
   const email = req.query.email;
-  const userId = await User.findOne({ email }).then(user => user._id);
+  const user = await User.findOne({ email })
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  const userId = user._id;
   const dashboard = await Dashboard.findOne({ userId });
   if (dashboard) {
     res.json({

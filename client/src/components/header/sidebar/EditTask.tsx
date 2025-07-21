@@ -58,11 +58,12 @@ export function EditTask({ task, fetchTasks }: EditTaskProps) {
     const fetchGroups = async () => {
       try {
         const token = localStorage.getItem("token");
+        const email = localStorage.getItem("email");
         if (!token) {
           console.log("No token found in localStorage");
           return;
         }
-        const res = await fetch("http://localhost:3000/api/dashboard", {
+        const res = await fetch(`http://localhost:3000/api/dashboard?email=${email}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -75,7 +76,7 @@ export function EditTask({ task, fetchTasks }: EditTaskProps) {
         setGroups(groupArray);
       } catch (error) {
         console.log("Error fetching group:", error);
-      }
+      } 
     };
     fetchGroups();
   }, []);

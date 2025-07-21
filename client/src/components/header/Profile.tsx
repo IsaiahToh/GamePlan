@@ -27,12 +27,12 @@ export default function Profile({
   return (
     <div className="group relative">
       <User className="cursor-pointer" />
-      <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4 z-5">
+      <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4 z-10">
         <div className="flex flex-col gap-1 w-36 py-2 px-3 bg-white text-gray-500 rounded shadow-lg">
           <p className="text-black text-xs underline my-2">{email}</p>
 
           <AddFriend />
-          <ViewFriend fetchDashboard={fetchDashboard}/>
+          <ViewFriend fetchDashboard={fetchDashboard} />
           <p className="cursor-pointer hover:text-black" onClick={handleLogout}>
             Logout
           </p>

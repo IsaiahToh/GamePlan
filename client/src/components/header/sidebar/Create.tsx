@@ -43,11 +43,12 @@ export function Create({ fetchTasks }: CreateProps) {
     const fetchGroups = async () => {
       try {
         const token = localStorage.getItem("token");
+        const email = localStorage.getItem("email");
         if (!token) {
           console.log("No token found in localStorage");
           return;
         }
-        const res = await fetch("http://localhost:3000/api/dashboard", {
+        const res = await fetch(`http://localhost:3000/api/dashboard?email=${email}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
