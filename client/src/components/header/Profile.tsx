@@ -2,26 +2,18 @@ import { User } from "lucide-react";
 import { AddFriend } from "./friends/AddFriend";
 import { ViewFriend } from "./friends/ViewFriend";
 import { useNavigate } from "react-router-dom";
+import { useDashboardContext } from "@/context/DashboardContext";
 
-interface ProfileProps {
-  setIsSidebarOpen: (open: boolean) => void;
-  setIsSettingsbarOpen: (open: boolean) => void;
-  setToken: (token: string | null) => void;
-  fetchDashboard: (email: string) => Promise<void>;
-}
-
-export default function Profile({
-  setIsSidebarOpen,
-  setIsSettingsbarOpen,
-  setToken,
-  fetchDashboard,
-}: ProfileProps) {
+export default function Profile() {
+  const {  setIsSidebarOpen, setIsSettingsbarOpen } = useDashboardContext();
+  // Use useNavigate to
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
   async function handleLogout() {
     setIsSidebarOpen(false); // Close sidebar if open
     setIsSettingsbarOpen(false); // Close settings bar if open
-    setToken(null);
+    localStorage.removeItem("token"); // Remove token from local storage
+    localStorage.removeItem("email"); // Remove email from local storage
     navigate("/login"); // Redirect to login page
   }
   return (
@@ -32,7 +24,7 @@ export default function Profile({
           <p className="text-black text-xs underline my-2">{email}</p>
 
           <AddFriend />
-          <ViewFriend fetchDashboard={fetchDashboard} />
+          <ViewFriend />
           <p className="cursor-pointer hover:text-black" onClick={handleLogout}>
             Logout
           </p>

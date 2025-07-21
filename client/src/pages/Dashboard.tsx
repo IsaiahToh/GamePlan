@@ -5,10 +5,8 @@ import Logout from "@/components/header/Logout";
 import { useDashboardContext } from "@/context/DashboardContext";
 
 export function Dashboard() {
-
   const {
     view,
-    scheduledTasks,
     fetchDashboardTasks,
     dashboardData,
     fetchDashboard,
@@ -26,29 +24,17 @@ export function Dashboard() {
     <>
       <div className="flex flex-col justify-center items-center h-screen">
         {view == "Week" ? (
-          dashboardData && dashboardData.events ? (
-            <Weekview
-              lessons={dashboardData.events}
-              groups={dashboardData.groups}
-              firstSundayOfSem={dashboardData.firstSundayOfSem}
-              tasks={scheduledTasks}
-              blockOutTimings={dashboardData.blockOutTimings}
-            />
+          dashboardData && dashboardData.lessons ? (
+            <Weekview />
           ) : (
             <Logout />
           )
         ) : (
-          <Dayview
-            lessons={dashboardData.events}
-            groups={dashboardData.groups}
-            firstSundayOfSem={dashboardData.firstSundayOfSem}
-            tasks={scheduledTasks}
-            blockOutTimings={dashboardData.blockOutTimings}
-          />
+          <Dayview />
         )}
       </div>
     </>
   );
-};
+}
 
 export default Dashboard;

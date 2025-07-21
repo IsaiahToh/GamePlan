@@ -1,7 +1,6 @@
 "use client";
 
-import * as React from "react";
-
+import React from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,12 +12,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
+import { useDashboardContext } from "@/context/DashboardContext";
 
-interface DropdownProps {
-  setView: React.Dispatch<React.SetStateAction<string>>;
-}
-
-export function Dropdown({ setView }: DropdownProps) {
+export function Dropdown() {
+  const { setView } = useDashboardContext();
   const [position, setPosition] = React.useState("Week");
 
   return (

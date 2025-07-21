@@ -14,16 +14,15 @@ export default function Header() {
     setIsSidebarOpen,
     isSettingsbarOpen,
     setIsSettingsbarOpen,
-    setView,
-    token,
-    setToken,
-    fetchDashboard,
+    friendView,
+    setFriendView,
   } = useDashboardContext();
+  const token = localStorage.getItem("token");
 
   return (
     <header className="flex items-center justify-between p-4 bg-gray-800 text-white">
       <div className="flex items-center">
-        {!!token ? (
+        {token && friendView === false ? (
           <Menu
             className="cursor-pointer mx-3"
             size={20}
@@ -39,24 +38,24 @@ export default function Header() {
           <p className="font-semibold">GamePlan</p>
         </div>
 
-        {!!token ? (
+        {token ? (
           <p className="text-md text-white px-4 py-1 border rounded-lg mx-2">
             {date.format("MMMM YYYY")}
           </p>
         ) : null}
       </div>
 
-      {!!token ? (
+      {token ? (
         <div className="flex items-center gap-4">
-          <Dropdown setView={setView} />
-          <Profile setIsSidebarOpen={setIsSidebarOpen} setIsSettingsbarOpen={setIsSettingsbarOpen} setToken={setToken} fetchDashboard={fetchDashboard}/>
-          <Settings
+          <Dropdown />
+          <Profile />
+          {friendView === false ? (<Settings
             className="cursor-pointer"
             size={20}
             onClick={() => {
               setIsSettingsbarOpen(!isSettingsbarOpen);
             }}
-          />
+          />) : null}
         </div>
       ) : (
         <div className="flex items-center gap-4">

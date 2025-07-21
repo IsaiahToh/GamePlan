@@ -4,23 +4,12 @@ import { ScrollArea } from "./ui/scroll-area";
 import { getHours } from "@/lib/utils";
 import { type ScheduledTask, type Lesson } from "@/lib/types";
 import { colorOptions } from "@/lib/utils";
+import { useDashboardContext } from "@/context/DashboardContext";
 
-type DayviewProps = {
-  lessons: Lesson[];
-  tasks: ScheduledTask[];
-  groups: { name: string; color: string }[];
-  firstSundayOfSem: string;
-  blockOutTimings: { from: string; to: string; label?: string; day?: string }[];
-};
-
-export default function Dayview({
-  lessons,
-  tasks,
-  groups,
-  firstSundayOfSem,
-  blockOutTimings = [],
-}: DayviewProps) {
+export default function Dayview() {
   const date = dayjs();
+  const { dashboardData, scheduledTasks } = useDashboardContext();
+  const { lessons, groups, firstSundayOfSem, blockOutTimings } = dashboardData;
   const weekNumber = dayjs(firstSundayOfSem).isAfter(date, "day")
     ? 0
     : date.diff(dayjs(firstSundayOfSem), "week") + 1;
@@ -201,7 +190,7 @@ export default function Dayview({
                     })}
 
                   {/* tasks view */}
-                  {(tasks || [])
+                  {(scheduledTasks || [])
                     .filter((task: ScheduledTask) => task.day === date.day())
                     .filter((task: ScheduledTask) => {
                       const taskStart = date

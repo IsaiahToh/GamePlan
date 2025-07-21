@@ -8,10 +8,12 @@ type DashboardContextType = {
   setIsSettingsbarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   view: string;
   setView: React.Dispatch<React.SetStateAction<string>>;
+  friendView: boolean;
+  setFriendView: React.Dispatch<React.SetStateAction<boolean>>;
+  taskOn: boolean;
+  setTaskOn: React.Dispatch<React.SetStateAction<boolean>>;
   scheduledTasks: ScheduledTask[];
   setScheduledTasks: React.Dispatch<React.SetStateAction<ScheduledTask[]>>;
-  token: string | null;
-  setToken: React.Dispatch<React.SetStateAction<string | null>>;
   dashboardData: dashboardData;
   setDashboardData: React.Dispatch<React.SetStateAction<dashboardData>>;
   fetchDashboard: (email: string) => Promise<void>;
@@ -37,14 +39,13 @@ export const DashboardProvider: React.FC<React.PropsWithChildren> = ({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSettingsbarOpen, setIsSettingsbarOpen] = useState(false);
   const [view, setView] = useState("Week");
+  const [friendView, setFriendView] = useState(false);
+  const [taskOn, setTaskOn] = useState(true);
   const [scheduledTasks, setScheduledTasks] = useState<ScheduledTask[]>([]);
-  const [token, setToken] = useState<string | null>(
-    localStorage.getItem("token")
-  );
   const [dashboardData, setDashboardData] = useState<dashboardData>({
     userId: "",
     blockOutTimings: [],
-    events: [],
+    lessons: [],
     firstSundayOfSem: "",
     freeTimeSlots: [],
     groups: [],
@@ -96,10 +97,12 @@ export const DashboardProvider: React.FC<React.PropsWithChildren> = ({
         setIsSettingsbarOpen,
         view,
         setView,
+        friendView,
+        setFriendView,
+        taskOn,
+        setTaskOn,
         scheduledTasks,
         setScheduledTasks,
-        token,
-        setToken,
         dashboardData,
         setDashboardData,
         fetchDashboard,

@@ -21,7 +21,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { useDashboardContext } from "@/context/DashboardContext";
 
 // Define Zod schema
 const formSchema = z.object({
@@ -32,7 +31,6 @@ const formSchema = z.object({
 });
 
 export function Login() {
-  const { setToken } = useDashboardContext();
   // Set up form with useForm and zodResolver
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -75,7 +73,6 @@ export function Login() {
         const data = await response.json();
         localStorage.setItem("token", data.token); // Store token in local storage
         localStorage.setItem("email", values.email); // Store email in local storage
-        setToken(data.token); // Update token state
         navigate("/dashboard"); // Redirect to dashboard page after successful login
       }
     } catch (error) {

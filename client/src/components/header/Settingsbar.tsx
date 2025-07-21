@@ -55,7 +55,6 @@ const defaultValues = {
 export default function Settingsbar() {
   const { fetchDashboard } = useDashboardContext();
   const [loading, setLoading] = useState(false);
-  const token = localStorage.getItem("token");
   const persisted = localStorage.getItem("myFormData");
   const initialValues = persisted ? JSON.parse(persisted) : defaultValues;
 

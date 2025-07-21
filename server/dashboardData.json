@@ -1,55 +1,10 @@
 [
   {
-    "moduleCode": "CS2103T",
-    "lessonType": "Lecture",
-    "startTime": "16:00",
-    "endTime": "18:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 5
-  },
-  {
-    "moduleCode": "CS2103T",
-    "lessonType": "Lecture",
-    "startTime": "09:00",
-    "endTime": "10:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 3
-  },
-  {
-    "moduleCode": "CS2103T",
-    "lessonType": "Lecture",
+    "moduleCode": "ES2660",
+    "lessonType": "Sectional Teaching",
     "startTime": "09:00",
     "endTime": "12:00",
     "weeks": [
-      1,
       2,
       3,
       4,
@@ -63,13 +18,13 @@
       12,
       13
     ],
-    "day": 2
+    "day": 1
   },
   {
-    "moduleCode": "FIN2704",
-    "lessonType": "Tutorial",
-    "startTime": "09:30",
-    "endTime": "10:30",
+    "moduleCode": "ACC1701A",
+    "lessonType": "Sectional Teaching",
+    "startTime": "12:00",
+    "endTime": "15:00",
     "weeks": [
       1,
       2,
@@ -88,71 +43,7 @@
     "day": 1
   },
   {
-    "moduleCode": "ST2334",
-    "lessonType": "Tutorial",
-    "startTime": "17:00",
-    "endTime": "18:00",
-    "weeks": [
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 2
-  },
-  {
-    "moduleCode": "CS2100",
-    "lessonType": "Lecture",
-    "startTime": "10:00",
-    "endTime": "12:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 1
-  },
-  {
-    "moduleCode": "FIN2704",
-    "lessonType": "Lecture",
-    "startTime": "10:00",
-    "endTime": "12:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 2
-  },
-  {
-    "moduleCode": "CS2103T",
+    "moduleCode": "BSP1703",
     "lessonType": "Lecture",
     "startTime": "16:00",
     "endTime": "18:00",
@@ -171,35 +62,13 @@
       12,
       13
     ],
-    "day": 5
+    "day": 1
   },
   {
-    "moduleCode": "CS2103T",
-    "lessonType": "Lecture",
-    "startTime": "09:00",
-    "endTime": "10:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 3
-  },
-  {
-    "moduleCode": "CS2103T",
-    "lessonType": "Lecture",
-    "startTime": "09:00",
-    "endTime": "12:00",
+    "moduleCode": "DAO1704",
+    "lessonType": "Sectional Teaching",
+    "startTime": "08:30",
+    "endTime": "11:30",
     "weeks": [
       1,
       2,
@@ -218,10 +87,74 @@
     "day": 2
   },
   {
-    "moduleCode": "ST2334",
+    "moduleCode": "QF1100",
+    "lessonType": "Tutorial",
+    "startTime": "10:00",
+    "endTime": "11:00",
+    "weeks": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 3
+  },
+  {
+    "moduleCode": "BSP1703",
+    "lessonType": "Tutorial",
+    "startTime": "08:30",
+    "endTime": "09:30",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 3
+  },
+  {
+    "moduleCode": "QF1100",
     "lessonType": "Lecture",
-    "startTime": "18:00",
-    "endTime": "20:00",
+    "startTime": "14:00",
+    "endTime": "16:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 2
+  },
+  {
+    "moduleCode": "QF1100",
+    "lessonType": "Lecture",
+    "startTime": "14:00",
+    "endTime": "16:00",
     "weeks": [
       1,
       2,
@@ -240,7 +173,73 @@
     "day": 4
   },
   {
-    "moduleCode": "CS2103T",
+    "moduleCode": "BSP1702",
+    "lessonType": "Sectional Teaching",
+    "startTime": "12:00",
+    "endTime": "15:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 4
+  },
+  {
+    "moduleCode": "QF1100",
+    "lessonType": "Lecture",
+    "startTime": "14:00",
+    "endTime": "16:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 2
+  },
+  {
+    "moduleCode": "QF1100",
+    "lessonType": "Lecture",
+    "startTime": "14:00",
+    "endTime": "16:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 4
+  },
+  {
+    "moduleCode": "IS2238",
     "lessonType": "Lecture",
     "startTime": "16:00",
     "endTime": "18:00",
@@ -260,49 +259,5 @@
       13
     ],
     "day": 5
-  },
-  {
-    "moduleCode": "CS2103T",
-    "lessonType": "Lecture",
-    "startTime": "09:00",
-    "endTime": "10:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 3
-  },
-  {
-    "moduleCode": "CS2103T",
-    "lessonType": "Lecture",
-    "startTime": "09:00",
-    "endTime": "12:00",
-    "weeks": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13
-    ],
-    "day": 2
   }
 ]
