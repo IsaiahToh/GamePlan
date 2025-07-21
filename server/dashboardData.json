@@ -2,6 +2,7 @@
   {
     "moduleCode": "ES2660",
     "lessonType": "Sectional Teaching",
+<<<<<<< HEAD
     "startTime": "12:00",
     "endTime": "15:00",
     "weeks": [
@@ -26,6 +27,84 @@
     "startTime": "10:00",
     "endTime": "12:00",
     "weeks": [
+=======
+    "startTime": "09:00",
+    "endTime": "12:00",
+    "weeks": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 1
+  },
+  {
+    "moduleCode": "ACC1701A",
+    "lessonType": "Sectional Teaching",
+    "startTime": "12:00",
+    "endTime": "15:00",
+    "weeks": [
+      1,
+      2,
+>>>>>>> before-deployment
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 1
+  },
+  {
+<<<<<<< HEAD
+    "moduleCode": "IS1108",
+    "lessonType": "Lecture",
+    "startTime": "12:00",
+    "endTime": "14:00",
+=======
+    "moduleCode": "BSP1703",
+    "lessonType": "Lecture",
+    "startTime": "16:00",
+    "endTime": "18:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 1
+  },
+  {
+    "moduleCode": "DAO1704",
+    "lessonType": "Sectional Teaching",
+    "startTime": "08:30",
+    "endTime": "11:30",
+    "weeks": [
+      1,
+      2,
       3,
       4,
       5,
@@ -41,10 +120,163 @@
     "day": 2
   },
   {
-    "moduleCode": "IS1108",
+    "moduleCode": "QF1100",
+    "lessonType": "Tutorial",
+    "startTime": "10:00",
+    "endTime": "11:00",
+    "weeks": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 3
+  },
+  {
+    "moduleCode": "BSP1703",
+    "lessonType": "Tutorial",
+    "startTime": "08:30",
+    "endTime": "09:30",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 3
+  },
+  {
+    "moduleCode": "QF1100",
     "lessonType": "Lecture",
+    "startTime": "14:00",
+    "endTime": "16:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 2
+  },
+  {
+    "moduleCode": "QF1100",
+    "lessonType": "Lecture",
+    "startTime": "14:00",
+    "endTime": "16:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 4
+  },
+  {
+    "moduleCode": "BSP1702",
+    "lessonType": "Sectional Teaching",
     "startTime": "12:00",
-    "endTime": "14:00",
+    "endTime": "15:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 4
+  },
+  {
+    "moduleCode": "QF1100",
+    "lessonType": "Lecture",
+    "startTime": "14:00",
+    "endTime": "16:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 2
+  },
+  {
+    "moduleCode": "QF1100",
+    "lessonType": "Lecture",
+    "startTime": "14:00",
+    "endTime": "16:00",
+    "weeks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "day": 4
+  },
+  {
+    "moduleCode": "IS2238",
+    "lessonType": "Lecture",
+    "startTime": "16:00",
+    "endTime": "18:00",
+>>>>>>> before-deployment
     "weeks": [
       1,
       2,

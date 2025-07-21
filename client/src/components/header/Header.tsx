@@ -1,42 +1,32 @@
 import { Button } from "@/components/ui/button";
 import { Calendar, Menu, Settings } from "lucide-react";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import { Dropdown } from "./Dropdown";
 import Profile from "./Profile";
+import { useDashboardContext } from "@/context/DashboardContext";
 
-interface HeaderProps {
-  isSideBarOpen: boolean;
-  setIsSidebarOpen: (open: boolean) => void;
-  isSettingsbarOpen: boolean;
-  setIsSettingsbarOpen: (open: boolean) => void;
-  setView: React.Dispatch<React.SetStateAction<string>>;
-  token: string | null;
-  setToken: (token: string | null) => void;
-  fetchDashboard: (email: string) => Promise<void>;
-}
+export default function Header() {
+  const {
+    isSidebarOpen,
+    setIsSidebarOpen,
+    isSettingsbarOpen,
+    setIsSettingsbarOpen,
+    currentDashboard,
+    loggedIn,
+  } = useDashboardContext();
 
-const date = dayjs();
-
-export default function Header({
-  isSideBarOpen,
-  setIsSidebarOpen,
-  isSettingsbarOpen,
-  setIsSettingsbarOpen,
-  setView,
-  token,
-  setToken,
-  fetchDashboard,
-}: HeaderProps) {
+  const date = dayjs();
 
   return (
-    <header className="flex items-center justify-between p-4 bg-gray-800 text-white">
+    <header className="relative flex items-center justify-between px-4 py-3 bg-gray-800 text-white h-16">
+      {/* Left */}
       <div className="flex items-center">
-        {!!token ? (
+        {loggedIn && currentDashboard === "My" ? (
           <Menu
             className="cursor-pointer mx-3"
             size={20}
-            onClick={() => setIsSidebarOpen(!isSideBarOpen)}
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           />
         ) : null}
 
@@ -48,41 +38,36 @@ export default function Header({
           <p className="font-semibold">GamePlan</p>
         </div>
 
-        {!!token ? (
+        {loggedIn ? (
           <p className="text-md text-white px-4 py-1 border rounded-lg mx-2">
             {date.format("MMMM YYYY")}
           </p>
         ) : null}
       </div>
 
-      <div className="lg:flex hidden pt-2 justify-between gap-5 text-sm text-white absolute left-1/2 -translate-x-1/2">
-        <NavLink to="/" className="flex flex-col items-center gap-1">
-          <p>HOME</p>
-          <hr className="w-2/4 border-none h-[1.5px] bg-white" />
-        </NavLink>
-        {!!token ? (
-          <NavLink to="/dashboard" className="flex flex-col items-center gap-1">
-            <p>DASHBOARD</p>
-            <hr className="w-2/4 border-none h-[1.5px] bg-white" />
-          </NavLink>
-        ) : null}
-        <NavLink to="/about" className="flex flex-col items-center gap-1">
-          <p>ABOUT</p>
-          <hr className="w-2/4 border-none h-[1.5px] bg-white" />
-        </NavLink>
-      </div>
+      {/* Center (absolutely centered) */}
+      {loggedIn ? (
+        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <p className="text-2xl font-bold text-white px-4 py-2 whitespace-nowrap">
+            {currentDashboard === "My" ? "My" : currentDashboard + "'s"} dashboard
+          </p>
+        </div>
+      ) : null}
 
-      {!!token ? (
+      {/* Right */}
+      {loggedIn ? (
         <div className="flex items-center gap-4">
-          <Dropdown setView={setView} />
-          <Profile setIsSidebarOpen={setIsSidebarOpen} setIsSettingsbarOpen={setIsSettingsbarOpen} setToken={setToken} fetchDashboard={fetchDashboard}/>
-          <Settings
-            className="cursor-pointer"
-            size={20}
-            onClick={() => {
-              setIsSettingsbarOpen(!isSettingsbarOpen);
-            }}
-          />
+          <Dropdown />
+          <Profile />
+          {currentDashboard === "My" ? (
+            <Settings
+              className="cursor-pointer"
+              size={20}
+              onClick={() => {
+                setIsSettingsbarOpen(!isSettingsbarOpen);
+              }}
+            />
+          ) : null}
         </div>
       ) : (
         <div className="flex items-center gap-4">
@@ -107,3 +92,4 @@ export default function Header({
     </header>
   );
 }
+

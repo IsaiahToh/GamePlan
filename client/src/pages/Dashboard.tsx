@@ -1,26 +1,16 @@
-import React, { useEffect, } from "react";
+import { useEffect } from "react";
 import Weekview from "@/components/Weekview";
 import Dayview from "@/components/Dayview";
 import Logout from "@/components/header/Logout";
-import { type ScheduledTask, type dashboardData } from "@/lib/types";
+import { useDashboardContext } from "@/context/DashboardContext";
 
-type DashboardProps = {
-  view: String;
-  scheduledTasks: ScheduledTask[];
-  fetchDashboardTasks: () => Promise<any>;
-  fetchDashboard: (email: string) => Promise<void>;
-  dashboardData: dashboardData;
-  isSettingsbarOpen: boolean;
-  setIsSettingsbarOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-const Dashboard: React.FC<DashboardProps> = ({
-  view,
-  scheduledTasks,
-  fetchDashboardTasks,
-  fetchDashboard,
-  dashboardData,
-}: DashboardProps) => {
+export function Dashboard() {
+  const {
+    view,
+    fetchDashboardTasks,
+    dashboardData,
+    fetchDashboard,
+  } = useDashboardContext();
 
   useEffect(() => {
     fetchDashboard(localStorage.getItem("email") || "");
@@ -34,29 +24,17 @@ const Dashboard: React.FC<DashboardProps> = ({
     <>
       <div className="flex flex-col justify-center items-center h-screen">
         {view == "Week" ? (
-          dashboardData && dashboardData.events ? (
-            <Weekview
-              lessons={dashboardData.events}
-              groups={dashboardData.groups}
-              firstSundayOfSem={dashboardData.firstSundayOfSem}
-              tasks={scheduledTasks}
-              blockOutTimings={dashboardData.blockOutTimings}
-            />
+          dashboardData && dashboardData.lessons ? (
+            <Weekview />
           ) : (
             <Logout />
           )
         ) : (
-          <Dayview
-            lessons={dashboardData.events}
-            groups={dashboardData.groups}
-            firstSundayOfSem={dashboardData.firstSundayOfSem}
-            tasks={scheduledTasks}
-            blockOutTimings={dashboardData.blockOutTimings}
-          />
+          <Dayview />
         )}
       </div>
     </>
   );
-};
+}
 
 export default Dashboard;

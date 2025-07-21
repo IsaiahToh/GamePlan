@@ -2,10 +2,6 @@ const UserTasks = require("../models/task");
 const Dashboard = require("../models/dashboard");
 const { scheduleTasks } = require("../services/scheduleTasks");
 const dayjs = require("dayjs");
-const utc = require("dayjs/plugin/utc");
-const timezone = require("dayjs/plugin/timezone");
-dayjs.extend(utc);
-dayjs.extend(timezone);
 
 async function createTask(req, res) {
   try {

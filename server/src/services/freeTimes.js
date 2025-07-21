@@ -3,11 +3,10 @@ const dayjs = require("dayjs");
 async function getWeeklyFreeTimes(
   firstSundayOfSem,
   blockOutTimings,
-  events,
+  lessons,
   currentDayjs
 ) {
   // Determine the current week number (1-based)
-  const firstSunday = dayjs(firstSundayOfSem);
   const weekNumber = dayjs(firstSundayOfSem).isAfter(currentDayjs, "day")
     ? 0
     : currentDayjs.diff(dayjs(firstSundayOfSem), "week") + 1;
@@ -30,7 +29,7 @@ async function getWeeklyFreeTimes(
   // Add blockout timings to correct days
   for (let d = 0; d < 7; d++) {
     for (const block of blockOutTimings) {
-      if (!block.day) {
+      if (block.day === "all") {
         // No day specified: applies to all days
         busyByDay[d].push([toMinutes(block.from), toMinutes(block.to)]);
       } else {
@@ -53,7 +52,7 @@ async function getWeeklyFreeTimes(
   }
 
   // Add lesson timings to busy intervals if present in current week
-  for (const event of events) {
+  for (const event of lessons) {
     if (event.weeks.includes(weekNumber)) {
       const dayIdx = event.day; // 0-based index
       busyByDay[dayIdx].push([

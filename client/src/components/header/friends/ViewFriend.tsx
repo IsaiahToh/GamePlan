@@ -1,5 +1,6 @@
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -10,20 +11,22 @@ import { toast } from "react-hot-toast";
 import { useState, useEffect } from "react";
 import { type FriendRequest } from "@/lib/types";
 import { Calendar, Check, X } from "lucide-react";
+import { useDashboardContext } from "@/context/DashboardContext";
 
-const API_URL = import.meta.env.VITE_API_URL;
+export function ViewFriend() {
+  const { fetchDashboard, setCurrentDashboard, setTaskOn } = useDashboardContext();
+  const API_URL = import.meta.env.VITE_API_URL;
 
-type ViewFriendProps = {
-    fetchDashboard: (email: string) => Promise<void>;
-}
-
-export function ViewFriend({fetchDashboard}: ViewFriendProps) {
   const [received, setReceived] = useState<FriendRequest[]>([]);
   const [friends, setFriends] = useState<FriendRequest[]>([]);
   const token = localStorage.getItem("token");
   const email = localStorage.getItem("email");
 
   async function fetchReceived() {
+    if (!token) {
+      toast.error("You are not logged in.", { duration: 2000 });
+      return;
+    }
     try {
       const response = await fetch(
         `${API_URL}/api/friend?type=received`,
@@ -137,21 +140,33 @@ export function ViewFriend({fetchDashboard}: ViewFriendProps) {
                     ? `${req.recipient.email} [${req.recipient.name}]`
                     : `${req.requester.email} [${req.requester.name}]`}
                   <div className="flex ml-auto">
-                    <Calendar
-                      className="h-5 cursor-pointer"
-                      color="blue"
-                      onClick={() => {
-                        fetchDashboard(
-                          req.requester.email === email
-                            ? req.recipient.email
-                            : req.requester.email
-                        );
-                      }}
-                    />
+                    <DialogClose asChild>
+                      <Calendar
+                        className="h-5 cursor-pointer"
+                        color="blue"
+                        onClick={() => {
+                          setCurrentDashboard(req.requester.email === email
+                              ? req.recipient.name
+                              : req.requester.name);
+                          setTaskOn(false);
+                          fetchDashboard(
+                            req.requester.email === email
+                              ? req.recipient.email
+                              : req.requester.email
+                          );
+                        }}
+                      />
+                    </DialogClose>
                     <X
                       className="h-5 cursor-pointer "
                       color="red"
-                      onClick={() => deleteFriendRequest(req.requester.email === email ? req.recipient._id : req.requester._id)}
+                      onClick={() =>
+                        deleteFriendRequest(
+                          req.requester.email === email
+                            ? req.recipient._id
+                            : req.requester._id
+                        )
+                      }
                     />
                   </div>
                 </li>

@@ -41,7 +41,10 @@ async function sendFriendRequest(req, res) {
     if (existingReceived) {
       return res
         .status(400)
-        .json({ code: "ALREADY_RECEIVED", message: "Friend request already received" });
+        .json({
+          code: "ALREADY_RECEIVED",
+          message: "Friend request already received",
+        });
     }
 
     // Check if already friends
@@ -60,12 +63,10 @@ async function sendFriendRequest(req, res) {
       ],
     });
     if (existingFriendship) {
-      return res
-        .status(400)
-        .json({
-          code: "ALREADY_FRIENDS",
-          message: "You are already friends with this user",
-        });
+      return res.status(400).json({
+        code: "ALREADY_FRIENDS",
+        message: "You are already friends with this user",
+      });
     }
 
     // Create new friend request
@@ -136,8 +137,8 @@ async function deleteFriend(req, res) {
 
     const request = await FriendRequest.findOneAndDelete({
       $or: [
-        { requester: id1, recipient: id2},
-        { requester: id2, recipient: id1},
+        { requester: id1, recipient: id2 },
+        { requester: id2, recipient: id1 },
       ],
     });
 

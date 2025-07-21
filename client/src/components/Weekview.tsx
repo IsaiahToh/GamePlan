@@ -6,25 +6,22 @@ import { colorOptions } from "@/lib/utils";
 import { type ScheduledTask, type Lesson } from "@/lib/types";
 import { Checkbox } from "./ui/checkbox";
 import { Label } from "./ui/label";
+import { useDashboardContext } from "@/context/DashboardContext";
+import { CornerDownLeft } from "lucide-react";
 
-type WeekviewProps = {
-  lessons: Lesson[];
-  tasks: ScheduledTask[];
-  groups: { name: string; color: string }[];
-  firstSundayOfSem: string;
-  blockOutTimings: { from: string; to: string; label?: string; day?: string }[];
-};
-
-export default function Weekview({
-  lessons,
-  tasks,
-  groups,
-  firstSundayOfSem,
-  blockOutTimings = [],
-}: WeekviewProps) {
+export default function Weekview() {
   const date = dayjs();
+  const {
+    dashboardData,
+    scheduledTasks,
+    taskOn,
+    setTaskOn,
+    currentDashboard,
+    setCurrentDashboard,
+    fetchDashboard,
+  } = useDashboardContext();
+  const { lessons, groups, firstSundayOfSem, blockOutTimings } = dashboardData;
   const [currentTime, setCurrentTime] = useState(dayjs());
-  const [taskOn, setTaskOn] = useState(true);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -53,9 +50,15 @@ export default function Weekview({
     ? 0
     : date.diff(dayjs(firstSundayOfSem), "week") + 1;
 
-  const handleClick = () => {
+  const handleCheck = () => {
     setTaskOn(!taskOn);
-  }
+  };
+
+  const handleReturn = () => {
+    setCurrentDashboard("My");
+    setTaskOn(true);
+    fetchDashboard(localStorage.getItem("email") || "");
+  };
 
   return (
     <div className="flex flex-col h-screen w-full overflow-auto">
@@ -66,8 +69,21 @@ export default function Weekview({
             {weekNumber == 0 ? "Sem break" : `Week ${weekNumber}`}
           </div>
           <div className="flex items-center gap-1">
-            <Checkbox id="terms" className="w-4 h-4" onClick={handleClick} defaultChecked/>
-            <Label htmlFor="terms" className="text-xs text-gray-600">Tasks</Label>
+            {currentDashboard !== "My" ? (
+              <CornerDownLeft onClick={handleReturn} className="cursor-pointer" />
+            ) : (
+              <div className="flex items-center gap-1">
+                <Checkbox
+                  id="terms"
+                  className="w-4 h-4"
+                  onClick={handleCheck}
+                  defaultChecked
+                />
+                <Label htmlFor="terms" className="text-xs text-gray-600">
+                  Tasks
+                </Label>
+              </div>
+            )}
           </div>
         </div>
 
@@ -110,10 +126,15 @@ export default function Weekview({
               const dayName = currentDate.format("dddd");
 
               // Filter blockouts for this day
-              const relevantBlockouts = blockOutTimings.filter(
-                (block) =>
-                  block.day === "all" || !block.day || block.day === dayName
-              );
+              const relevantBlockouts =
+                !blockOutTimings || blockOutTimings.length === 0
+                  ? []
+                  : blockOutTimings.filter(
+                      (block) =>
+                        block.day === "all" ||
+                        !block.day ||
+                        block.day === dayName
+                    );
 
               return (
                 <div
@@ -234,60 +255,68 @@ export default function Weekview({
                           })}
 
                         {/* tasks view */}
-                        {taskOn && (tasks || [])
-                          .filter(
-                            (task: ScheduledTask) => task.day === dayIndex
-                          )
-                          .filter((task: ScheduledTask) => {
-                            const taskStart = currentDate
-                              .hour(Number(task.startTime.split(":")[0]))
-                              .minute(Number(task.startTime.split(":")[1]));
-                            return (
-                              (taskStart.isSame(slotStart) ||
-                                taskStart.isAfter(slotStart)) &&
-                              taskStart.isBefore(slotStart.add(1, "hour"))
-                            );
-                          })
-                          .map((task: ScheduledTask, taskIndex: number) => {
-                            const taskStart = currentDate
-                              .hour(Number(task.startTime.split(":")[0]))
-                              .minute(Number(task.startTime.split(":")[1]));
-                            const taskEnd = currentDate
-                              .hour(Number(task.endTime.split(":")[0]))
-                              .minute(Number(task.endTime.split(":")[1]));
-                            const duration = taskEnd.diff(taskStart, "minutes");
-                            const isOClockTask = taskStart.minute() === 0;
-                            const group = groups
-                              ? groups.find(
-                                  (g) =>
-                                    g.name.toLowerCase() ===
-                                    task.group.toLowerCase()
-                                )
-                              : undefined;
-                            const colorOption = group
-                              ? colorOptions.find(
-                                  (option) => option.value === group.color
-                                )
-                              : undefined;
+                        {taskOn &&
+                          (scheduledTasks || [])
+                            .filter(
+                              (task: ScheduledTask) => task.day === dayIndex
+                            )
+                            .filter((task: ScheduledTask) => {
+                              const taskStart = currentDate
+                                .hour(Number(task.startTime.split(":")[0]))
+                                .minute(Number(task.startTime.split(":")[1]));
+                              return (
+                                (taskStart.isSame(slotStart) ||
+                                  taskStart.isAfter(slotStart)) &&
+                                taskStart.isBefore(slotStart.add(1, "hour"))
+                              );
+                            })
+                            .map((task: ScheduledTask, taskIndex: number) => {
+                              const taskStart = currentDate
+                                .hour(Number(task.startTime.split(":")[0]))
+                                .minute(Number(task.startTime.split(":")[1]));
+                              const taskEnd = currentDate
+                                .hour(Number(task.endTime.split(":")[0]))
+                                .minute(Number(task.endTime.split(":")[1]));
+                              const duration = taskEnd.diff(
+                                taskStart,
+                                "minutes"
+                              );
+                              const isOClockTask = taskStart.minute() === 0;
+                              const group = groups
+                                ? groups.find(
+                                    (g) =>
+                                      g.name.toLowerCase() ===
+                                      task.group.toLowerCase()
+                                  )
+                                : undefined;
+                              const colorOption = group
+                                ? colorOptions.find(
+                                    (option) => option.value === group.color
+                                  )
+                                : undefined;
 
-                            return (
-                              <div
-                                key={taskIndex}
-                                className={`absolute left-0 w-full ${
-                                  colorOption ? colorOption.css : "bg-gray-300"
-                                } rounded-lg px-2 py-1 text-xs z-2`}
-                                style={{
-                                  top: `${isOClockTask ? 0 : 50}%`,
-                                  height: `${(duration / 59) * 100}%`,
-                                }}
-                              >
-                                <div className="font-semibold">{task.name}</div>
-                                <div className="text-gray-600">
-                                  {task.description}
+                              return (
+                                <div
+                                  key={taskIndex}
+                                  className={`absolute left-0 w-full ${
+                                    colorOption
+                                      ? colorOption.css
+                                      : "bg-gray-300"
+                                  } rounded-lg px-2 py-1 text-xs z-2`}
+                                  style={{
+                                    top: `${isOClockTask ? 0 : 50}%`,
+                                    height: `${(duration / 59) * 100}%`,
+                                  }}
+                                >
+                                  <div className="font-semibold">
+                                    {task.name}
+                                  </div>
+                                  <div className="text-gray-600">
+                                    {task.description}
+                                  </div>
                                 </div>
-                              </div>
-                            );
-                          })}
+                              );
+                            })}
                       </div>
                     );
                   })}

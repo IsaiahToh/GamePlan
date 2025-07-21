@@ -1,9 +1,8 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-
 import {
   Form,
   FormField,
@@ -22,6 +21,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
+import { useDashboardContext } from "@/context/DashboardContext";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -33,11 +33,8 @@ const formSchema = z.object({
     .min(8, { message: "Password must be at least 8 characters." }),
 });
 
-interface LoginProps {
-  setToken: (token: string | null) => void;
-}
-
-const Login = ({ setToken } : LoginProps) => {
+export function Login() {
+  const { setLoggedIn } = useDashboardContext();
   // Set up form with useForm and zodResolver
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -80,7 +77,7 @@ const Login = ({ setToken } : LoginProps) => {
         const data = await response.json();
         localStorage.setItem("token", data.token); // Store token in local storage
         localStorage.setItem("email", values.email); // Store email in local storage
-        setToken(data.token); // Update token state
+        setLoggedIn(true); // Update loggedIn state
         navigate("/dashboard"); // Redirect to dashboard page after successful login
       }
     } catch (error) {

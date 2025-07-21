@@ -14,7 +14,7 @@ const dashboardSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  events: { type: Array, default: [] },
+  lessons: { type: Array, default: [] },
   groups: { type: Array, default: [] },
   blockOutTimings: { type: [blockOutTimingSchema], default: [] },
   firstSundayOfSem: { type: String, default: "" },

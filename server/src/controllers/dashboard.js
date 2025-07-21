@@ -17,17 +17,17 @@ async function scrapeAndImportDashboard(req, res) {
       await scrape(url);
     }
 
-    const events = JSON.parse(fs.readFileSync("dashboardData.json", "utf-8"));
+    const lessons = JSON.parse(fs.readFileSync("dashboardData.json", "utf-8"));
     const freeTimes = await getWeeklyFreeTimes(
       firstSundayOfSem,
       blockOutTimings,
-      events,
+      lessons,
       dayjs()
     );
     console.log(JSON.stringify(freeTimes, null, 2));
     const doc = await Dashboard.findOneAndUpdate(
       { userId },
-      { userId, events, groups, firstSundayOfSem, blockOutTimings, freeTimes },
+      { userId, lessons, groups, firstSundayOfSem, blockOutTimings, freeTimes },
       { upsert: true, new: true }
     );
     res.json({
@@ -47,18 +47,22 @@ async function scrapeAndImportDashboard(req, res) {
 
 async function getDashboard(req, res) {
   const email = req.query.email;
-  const userId = await User.findOne({ email }).then(user => user._id);
+  const user = await User.findOne({ email })
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  const userId = user._id;
   const dashboard = await Dashboard.findOne({ userId });
   if (dashboard) {
     res.json({
-      events: dashboard.events,
+      lessons: dashboard.lessons,
       groups: dashboard.groups,
       firstSundayOfSem: dashboard.firstSundayOfSem,
       blockOutTimings: dashboard.blockOutTimings,
       freeTimes: dashboard.freeTimes,
     });
   } else {
-    res.json({ events: [], groups: [], firstSundayOfSem: "" });
+    res.json({ lessons: [], groups: [], firstSundayOfSem: "" });
   }
 }
 
