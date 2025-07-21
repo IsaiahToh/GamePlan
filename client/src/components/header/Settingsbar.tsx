@@ -200,7 +200,6 @@ export default function Settingsbar() {
                                 | "Thursday"
                                 | "Friday"
                                 | "Saturday"
-                                | "Sunday"
                             )
                           }
                           value={form.watch(`blockOutTimings.${index}.day`)}

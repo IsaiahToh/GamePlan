@@ -78,7 +78,7 @@ export function Login() {
         localStorage.setItem("token", data.token); // Store token in local storage
         localStorage.setItem("email", values.email); // Store email in local storage
         setLoggedIn(true); // Update loggedIn state
-        navigate("/dashboard"); // Redirect to dashboard page after successful login
+        navigate("/"); // Redirect to dashboard page after successful login
       }
     } catch (error) {
       setError("root", {

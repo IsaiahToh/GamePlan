@@ -25,7 +25,7 @@ async function scrapeAndImportDashboard(req, res) {
       dayjs()
     );
     console.log(JSON.stringify(freeTimes, null, 2));
-    const doc = await Dashboard.findOneAndUpdate(
+    await Dashboard.findOneAndUpdate(
       { userId },
       { userId, lessons, groups, firstSundayOfSem, blockOutTimings, freeTimes },
       { upsert: true, new: true }
