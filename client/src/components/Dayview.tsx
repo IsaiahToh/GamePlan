@@ -5,10 +5,21 @@ import { getHours } from "@/lib/utils";
 import { type ScheduledTask, type Lesson } from "@/lib/types";
 import { colorOptions } from "@/lib/utils";
 import { useDashboardContext } from "@/context/DashboardContext";
+import { CornerDownLeft } from "lucide-react";
+import { Checkbox } from "./ui/checkbox";
+import { Label } from "./ui/label";
 
 export default function Dayview() {
   const date = dayjs();
-  const { dashboardData, scheduledTasks } = useDashboardContext();
+  const {
+    dashboardData,
+    scheduledTasks,
+    taskOn,
+    setTaskOn,
+    currentDashboard,
+    setCurrentDashboard,
+    fetchDashboard,
+  } = useDashboardContext();
   const { lessons, groups, firstSundayOfSem, blockOutTimings } = dashboardData;
   const weekNumber = dayjs(firstSundayOfSem).isAfter(date, "day")
     ? 0
@@ -38,6 +49,16 @@ export default function Dayview() {
     return () => clearInterval(interval);
   }, []);
 
+  const handleCheck = () => {
+    setTaskOn(!taskOn);
+  };
+
+  const handleReturn = () => {
+    setCurrentDashboard("My");
+    setTaskOn(true);
+    fetchDashboard(localStorage.getItem("email") || "");
+  };
+
   // Use date.format("dddd") to get the day name (e.g. "Monday")
   const dayName = date.format("dddd");
   const relevantBlockouts = blockOutTimings
@@ -49,9 +70,26 @@ export default function Dayview() {
   return (
     <div className="flex h-screen w-full flex-col overflow-auto">
       <div className="grid grid-cols-[auto_1fr] px-4 py-2 shadow-sm">
-        <div className="h-full border-r border-gray-300 flex items-center justify-center">
-          <div className="text-xs text-gray-600 pr-5 pl-1">
+        <div className="h-full border-r border-gray-300 flex flex-col items-center justify-center gap-y-2 pr-3">
+          <div className="text-xs text-gray-600">
             {weekNumber == 0 ? "Sem break" : `Week ${weekNumber}`}
+          </div>
+          <div className="flex items-center gap-1">
+            {currentDashboard !== "My" ? (
+              <CornerDownLeft onClick={handleReturn} className="cursor-pointer" />
+            ) : (
+              <div className="flex items-center gap-1">
+                <Checkbox
+                  id="terms"
+                  className="w-4 h-4"
+                  onClick={handleCheck}
+                  defaultChecked
+                />
+                <Label htmlFor="terms" className="text-xs text-gray-600">
+                  Tasks
+                </Label>
+              </div>
+            )}
           </div>
         </div>
         <div className="flex w-16 flex-col items-center">
@@ -190,7 +228,7 @@ export default function Dayview() {
                     })}
 
                   {/* tasks view */}
-                  {(scheduledTasks || [])
+                  {taskOn && (scheduledTasks || [])
                     .filter((task: ScheduledTask) => task.day === date.day())
                     .filter((task: ScheduledTask) => {
                       const taskStart = date

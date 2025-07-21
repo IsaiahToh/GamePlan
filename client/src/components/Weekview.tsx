@@ -16,8 +16,8 @@ export default function Weekview() {
     scheduledTasks,
     taskOn,
     setTaskOn,
-    friendView,
-    setFriendView,
+    currentDashboard,
+    setCurrentDashboard,
     fetchDashboard,
   } = useDashboardContext();
   const { lessons, groups, firstSundayOfSem, blockOutTimings } = dashboardData;
@@ -55,7 +55,7 @@ export default function Weekview() {
   };
 
   const handleReturn = () => {
-    setFriendView(false);
+    setCurrentDashboard("My");
     setTaskOn(true);
     fetchDashboard(localStorage.getItem("email") || "");
   };
@@ -69,8 +69,8 @@ export default function Weekview() {
             {weekNumber == 0 ? "Sem break" : `Week ${weekNumber}`}
           </div>
           <div className="flex items-center gap-1">
-            {friendView ? (
-              <CornerDownLeft onClick={handleReturn} />
+            {currentDashboard !== "My" ? (
+              <CornerDownLeft onClick={handleReturn} className="cursor-pointer" />
             ) : (
               <div className="flex items-center gap-1">
                 <Checkbox

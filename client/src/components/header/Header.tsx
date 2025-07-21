@@ -14,14 +14,17 @@ export default function Header() {
     setIsSidebarOpen,
     isSettingsbarOpen,
     setIsSettingsbarOpen,
-    friendView,
+    currentDashboard,
     loggedIn,
   } = useDashboardContext();
 
+  const date = dayjs();
+
   return (
-    <header className="flex items-center justify-between p-4 bg-gray-800 text-white">
+    <header className="relative flex items-center justify-between px-4 py-3 bg-gray-800 text-white h-16">
+      {/* Left */}
       <div className="flex items-center">
-        {loggedIn && friendView === false ? (
+        {loggedIn && currentDashboard === "My" ? (
           <Menu
             className="cursor-pointer mx-3"
             size={20}
@@ -44,17 +47,29 @@ export default function Header() {
         ) : null}
       </div>
 
+      {/* Center (absolutely centered) */}
+      {loggedIn ? (
+        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <p className="text-2xl font-bold text-white px-4 py-2 whitespace-nowrap">
+            {currentDashboard === "My" ? "My" : currentDashboard + "'s"} dashboard
+          </p>
+        </div>
+      ) : null}
+
+      {/* Right */}
       {loggedIn ? (
         <div className="flex items-center gap-4">
           <Dropdown />
           <Profile />
-          {friendView === false ? (<Settings
-            className="cursor-pointer"
-            size={20}
-            onClick={() => {
-              setIsSettingsbarOpen(!isSettingsbarOpen);
-            }}
-          />) : null}
+          {currentDashboard === "My" ? (
+            <Settings
+              className="cursor-pointer"
+              size={20}
+              onClick={() => {
+                setIsSettingsbarOpen(!isSettingsbarOpen);
+              }}
+            />
+          ) : null}
         </div>
       ) : (
         <div className="flex items-center gap-4">
@@ -79,3 +94,4 @@ export default function Header() {
     </header>
   );
 }
+

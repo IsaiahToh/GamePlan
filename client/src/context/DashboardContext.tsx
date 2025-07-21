@@ -8,8 +8,8 @@ type DashboardContextType = {
   setIsSettingsbarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   view: string;
   setView: React.Dispatch<React.SetStateAction<string>>;
-  friendView: boolean;
-  setFriendView: React.Dispatch<React.SetStateAction<boolean>>;
+  currentDashboard: string;
+  setCurrentDashboard: React.Dispatch<React.SetStateAction<string>>;
   taskOn: boolean;
   setTaskOn: React.Dispatch<React.SetStateAction<boolean>>;
   loggedIn: boolean;
@@ -41,9 +41,9 @@ export const DashboardProvider: React.FC<React.PropsWithChildren> = ({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSettingsbarOpen, setIsSettingsbarOpen] = useState(false);
   const [view, setView] = useState("Week");
-  const [friendView, setFriendView] = useState(false);
+  const [currentDashboard, setCurrentDashboard] = useState("My");
   const [taskOn, setTaskOn] = useState(true);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem("token"));
   const [scheduledTasks, setScheduledTasks] = useState<ScheduledTask[]>([]);
   const [dashboardData, setDashboardData] = useState<dashboardData>({
     userId: "",
@@ -100,8 +100,8 @@ export const DashboardProvider: React.FC<React.PropsWithChildren> = ({
         setIsSettingsbarOpen,
         view,
         setView,
-        friendView,
-        setFriendView,
+        currentDashboard,
+        setCurrentDashboard,
         taskOn,
         setTaskOn,
         loggedIn,

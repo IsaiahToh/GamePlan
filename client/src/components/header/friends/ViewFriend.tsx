@@ -14,7 +14,7 @@ import { Calendar, Check, X } from "lucide-react";
 import { useDashboardContext } from "@/context/DashboardContext";
 
 export function ViewFriend() {
-  const { fetchDashboard, setFriendView, setTaskOn } = useDashboardContext();
+  const { fetchDashboard, setCurrentDashboard, setTaskOn } = useDashboardContext();
   const [received, setReceived] = useState<FriendRequest[]>([]);
   const [friends, setFriends] = useState<FriendRequest[]>([]);
   const token = localStorage.getItem("token");
@@ -143,7 +143,9 @@ export function ViewFriend() {
                         className="h-5 cursor-pointer"
                         color="blue"
                         onClick={() => {
-                          setFriendView(true);
+                          setCurrentDashboard(req.requester.email === email
+                              ? req.recipient.name
+                              : req.requester.name);
                           setTaskOn(false);
                           fetchDashboard(
                             req.requester.email === email
