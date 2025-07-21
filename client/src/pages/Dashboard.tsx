@@ -1,24 +1,18 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Weekview from "@/components/Weekview";
 import Dayview from "@/components/Dayview";
 import Logout from "@/components/header/Logout";
-import { type ScheduledTask, type dashboardData } from "@/lib/types";
+import { useDashboardContext } from "@/context/DashboardContext";
 
-type DashboardProps = {
-  view: String;
-  scheduledTasks: ScheduledTask[];
-  fetchDashboardTasks: () => Promise<any>;
-  fetchDashboard: (email: string) => Promise<void>;
-  dashboardData: dashboardData;
-};
+export function Dashboard() {
 
-const Dashboard: React.FC<DashboardProps> = ({
-  view,
-  scheduledTasks,
-  fetchDashboardTasks,
-  fetchDashboard,
-  dashboardData,
-}: DashboardProps) => {
+  const {
+    view,
+    scheduledTasks,
+    fetchDashboardTasks,
+    dashboardData,
+    fetchDashboard,
+  } = useDashboardContext();
 
   useEffect(() => {
     fetchDashboard(localStorage.getItem("email") || "");

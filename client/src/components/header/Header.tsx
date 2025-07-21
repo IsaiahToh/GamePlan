@@ -4,31 +4,21 @@ import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import { Dropdown } from "./Dropdown";
 import Profile from "./Profile";
-
-
-interface HeaderProps {
-  isSideBarOpen: boolean;
-  setIsSidebarOpen: (open: boolean) => void;
-  isSettingsbarOpen: boolean;
-  setIsSettingsbarOpen: (open: boolean) => void;
-  setView: React.Dispatch<React.SetStateAction<string>>;
-  token: string | null;
-  setToken: (token: string | null) => void;
-  fetchDashboard: (email: string) => Promise<void>;
-}
+import { useDashboardContext } from "@/context/DashboardContext";
 
 const date = dayjs();
 
-export default function Header({
-  isSideBarOpen,
-  setIsSidebarOpen,
-  isSettingsbarOpen,
-  setIsSettingsbarOpen,
-  setView,
-  token,
-  setToken,
-  fetchDashboard,
-}: HeaderProps) {
+export default function Header() {
+  const {
+    isSidebarOpen,
+    setIsSidebarOpen,
+    isSettingsbarOpen,
+    setIsSettingsbarOpen,
+    setView,
+    token,
+    setToken,
+    fetchDashboard,
+  } = useDashboardContext();
 
   return (
     <header className="flex items-center justify-between p-4 bg-gray-800 text-white">
@@ -37,7 +27,7 @@ export default function Header({
           <Menu
             className="cursor-pointer mx-3"
             size={20}
-            onClick={() => setIsSidebarOpen(!isSideBarOpen)}
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           />
         ) : null}
 

@@ -24,6 +24,7 @@ import {
   Select,
 } from "@/components/ui/select";
 import { colorOptions } from "@/lib/utils";
+import { useDashboardContext } from "@/context/DashboardContext";
 
 const formSchema = z.object({
   blockOutTimings: z.array(
@@ -52,7 +53,9 @@ const defaultValues = {
 };
 
 export default function Settingsbar() {
+  const { fetchDashboard } = useDashboardContext();
   const [loading, setLoading] = useState(false);
+  const token = localStorage.getItem("token");
   const persisted = localStorage.getItem("myFormData");
   const initialValues = persisted ? JSON.parse(persisted) : defaultValues;
 
@@ -131,6 +134,7 @@ export default function Settingsbar() {
         message: "An unexpected error occurred. Please try again later.",
       });
     } finally {
+      fetchDashboard(localStorage.getItem("email") || "");
       setLoading(false);
     }
   };

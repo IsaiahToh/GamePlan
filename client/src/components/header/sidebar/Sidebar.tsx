@@ -4,6 +4,7 @@ import CompletedTasks from "./CompletedTasks";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { type Task } from "@/lib/types";
 import toast from "react-hot-toast";
+import { useDashboardContext } from "@/context/DashboardContext";
 
 type SidebarDropdownProps = {
   label: string;
@@ -32,11 +33,8 @@ const SidebarDropdown: React.FC<SidebarDropdownProps> = ({
   );
 };
 
-type SidebarProps = {
-  fetchDashboardTasks: () => Promise<any>;
-};
-
-export default function Sidebar({ fetchDashboardTasks }: SidebarProps) {
+export default function Sidebar() {
+  const { fetchDashboardTasks } = useDashboardContext();
   const [outstandingTasks, setOutstandingTasks] = useState<Task[]>([]);
   const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
 
@@ -63,12 +61,9 @@ export default function Sidebar({ fetchDashboardTasks }: SidebarProps) {
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
-      const res = await fetch(
-        "http://localhost:3000/api/tasks?sort=true",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await fetch("http://localhost:3000/api/tasks?sort=true", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (!res.ok) return;
       const data = await res.json();
       setOutstandingTasks(data.outstandingTasks || []);
@@ -77,7 +72,6 @@ export default function Sidebar({ fetchDashboardTasks }: SidebarProps) {
       console.log("Error fetching sorted tasks:", error);
     }
   };
-  
 
   // Delete a task
   const deleteTask = async (id: string) => {
@@ -149,20 +143,23 @@ export default function Sidebar({ fetchDashboardTasks }: SidebarProps) {
       const diffMs = deadline.getTime() - now.getTime();
       const diffHrs = diffMs / (1000 * 60 * 60);
       if (diffHrs > 0 && diffHrs <= 24) {
-        toast.custom((t) => (
-          <div className="bg-white rounded shadow px-4 py-2 flex items-center gap-2 relative min-w-[250px] pr-8">
-            <span className="text-lg">⏰</span>
-            <span className="flex-1">
-              Task "<b>{task.name}</b>" is due in less than 24 hours!
-            </span>
-            <button
-              className="absolute top-1 right-2 text-gray-400 hover:text-gray-700 text-lg"
-              onClick={() => toast.dismiss(t.id)}
-            >
-              ×
-            </button>
-          </div>
-        ), { duration: 6000 });
+        toast.custom(
+          (t) => (
+            <div className="bg-white rounded shadow px-4 py-2 flex items-center gap-2 relative min-w-[250px] pr-8">
+              <span className="text-lg">⏰</span>
+              <span className="flex-1">
+                Task "<b>{task.name}</b>" is due in less than 24 hours!
+              </span>
+              <button
+                className="absolute top-1 right-2 text-gray-400 hover:text-gray-700 text-lg"
+                onClick={() => toast.dismiss(t.id)}
+              >
+                ×
+              </button>
+            </div>
+          ),
+          { duration: 6000 }
+        );
       }
     });
   }, [outstandingTasks]);

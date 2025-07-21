@@ -3,7 +3,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-
 import {
   Form,
   FormField,
@@ -22,6 +21,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
+import { useDashboardContext } from "@/context/DashboardContext";
 
 // Define Zod schema
 const formSchema = z.object({
@@ -31,11 +31,8 @@ const formSchema = z.object({
     .min(8, { message: "Password must be at least 8 characters." }),
 });
 
-interface LoginProps {
-  setToken: (token: string | null) => void;
-}
-
-const Login = ({ setToken } : LoginProps) => {
+export function Login() {
+  const { setToken } = useDashboardContext();
   // Set up form with useForm and zodResolver
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
