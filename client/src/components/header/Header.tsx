@@ -15,14 +15,13 @@ export default function Header() {
     isSettingsbarOpen,
     setIsSettingsbarOpen,
     friendView,
-    setFriendView,
+    loggedIn,
   } = useDashboardContext();
-  const token = localStorage.getItem("token");
 
   return (
     <header className="flex items-center justify-between p-4 bg-gray-800 text-white">
       <div className="flex items-center">
-        {token && friendView === false ? (
+        {loggedIn && friendView === false ? (
           <Menu
             className="cursor-pointer mx-3"
             size={20}
@@ -38,14 +37,14 @@ export default function Header() {
           <p className="font-semibold">GamePlan</p>
         </div>
 
-        {token ? (
+        {loggedIn ? (
           <p className="text-md text-white px-4 py-1 border rounded-lg mx-2">
             {date.format("MMMM YYYY")}
           </p>
         ) : null}
       </div>
 
-      {token ? (
+      {loggedIn ? (
         <div className="flex items-center gap-4">
           <Dropdown />
           <Profile />

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useDashboardContext } from "@/context/DashboardContext";
 
 export default function Profile() {
-  const {  setIsSidebarOpen, setIsSettingsbarOpen } = useDashboardContext();
+  const {  setIsSidebarOpen, setIsSettingsbarOpen, setLoggedIn } = useDashboardContext();
   // Use useNavigate to
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
@@ -14,6 +14,7 @@ export default function Profile() {
     setIsSettingsbarOpen(false); // Close settings bar if open
     localStorage.removeItem("token"); // Remove token from local storage
     localStorage.removeItem("email"); // Remove email from local storage
+    setLoggedIn(false); // Update loggedIn state
     navigate("/login"); // Redirect to login page
   }
   return (

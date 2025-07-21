@@ -12,6 +12,8 @@ type DashboardContextType = {
   setFriendView: React.Dispatch<React.SetStateAction<boolean>>;
   taskOn: boolean;
   setTaskOn: React.Dispatch<React.SetStateAction<boolean>>;
+  loggedIn: boolean;
+  setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   scheduledTasks: ScheduledTask[];
   setScheduledTasks: React.Dispatch<React.SetStateAction<ScheduledTask[]>>;
   dashboardData: dashboardData;
@@ -41,6 +43,7 @@ export const DashboardProvider: React.FC<React.PropsWithChildren> = ({
   const [view, setView] = useState("Week");
   const [friendView, setFriendView] = useState(false);
   const [taskOn, setTaskOn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
   const [scheduledTasks, setScheduledTasks] = useState<ScheduledTask[]>([]);
   const [dashboardData, setDashboardData] = useState<dashboardData>({
     userId: "",
@@ -101,6 +104,8 @@ export const DashboardProvider: React.FC<React.PropsWithChildren> = ({
         setFriendView,
         taskOn,
         setTaskOn,
+        loggedIn,
+        setLoggedIn,
         scheduledTasks,
         setScheduledTasks,
         dashboardData,
