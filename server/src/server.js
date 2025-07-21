@@ -29,5 +29,5 @@ app.use("/api/tasks", taskRoutes);
 app.use("/api/friend", friendRoutes)
 
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on port ${port}`);
 });

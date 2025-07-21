@@ -85,7 +85,7 @@ export function AddFriend() {
 
   async function onSubmit(data: z.infer<typeof FriendForm>) {
     try {
-      const response = await fetch(`http://localhost:3000/api/friend`, {
+      const response = await fetch(`${API_URL}/api/friend`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
