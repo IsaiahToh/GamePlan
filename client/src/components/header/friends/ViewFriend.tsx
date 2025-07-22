@@ -14,7 +14,7 @@ import { Calendar, Check, X } from "lucide-react";
 import { useDashboardContext } from "@/context/DashboardContext";
 
 export function ViewFriend() {
-  const { fetchDashboard, setCurrentDashboard, setTaskOn } = useDashboardContext();
+  const { fetchDashboard, setCurrentDashboard, setTaskOn, setIsSettingsbarOpen, setIsSidebarOpen } = useDashboardContext();
   const API_URL = import.meta.env.VITE_API_URL;
 
   const [received, setReceived] = useState<FriendRequest[]>([]);
@@ -149,6 +149,8 @@ export function ViewFriend() {
                               ? req.recipient.name
                               : req.requester.name);
                           setTaskOn(false);
+                          setIsSettingsbarOpen(false);
+                          setIsSidebarOpen(false);
                           fetchDashboard(
                             req.requester.email === email
                               ? req.recipient.email
