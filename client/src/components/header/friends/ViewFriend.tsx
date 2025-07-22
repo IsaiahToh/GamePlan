@@ -14,7 +14,13 @@ import { Calendar, Check, X } from "lucide-react";
 import { useDashboardContext } from "@/context/DashboardContext";
 
 export function ViewFriend() {
-  const { fetchDashboard, setCurrentDashboard, setTaskOn, setIsSettingsbarOpen, setIsSidebarOpen } = useDashboardContext();
+  const {
+    fetchDashboard,
+    setCurrentDashboard,
+    setTaskOn,
+    setIsSettingsbarOpen,
+    setIsSidebarOpen,
+  } = useDashboardContext();
   const API_URL = import.meta.env.VITE_API_URL;
 
   const [received, setReceived] = useState<FriendRequest[]>([]);
@@ -28,37 +34,31 @@ export function ViewFriend() {
       return;
     }
     try {
-      const response = await fetch(
-        `${API_URL}/api/friend?type=received`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${API_URL}/api/friend?type=received`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (!response.ok) throw new Error("Failed to fetch");
       const data = await response.json();
       setReceived(data === null ? [] : data);
     } catch (error) {
-      toast.error("An unexpected error ocurred.", { duration: 2000 });
+      console.error("Error fetching received friend requests:", error);
     }
   }
 
   async function fetchFriends() {
     try {
-      const response = await fetch(
-        `${API_URL}/api/friend?type=friends`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${API_URL}/api/friend?type=friends`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (!response.ok) throw new Error("Failed to fetch");
       const data = await response.json();
       setFriends(data === null ? [] : data);
     } catch (error) {
-      toast.error("An unexpected error ocurred.", { duration: 2000 });
+      console.error("Error fetching friends:", error);
     }
   }
 
@@ -145,9 +145,11 @@ export function ViewFriend() {
                         className="h-5 cursor-pointer"
                         color="blue"
                         onClick={() => {
-                          setCurrentDashboard(req.requester.email === email
+                          setCurrentDashboard(
+                            req.requester.email === email
                               ? req.recipient.name
-                              : req.requester.name);
+                              : req.requester.name
+                          );
                           setTaskOn(false);
                           setIsSettingsbarOpen(false);
                           setIsSidebarOpen(false);
