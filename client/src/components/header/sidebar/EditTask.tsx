@@ -26,11 +26,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../ui/select";
-import { useEffect, useState } from "react";
 import z from "zod";
 import { taskSchema } from "@/lib/types";
 import { importanceLevels } from "@/lib/types";
 import toast from "react-hot-toast";
+import { useDashboardContext } from "@/context/DashboardContext";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -54,34 +54,11 @@ export function EditTask({ task, fetchTasks }: EditTaskProps) {
     },
   });
 
-  const [groups, setGroups] = useState<string[]>([]);
-
-  useEffect(() => {
-    const fetchGroups = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const email = localStorage.getItem("email");
-        if (!token) {
-          console.log("No token found in localStorage");
-          return;
-        }
-        const res = await fetch(`${API_URL}/api/dashboard?email=${email}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await res.json();
-        const groupArray = data.groups.map(
-          (group: { name: string }) => group.name
-        );
-        groupArray.push("None");
-        setGroups(groupArray);
-      } catch (error) {
-        console.log("Error fetching group:", error);
-      } 
-    };
-    fetchGroups();
-  }, []);
+  const { dashboardData } = useDashboardContext();
+    const groups = dashboardData.groups.map(
+      (group: { name: string }) => group.name
+    );
+    groups.push("None");
 
   const onSubmit = async (values: z.infer<typeof taskSchema>) => {
     const token = localStorage.getItem("token");
