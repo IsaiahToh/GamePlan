@@ -137,22 +137,11 @@ async function scrape(url) {
     return dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day);
   });
 
-  /*console.log(
-    JSON.stringify(
-      flatLessons,
-      (key, value) => {
-        if (key === "weeks" && Array.isArray(value)) {
-          return JSON.stringify(value);
-        }
-        return value;
-      },
-      2
-    )
-  );*/
-
-  const jsonString = JSON.stringify(flatLessons, null, 2);
+  /*const jsonString = JSON.stringify(flatLessons, null, 2);
   fs.writeFileSync("dashboardData.json", jsonString, "utf-8");
-  console.log("dashboardData.json has been written.");
+  console.log("dashboardData.json has been written.");*/
+
+  return flatLessons;
 }
 
 module.exports = {

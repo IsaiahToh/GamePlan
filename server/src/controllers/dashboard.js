@@ -13,11 +13,11 @@ async function scrapeAndImportDashboard(req, res) {
     const firstSundayOfSem = req.body.firstSundayOfSem;
     const blockOutTimings = req.body.blockOutTimings;
 
+    let lessons = [];
     if (url) {
-      await scrape(url);
+      lessons = await scrape(url);
     }
 
-    const lessons = JSON.parse(fs.readFileSync("dashboardData.json", "utf-8"));
     const freeTimes = await getWeeklyFreeTimes(
       firstSundayOfSem,
       blockOutTimings,
