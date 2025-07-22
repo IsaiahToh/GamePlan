@@ -21,6 +21,7 @@ export function ViewFriend() {
     setIsSettingsbarOpen,
     setIsSidebarOpen,
   } = useDashboardContext();
+  
   const API_URL = import.meta.env.VITE_API_URL;
 
   const [received, setReceived] = useState<FriendRequest[]>([]);

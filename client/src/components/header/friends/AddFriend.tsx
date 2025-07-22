@@ -24,7 +24,11 @@ import { useState, useEffect } from "react";
 import { type FriendRequest } from "@/lib/types";
 import { X } from "lucide-react";
 
-const API_URL = import.meta.env.VITE_API_URL;
+// Uncomment the line below if you are testing locally
+const API_URL = process.env.VITE_API_URL || "http://localhost:3000";
+
+// Uncomment the line below if you are using the deployed app
+// const API_URL = import.meta.env.VITE_API_URL;
 
 export function AddFriend() {
   const form = useForm<z.infer<typeof FriendForm>>({
