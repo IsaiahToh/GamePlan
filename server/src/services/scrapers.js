@@ -98,8 +98,8 @@ function parseLesson(lessonStr) {
   };
 }
 
-const SEMESTER = 2;
-const acadYear = "2024-2025";
+const SEMESTER = 1;
+const acadYear = "2025-2026";
 
 async function scrape(url) {
   const allLessonClassNames = await scrapeLessonClassNamesInKRfrugFP(url);
