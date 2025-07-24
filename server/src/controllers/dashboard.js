@@ -17,9 +17,7 @@ async function scrapeAndImportDashboard(req, res) {
 
     if (newUrl.length === 0) {
       lessons = [];
-    }
-
-    if (newUrl !== oldUrl) {
+    } else if (newUrl !== oldUrl) {
       lessons = await scrape(newUrl);
     }
 
