@@ -27,10 +27,11 @@ import {
   SelectValue,
 } from "../../ui/select";
 import z from "zod";
-import { taskSchema } from "@/lib/types";
-import { importanceLevels } from "@/lib/types";
+import { taskSchema, importanceLevels, type Task } from "@/lib/types";
 import toast from "react-hot-toast";
 import { useDashboardContext } from "@/context/DashboardContext";
+import { useTaskContext } from "@/context/TaskContext";
+import { getColorCSS } from "@/lib/utils";
 
 // Uncomment the line below if you are testing locally
 // const API_URL = process.env.VITE_API_URL || "http://localhost:3000";
@@ -39,30 +40,29 @@ import { useDashboardContext } from "@/context/DashboardContext";
 const API_URL = import.meta.env.VITE_API_URL;
 
 type EditTaskProps = {
-  task: any;
-  fetchTasks: () => void;
+  task: Task;
 };
 
-export function EditTask({ task, fetchTasks }: EditTaskProps) {
+export function EditTask({ task }: EditTaskProps) {
+  const { fetchTasks } = useTaskContext();
+  const { dashboardData } = useDashboardContext();
+  const formattedDate = new Date().toISOString().slice(0, 10);
+  const groups = [...dashboardData.groups];
+  groups.push({ name: "None", color: "bg-gray-200" });
+
   const form = useForm<z.infer<typeof taskSchema>>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
-      name: task.name,
-      description: task.description,
-      deadlineDate: task.deadlineDate,
-      deadlineTime: task.deadlineTime,
-      estimatedTimeTaken: task.estimatedTimeTaken,
-      minChunk: task.minChunk,
-      group: task.group,
-      importance: task.importance,
+      name: "",
+      description: "",
+      deadlineDate: formattedDate,
+      deadlineTime: "23:59",
+      estimatedTimeTaken: 2,
+      minChunk: 1,
+      importance: "Low",
+      group: "None",
     },
   });
-
-  const { dashboardData } = useDashboardContext();
-    const groups = dashboardData.groups.map(
-      (group: { name: string }) => group.name
-    );
-    groups.push("None");
 
   const onSubmit = async (values: z.infer<typeof taskSchema>) => {
     const token = localStorage.getItem("token");
@@ -217,11 +217,20 @@ export function EditTask({ task, fetchTasks }: EditTaskProps) {
                         <SelectValue placeholder="Select a group" />
                       </SelectTrigger>
                       <SelectContent>
-                        {groups.map((group) => (
-                          <SelectItem key={group} value={group}>
-                            {group}
-                          </SelectItem>
-                        ))}
+                        {groups.map((option) => {
+                          // Explicitly type color as keyof typeof getColorCSS
+                          const colorKey =
+                            option.color as keyof typeof getColorCSS;
+                          return (
+                            <SelectItem
+                              key={option.name}
+                              value={option.name}
+                              className={getColorCSS[colorKey]}
+                            >
+                              {option.name}
+                            </SelectItem>
+                          );
+                        })}
                       </SelectContent>
                     </Select>
                   </FormControl>

@@ -2,21 +2,13 @@ import React, { useState, useEffect, type ReactNode } from "react";
 import OutstandingTasks from "./OutstandingTasks";
 import CompletedTasks from "./CompletedTasks";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { type Task } from "@/lib/types";
 import toast from "react-hot-toast";
-import { useDashboardContext } from "@/context/DashboardContext";
+import { useTaskContext } from "@/context/TaskContext";
 
-// Uncomment the line below if you are testing locally
-// const API_URL = process.env.VITE_API_URL || "http://localhost:3000";
-
-// Uncomment the line below if you are using the deployed app
-const API_URL = import.meta.env.VITE_API_URL;
-
-type SidebarDropdownProps = {
+interface SidebarDropdownProps {
   label: string;
   children: ReactNode;
-};
-
+}
 const SidebarDropdown: React.FC<SidebarDropdownProps> = ({
   label,
   children,
@@ -40,103 +32,7 @@ const SidebarDropdown: React.FC<SidebarDropdownProps> = ({
 };
 
 export default function Sidebar() {
-  const { fetchDashboardTasks } = useDashboardContext();
-  const [outstandingTasks, setOutstandingTasks] = useState<Task[]>([]);
-  const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
-
-  // Fetch tasks
-  const fetchTasks = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    try {
-      const res = await fetch(`${API_URL}/api/tasks`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) return;
-      const data = await res.json();
-      setOutstandingTasks(data.outstandingTasks || []);
-      setCompletedTasks(data.completedTasks || []);
-      console.log("fetchTasks", data.outstandingTasks);
-    } catch (error) {
-      console.log("Error fetching sorted tasks:", error);
-    }
-  };
-
-  // Sort + Fetch tasks
-  const sortAndFetchTasks = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    try {
-      const res = await fetch(`${API_URL}/api/tasks?sort=true`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) return;
-      const data = await res.json();
-      setOutstandingTasks(data.outstandingTasks || []);
-      console.log("sortAndFetchTasks", data.outstandingTasks);
-    } catch (error) {
-      console.log("Error fetching sorted tasks:", error);
-    }
-  };
-
-  // Delete a task
-  const deleteTask = async (id: string) => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    try {
-      const res = await fetch(`${API_URL}/api/tasks/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.ok) {
-        toast.success("Task deleted!");
-        fetchTasks();
-      }
-    } catch (error) {
-      console.log("Error deleting task:", error);
-    }
-  };
-
-  // Mark a task as done
-  const markTaskAsDone = async (taskId: string) => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    try {
-      const res = await fetch(
-        `${API_URL}/api/tasks/${taskId}/complete`,
-        {
-          method: "PATCH",
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      if (res.ok) {
-        toast.success("Task completed!");
-        fetchTasks();
-      }
-    } catch (error) {
-      console.log("Error marking task as done:", error);
-    }
-  };
-
-  const markTaskAsUndone = async (taskId: string) => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    try {
-      const res = await fetch(
-        `${API_URL}/api/tasks/${taskId}/uncomplete`,
-        {
-          method: "PATCH",
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      if (res.ok) {
-        toast.success("Task marked uncomplete!");
-        fetchTasks();
-      }
-    } catch (error) {
-      console.log("Error marking task as undone:", error);
-    }
-  };
+  const { outstandingTasks, fetchTasks } = useTaskContext();
 
   useEffect(() => {
     fetchTasks();
@@ -173,21 +69,10 @@ export default function Sidebar() {
   return (
     <aside className="bg-white shadow-md shadow-gray-500 w-64 h-screen overflow-y-auto">
       <SidebarDropdown label="Outstanding tasks">
-        <OutstandingTasks
-          tasks={outstandingTasks}
-          fetchTasks={fetchTasks}
-          sortAndFetchTasks={sortAndFetchTasks}
-          deleteTask={deleteTask}
-          markTaskAsDone={markTaskAsDone}
-          fetchDashboardTasks={fetchDashboardTasks}
-        />
+        <OutstandingTasks />
       </SidebarDropdown>
       <SidebarDropdown label="Completed tasks">
-        <CompletedTasks
-          tasks={completedTasks}
-          markTaskAsUndone={markTaskAsUndone}
-          fetchTasks={fetchTasks}
-        />
+        <CompletedTasks />
       </SidebarDropdown>
     </aside>
   );

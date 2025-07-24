@@ -31,6 +31,8 @@ import {
 import { taskSchema } from "@/lib/types";
 import { importanceLevels } from "@/lib/types";
 import { useDashboardContext } from "@/context/DashboardContext";
+import { useTaskContext } from "@/context/TaskContext";
+import { getColorCSS } from "@/lib/utils";
 
 // Uncomment the line below if you are testing locally
 // const API_URL = process.env.VITE_API_URL || "http://localhost:3000";
@@ -38,23 +40,19 @@ import { useDashboardContext } from "@/context/DashboardContext";
 // Uncomment the line below if you are using the deployed app
 const API_URL = import.meta.env.VITE_API_URL;
 
-type CreateProps = {
-  fetchTasks: () => void;
-};
-
-export function Create({ fetchTasks }: CreateProps) {
+export function Create() {
   const { dashboardData } = useDashboardContext();
-  const groups = dashboardData.groups.map(
-    (group: { name: string }) => group.name
-  );
-  groups.push("None");
+  const { fetchTasks } = useTaskContext();
+  const formattedDate = new Date().toISOString().slice(0, 10);
+  const groups = [...dashboardData.groups];
+  groups.push({ name: "None", color: "bg-gray-200" });
 
   const form = useForm<z.infer<typeof taskSchema>>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
-      name: "AAA",
+      name: "",
       description: "",
-      deadlineDate: "2025-06-30",
+      deadlineDate: formattedDate,
       deadlineTime: "23:59",
       estimatedTimeTaken: 2,
       minChunk: 1,
@@ -219,11 +217,20 @@ export function Create({ fetchTasks }: CreateProps) {
                         <SelectValue placeholder="Select a group" />
                       </SelectTrigger>
                       <SelectContent>
-                        {groups.map((option) => (
-                          <SelectItem key={option} value={option}>
-                            {option}
-                          </SelectItem>
-                        ))}
+                        {groups.map((option) => {
+                          // Explicitly type color as keyof typeof getColorCSS
+                          const colorKey =
+                            option.color as keyof typeof getColorCSS;
+                          return (
+                            <SelectItem
+                              key={option.name}
+                              value={option.name}
+                              className={getColorCSS[colorKey]}
+                            >
+                              {option.name}
+                            </SelectItem>
+                          );
+                        })}
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -232,14 +239,12 @@ export function Create({ fetchTasks }: CreateProps) {
               )}
             />
 
-            <DialogClose asChild>
-              <Button
-                type="submit"
-                className="w-full bg-gray-800 hover:bg-gray-700 active:bg-gray-600 cursor-pointer mb-2"
-              >
-                Create Task
-              </Button>
-            </DialogClose>
+            <Button
+              type="submit"
+              className="w-full bg-gray-800 hover:bg-gray-700 active:bg-gray-600 cursor-pointer mb-2"
+            >
+              Create Task
+            </Button>
           </form>
         </Form>
       </DialogContent>
