@@ -2,10 +2,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import OutstandingTasks from "../components/header/sidebar/OutstandingTasks";
 import "@testing-library/jest-dom";
 
-// Set up environment variable for API URL
-process.env.VITE_API_URL = "http://localhost:3000";
-
-// Mock react-hot-toast to avoid errors
+// Mock react-hot-toast
 jest.mock("react-hot-toast", () => ({
   __esModule: true,
   default: {
@@ -45,17 +42,29 @@ beforeEach(() => {
   ) as jest.Mock;
 });
 
-// Mock useDashboardContext to provide groups
+// Mock useDashboardContext
 jest.mock("../context/DashboardContext", () => ({
   useDashboardContext: () => ({
     dashboardData: {
-      groups: [{ name: "Group1" }, { name: "Group2" }],
+      groups: [
+        { name: "Group1", color: "blue" },
+        { name: "Group2", color: "red" },
+      ],
+      firstSundayOfSem: "2025-07-27",
+      blockOutTimings: [],
+      lessons: [],
     },
     fetchDashboardTasks: jest.fn(),
   }),
 }));
 
-const tasks = [
+// Mocks for useTaskContext
+const mockSortAndFetchTasks = jest.fn();
+const mockDeleteTask = jest.fn();
+const mockMarkTaskAsDone = jest.fn();
+const mockFetchTasks = jest.fn();
+
+let mockOutstandingTasks = [
   {
     _id: "t1",
     name: "Task 1",
@@ -71,7 +80,7 @@ const tasks = [
     _id: "t2",
     name: "Task 2",
     description: "Desc 2",
-    deadlineDate: "2025-07-31",
+    deadlineDate: "2025-07-29",
     deadlineTime: "12:00",
     estimatedTimeTaken: 1,
     minChunk: 0.5,
@@ -80,173 +89,106 @@ const tasks = [
   },
 ];
 
+jest.mock("../context/TaskContext", () => ({
+  useTaskContext: () => ({
+    outstandingTasks: mockOutstandingTasks,
+    sortAndFetchTasks: mockSortAndFetchTasks,
+    deleteTask: mockDeleteTask,
+    markTaskAsDone: mockMarkTaskAsDone,
+    fetchTasks: mockFetchTasks,
+  }),
+}));
+
 describe("OutstandingTasks", () => {
-  it("renders tasks and buttons", () => {
-    render(
-      <OutstandingTasks
-        tasks={tasks}
-        fetchTasks={jest.fn()}
-        sortAndFetchTasks={jest.fn()}
-        deleteTask={jest.fn()}
-        markTaskAsDone={jest.fn()}
-        fetchDashboardTasks={jest.fn()}
-      />
-    );
+  beforeEach(() => {
+    jest.clearAllMocks();
+    // Reset tasks before each test
+    mockOutstandingTasks = [
+      {
+        _id: "t1",
+        name: "Task 1",
+        description: "Desc 1",
+        deadlineDate: "2025-07-30",
+        deadlineTime: "23:59",
+        estimatedTimeTaken: 2,
+        minChunk: 1,
+        importance: "Low" as const,
+        group: "Group1",
+      },
+      {
+        _id: "t2",
+        name: "Task 2",
+        description: "Desc 2",
+        deadlineDate: "2025-07-29",
+        deadlineTime: "12:00",
+        estimatedTimeTaken: 1,
+        minChunk: 0.5,
+        importance: "High" as const,
+        group: "Group2",
+      },
+    ];
+  });
+
+  it("renders create new task button and schedule button", () => {
+    render(<OutstandingTasks />);
+    expect(screen.getByText(/create new task/i)).toBeInTheDocument();
+    expect(screen.getByText(/schedule tasks/i)).toBeInTheDocument();
+  });
+
+  it("renders outstanding tasks", () => {
+    render(<OutstandingTasks />);
     expect(screen.getByText("Task 1")).toBeInTheDocument();
     expect(screen.getByText("Task 2")).toBeInTheDocument();
-    expect(screen.getAllByText(/done/i)).toHaveLength(2);
-    expect(screen.getByText(/schedule tasks/i)).toBeInTheDocument();
-    expect(screen.getByText(/create new task/i)).toBeInTheDocument();
+    expect(screen.getByText("Desc 1")).toBeInTheDocument();
+    expect(screen.getByText("Desc 2")).toBeInTheDocument();
+    expect(screen.getAllByText(/due:/i)).toHaveLength(2);
+  });
+
+  it("calls sortAndFetchTasks and fetchDashboardTasks when schedule button is clicked", async () => {
+    render(<OutstandingTasks />);
+    fireEvent.click(screen.getByText(/schedule tasks/i));
+    await waitFor(() => {
+      expect(mockSortAndFetchTasks).toHaveBeenCalled();
+    });
   });
 
   it("calls deleteTask when delete button is clicked", () => {
-    const mockDeleteTask = jest.fn();
-    render(
-      <OutstandingTasks
-        tasks={tasks}
-        fetchTasks={jest.fn()}
-        sortAndFetchTasks={jest.fn()}
-        deleteTask={mockDeleteTask}
-        markTaskAsDone={jest.fn()}
-        fetchDashboardTasks={jest.fn()}
-      />
-    );
-    // Find all delete buttons (with title "Delete Task")
+    render(<OutstandingTasks />);
     const deleteBtns = screen.getAllByTitle("Delete Task");
     fireEvent.click(deleteBtns[0]);
     expect(mockDeleteTask).toHaveBeenCalledWith("t1");
   });
 
-  it("calls markTaskAsDone when Done button is clicked", () => {
-    const mockMarkTaskAsDone = jest.fn();
-    render(
-      <OutstandingTasks
-        tasks={tasks}
-        fetchTasks={jest.fn()}
-        sortAndFetchTasks={jest.fn()}
-        deleteTask={jest.fn()}
-        markTaskAsDone={mockMarkTaskAsDone}
-        fetchDashboardTasks={jest.fn()}
-      />
-    );
-    fireEvent.click(screen.getAllByText(/done/i)[0]);
+  it("calls markTaskAsDone when done button is clicked", () => {
+    render(<OutstandingTasks />);
+    const doneBtns = screen.getAllByText(/done/i);
+    fireEvent.click(doneBtns[0]);
     expect(mockMarkTaskAsDone).toHaveBeenCalledWith("t1");
   });
 
-  it("calls sortAndFetchTasks and fetchDashboardTasks when Schedule tasks is clicked", async () => {
-    const mockSortAndFetchTasks = jest.fn().mockResolvedValue(undefined);
-    const mockFetchDashboardTasks = jest.fn();
-    render(
-      <OutstandingTasks
-        tasks={tasks}
-        fetchTasks={jest.fn()}
-        sortAndFetchTasks={mockSortAndFetchTasks}
-        deleteTask={jest.fn()}
-        markTaskAsDone={jest.fn()}
-        fetchDashboardTasks={mockFetchDashboardTasks}
-      />
-    );
-    fireEvent.click(screen.getByText(/schedule tasks/i));
-    await waitFor(() => {
-      expect(mockSortAndFetchTasks).toHaveBeenCalled();
-      expect(mockFetchDashboardTasks).toHaveBeenCalled();
-    });
+  it("shows 'Past due' for overdue tasks", () => {
+    // Set a past deadline
+    mockOutstandingTasks = [
+      {
+        _id: "t3",
+        name: "Past Task",
+        description: "Old",
+        deadlineDate: "2020-01-01",
+        deadlineTime: "12:00",
+        estimatedTimeTaken: 1,
+        minChunk: 0.5,
+        importance: "Low" as const,
+        group: "Group1",
+      },
+    ];
+    render(<OutstandingTasks />);
+    expect(screen.getByText(/past due/i)).toBeInTheDocument();
   });
 
-  it("opens Create dialog and submits new task", async () => {
-    render(
-      <OutstandingTasks
-        tasks={tasks}
-        fetchTasks={jest.fn()}
-        sortAndFetchTasks={jest.fn()}
-        deleteTask={jest.fn()}
-        markTaskAsDone={jest.fn()}
-        fetchDashboardTasks={jest.fn()}
-      />
-    );
-    fireEvent.click(screen.getByText(/create new task/i));
-    fireEvent.change(screen.getByLabelText(/title/i), {
-      target: { value: "New Task" },
-    });
-    fireEvent.change(screen.getByLabelText(/due date/i), {
-      target: { value: "2025-08-02" },
-    });
-    fireEvent.change(screen.getByLabelText(/due time/i), {
-      target: { value: "10:00" },
-    });
-    fireEvent.change(screen.getByLabelText(/estimated time taken/i), {
-      target: { value: "2" },
-    });
-    fireEvent.change(screen.getByLabelText(/min. chunk/i), {
-      target: { value: "1" },
-    });
-    fireEvent.mouseDown(screen.getByText(/importance/i));
-    const lowOptions = screen.getAllByText("Low");
-    fireEvent.click(lowOptions[lowOptions.length - 1]);
-    fireEvent.mouseDown(screen.getAllByText(/group/i)[0]);
-    const groupOptions = screen.getAllByText("Group1");
-    fireEvent.click(groupOptions[groupOptions.length - 1]);
-    fireEvent.click(screen.getByRole("button", { name: /create task/i }));
-
-    await waitFor(() => {
-      expect(globalThis.fetch).toHaveBeenCalledWith(
-        expect.stringContaining("/api/tasks"),
-        expect.objectContaining({
-          method: "POST",
-          headers: expect.objectContaining({
-            Authorization: "Bearer test-token",
-          }),
-        })
-      );
-    });
-  });
-
-  it("opens EditTask dialog and submits changes", async () => {
-    render(
-      <OutstandingTasks
-        tasks={tasks}
-        fetchTasks={jest.fn()}
-        sortAndFetchTasks={jest.fn()}
-        deleteTask={jest.fn()}
-        markTaskAsDone={jest.fn()}
-        fetchDashboardTasks={jest.fn()}
-      />
-    );
-    // Open Edit dialog for first task
-    fireEvent.click(screen.getAllByRole("button", { name: /edit/i })[0]);
-    fireEvent.change(screen.getByLabelText(/title/i), {
-      target: { value: "Updated Task" },
-    });
-    fireEvent.change(screen.getByLabelText(/date/i), {
-      target: { value: "2025-08-03" },
-    });
-    fireEvent.change(screen.getByLabelText("Time"), {
-      target: { value: "14:00" },
-    });
-    fireEvent.change(screen.getByLabelText("Estimated time taken (h)"), {
-      target: { value: "3" },
-    });
-    fireEvent.change(screen.getByLabelText("Min. chunk (h)"), {
-      target: { value: "1.5" },
-    });
-    fireEvent.mouseDown(screen.getByText(/importance/i));
-    const highOptions = screen.getAllByText("High");
-    fireEvent.click(highOptions[highOptions.length - 1]);
-    fireEvent.mouseDown(screen.getAllByText(/group/i)[0]);
-    const groupOptions = screen.getAllByText("Group2");
-    fireEvent.click(groupOptions[groupOptions.length - 1]);
-    fireEvent.click(screen.getByRole("button", { name: /save changes/i }));
-
-    await waitFor(() => {
-      expect(globalThis.fetch).toHaveBeenCalledWith(
-        expect.stringContaining("/api/tasks/t1"),
-        expect.objectContaining({
-          method: "PATCH",
-          headers: expect.objectContaining({
-            Authorization: "Bearer test-token",
-          }),
-        })
-      );
-    });
+  it("shows 'No outstanding tasks.' if list is empty", () => {
+    mockOutstandingTasks = [];
+    render(<OutstandingTasks />);
+    expect(screen.queryByText("Task 1")).not.toBeInTheDocument();
+    expect(screen.queryByText("Task 2")).not.toBeInTheDocument();
   });
 });

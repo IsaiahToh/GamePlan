@@ -1,7 +1,7 @@
 const request = require("supertest");
 const express = require("express");
 
-// Mock authentication middleware BEFORE requiring the routes
+// Mock authentication middleware
 jest.mock("../utils/authMiddleware", () => ({
   authenticateToken: (req, res, next) => {
     req.user = { id: "user1" };

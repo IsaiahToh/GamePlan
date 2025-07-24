@@ -54,6 +54,7 @@ jest.mock("../context/DashboardContext", () => ({
   }),
 }));
 
+const mockFetchTasks = jest.fn();
 const mockTask = {
   _id: "t1",
   name: "Task 1",
@@ -62,13 +63,21 @@ const mockTask = {
   deadlineTime: "23:59",
   estimatedTimeTaken: 2,
   minChunk: 1,
-  importance: "Low",
+  importance: "Low" as const,
   group: "Group1",
 };
 
+// Mock useTaskContext to provide currentTask and fetchTasks
+jest.mock("../context/TaskContext", () => ({
+  useTaskContext: () => ({
+    currentTask: mockTask,
+    fetchTasks: mockFetchTasks,
+  }),
+}));
+
 describe("EditTask", () => {
   it("renders dialog and form fields", () => {
-    render(<EditTask task={mockTask} fetchTasks={jest.fn()} />);
+    render(<EditTask task={mockTask} />);
     fireEvent.click(screen.getByRole("button", { name: /edit/i }));
     expect(screen.getByLabelText(/title/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/date/i)).toBeInTheDocument();
@@ -78,8 +87,7 @@ describe("EditTask", () => {
   });
 
   it("submits the form and calls fetchTasks", async () => {
-    const mockFetchTasks = jest.fn();
-    render(<EditTask task={mockTask} fetchTasks={mockFetchTasks} />);
+    render(<EditTask task={mockTask} />);
     fireEvent.click(screen.getByRole("button", { name: /edit/i }));
 
     fireEvent.change(screen.getByLabelText(/title/i), {

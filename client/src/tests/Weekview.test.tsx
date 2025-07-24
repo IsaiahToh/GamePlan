@@ -92,13 +92,10 @@ describe("Weekview", () => {
     const checkbox = screen.getByRole("checkbox");
     expect(checkbox).toBeChecked();
     fireEvent.click(checkbox);
-    // No assertion for hiding tasks, as setTaskOn is mocked
   });
 
   it("shows current time indicator", () => {
     render(<Weekview />);
-    // Look for the red circle by class (if you use Tailwind or similar)
-    // You may need to adjust the class name to match your indicator
     const bulbs = document.querySelectorAll(".bg-red-500.rounded-full");
     expect(bulbs.length).toBeGreaterThan(0);
   });
