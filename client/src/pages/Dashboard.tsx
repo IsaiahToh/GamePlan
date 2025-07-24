@@ -24,7 +24,7 @@ export function Dashboard() {
     <>
       <div className="flex flex-col justify-center items-center h-screen">
         {view == "Week" ? (
-          dashboardData && dashboardData.lessons ? (
+          dashboardData && dashboardData.lessons ?(
             <Weekview />
           ) : (
             <Logout />
