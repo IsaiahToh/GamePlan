@@ -23,6 +23,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useDashboardContext } from "@/context/DashboardContext";
 
+// Uncomment the line below if you are testing locally
+// const API_URL = process.env.VITE_API_URL || "http://localhost:3000";
+
+// Uncomment the line below if you are using the deployed app
 const API_URL = import.meta.env.VITE_API_URL;
 
 // Define Zod schema

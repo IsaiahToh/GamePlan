@@ -32,6 +32,10 @@ import { taskSchema } from "@/lib/types";
 import { importanceLevels } from "@/lib/types";
 import { useDashboardContext } from "@/context/DashboardContext";
 
+// Uncomment the line below if you are testing locally
+// const API_URL = process.env.VITE_API_URL || "http://localhost:3000";
+
+// Uncomment the line below if you are using the deployed app
 const API_URL = import.meta.env.VITE_API_URL;
 
 type CreateProps = {

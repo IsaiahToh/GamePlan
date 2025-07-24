@@ -7,8 +7,11 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "module": "esnext",
+    "moduleResolution": "node",
     "target": "es6",
     "baseUrl": ".",
+    "esModuleInterop": true,
+      "types": ["jest", "@testing-library/jest-dom", "node"],
     "paths": {
       "@/*": ["./src/*"]
     }
