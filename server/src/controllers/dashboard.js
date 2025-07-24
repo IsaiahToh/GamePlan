@@ -64,6 +64,7 @@ async function getDashboard(req, res) {
       firstSundayOfSem: dashboard.firstSundayOfSem,
       blockOutTimings: dashboard.blockOutTimings,
       freeTimes: dashboard.freeTimes,
+      url: dashboard.url,
     });
   } else {
     res.json({ lessons: [], groups: [], firstSundayOfSem: "" });
