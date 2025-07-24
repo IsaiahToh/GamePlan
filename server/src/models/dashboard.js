@@ -14,6 +14,7 @@ const dashboardSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  url: { type: String, default: "" },
   lessons: { type: Array, default: [] },
   groups: { type: Array, default: [] },
   blockOutTimings: { type: [blockOutTimingSchema], default: [] },

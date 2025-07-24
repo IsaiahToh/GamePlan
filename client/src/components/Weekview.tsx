@@ -66,7 +66,7 @@ export default function Weekview() {
       <div className="grid grid-cols-[auto_1fr_1fr_1fr_1fr_1fr_1fr_1fr] place-items-center px-4 py-2 shadow-sm">
         <div className="h-full border-r border-gray-300 flex flex-col items-center justify-center gap-y-2 pr-3">
           <div className="text-xs text-gray-600">
-            {weekNumber == 0 ? "Sem break" : `Week ${weekNumber}`}
+            {weekNumber == 0 ? "Sem break" : Number.isNaN(weekNumber) ? "Week _" : `Week ${weekNumber}`}
           </div>
           <div className="flex items-center gap-1">
             {currentDashboard !== "My" ? (

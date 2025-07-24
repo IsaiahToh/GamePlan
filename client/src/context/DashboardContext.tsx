@@ -52,6 +52,7 @@ export const DashboardProvider: React.FC<React.PropsWithChildren> = ({
   const [scheduledTasks, setScheduledTasks] = useState<ScheduledTask[]>([]);
   const [dashboardData, setDashboardData] = useState<dashboardData>({
     userId: "",
+    url: "",
     blockOutTimings: [],
     lessons: [],
     firstSundayOfSem: "",
@@ -63,7 +64,7 @@ export const DashboardProvider: React.FC<React.PropsWithChildren> = ({
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        console.log("No token in localStorage");
+        setLoggedIn(false);
         return;
       }
       const res = await fetch(
@@ -72,6 +73,10 @@ export const DashboardProvider: React.FC<React.PropsWithChildren> = ({
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      if (!res.ok) {
+        setLoggedIn(false);
+        return;
+      }
       const data = await res.json();
       setDashboardData(data);
       console.log("Fetched data:", data);

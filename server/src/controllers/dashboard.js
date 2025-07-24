@@ -8,14 +8,17 @@ const dayjs = require("dayjs");
 async function scrapeAndImportDashboard(req, res) {
   try {
     const userId = req.user.id;
-    const url = req.body.url;
+    const newUrl = req.body.url;
+    const oldUrl = await Dashboard.findOne({ userId }).then(d => d ? d.url : "");
+    let lessons = await Dashboard.findOne({ userId }).then(d => d ? d.lessons : []);
     const groups = req.body.groups;
     const firstSundayOfSem = req.body.firstSundayOfSem;
     const blockOutTimings = req.body.blockOutTimings;
 
-    let lessons = [];
-    if (url) {
-      lessons = await scrape(url);
+    if (newUrl.length === 0) {
+      lessons = [];
+    } else if (newUrl !== oldUrl) {
+      lessons = await scrape(newUrl);
     }
 
     const freeTimes = await getWeeklyFreeTimes(
@@ -24,15 +27,14 @@ async function scrapeAndImportDashboard(req, res) {
       lessons,
       dayjs()
     );
-    console.log(JSON.stringify(freeTimes, null, 2));
     await Dashboard.findOneAndUpdate(
       { userId },
-      { userId, lessons, groups, firstSundayOfSem, blockOutTimings, freeTimes },
+      { userId, url: newUrl, lessons, groups, firstSundayOfSem, blockOutTimings, freeTimes },
       { upsert: true, new: true }
     );
     res.json({
       userId,
-      url: url,
+      url: newUrl,
       groups: groups,
       firstSundayOfSem: firstSundayOfSem,
       blockOutTimings: blockOutTimings,
@@ -60,6 +62,7 @@ async function getDashboard(req, res) {
       firstSundayOfSem: dashboard.firstSundayOfSem,
       blockOutTimings: dashboard.blockOutTimings,
       freeTimes: dashboard.freeTimes,
+      url: dashboard.url,
     });
   } else {
     res.json({ lessons: [], groups: [], firstSundayOfSem: "" });

@@ -25,11 +25,8 @@ import {
 } from "@/components/ui/select";
 import { colorOptions } from "@/lib/utils";
 import { useDashboardContext } from "@/context/DashboardContext";
+import toast from "react-hot-toast";
 
-// Uncomment the line below if you are testing locally
-// const API_URL = process.env.VITE_API_URL || "http://localhost:3000";
-
-// Uncomment the line below if you are using the deployed app
 const API_URL = import.meta.env.VITE_API_URL;
 
 const formSchema = z.object({
@@ -51,18 +48,20 @@ const formSchema = z.object({
   firstSundayOfSem: z.string().min(1, "First Sunday of Sem required"),
 });
 
-const defaultValues = {
-  blockOutTimings: [{ from: "", to: "", label: "", day: "all" }],
-  url: "",
-  groups: [{ name: "", color: "red" }],
-  firstSundayOfSem: "",
-};
-
 export default function Settingsbar() {
-  const { fetchDashboard } = useDashboardContext();
+  const { fetchDashboard, dashboardData } = useDashboardContext();
   const [loading, setLoading] = useState(false);
-  const persisted = localStorage.getItem("myFormData");
-  const initialValues = persisted ? JSON.parse(persisted) : defaultValues;
+  const savedFormData =
+    typeof window !== "undefined" ? localStorage.getItem("myFormData") : null;
+
+  const initialValues = savedFormData
+    ? JSON.parse(savedFormData)
+    : {
+        url: dashboardData?.url,
+        blockOutTimings: dashboardData?.blockOutTimings,
+        groups: dashboardData?.groups,
+        firstSundayOfSem: dashboardData?.firstSundayOfSem,
+      };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -122,12 +121,7 @@ export default function Settingsbar() {
       });
       if (!res.ok) {
         // Try to parse the error message from the response
-        const errorData = await res.json().catch(() => ({}));
-        console.error("Server error:", errorData); // Log the error for debugging
-        form.setError("root", {
-          type: "server",
-          message: errorData.message || "Server error occurred.",
-        });
+        toast.error("Invalid URL or data.", { duration: 2000 });
         return; // Stop further execution
       } else {
         const data = await res.json();
@@ -164,7 +158,10 @@ export default function Settingsbar() {
                     Specify times when you are unavailable for tasks.
                   </FormDescription>
                   {timeFields.map((field, index) => (
-                    <div key={field.id} className="flex items-center gap-2 mb-2">
+                    <div
+                      key={field.id}
+                      className="flex items-center gap-2 mb-2"
+                    >
                       <FormControl>
                         <Input
                           type="time"

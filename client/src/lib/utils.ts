@@ -42,3 +42,18 @@ export const colorOptions = [
   { label: "Brown", value: "brown", css: "bg-yellow-600" },
   { label: "Gray", value: "gray", css: "bg-gray-500" },
 ];
+
+export const getColorCSS = {
+  red: "data-[highlighted]:bg-red-400",
+  orange: "data-[highlighted]:bg-orange-400",
+  yellow: "data-[highlighted]:bg-yellow-300",
+  green: "data-[highlighted]:bg-green-500",
+  blue: "data-[highlighted]:bg-blue-500",
+  purple: "data-[highlighted]:bg-purple-500",
+  pink: "data-[highlighted]:bg-pink-400",
+  teal: "data-[highlighted]:bg-teal-500",
+  brown: "data-[highlighted]:bg-yellow-600",
+  gray: "data-[highlighted]:bg-gray-500",
+  None: "data-[highlighted]:bg-gray-400",
+};
+

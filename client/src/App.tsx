@@ -10,6 +10,7 @@ import {
   useDashboardContext,
   DashboardProvider,
 } from "./context/DashboardContext";
+import { TaskProvider } from "./context/TaskContext";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = !!localStorage.getItem("token");
@@ -49,9 +50,11 @@ function AppContent() {
 
 function App() {
   return (
-    <DashboardProvider>
-      <AppContent />
-    </DashboardProvider>
+    <TaskProvider>
+      <DashboardProvider>
+        <AppContent />
+      </DashboardProvider>
+    </TaskProvider>
   );
 }
 

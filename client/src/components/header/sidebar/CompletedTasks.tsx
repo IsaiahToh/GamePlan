@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { useTaskContext } from "@/context/TaskContext";
 import toast from "react-hot-toast";
 
 // Uncomment the line below if you are testing locally
@@ -7,25 +8,10 @@ import toast from "react-hot-toast";
 // Uncomment the line below if you are using the deployed app
 const API_URL = import.meta.env.VITE_API_URL;
 
-type Task = {
-  _id: string;
-  name: string;
-  description: string;
-  deadlineDate: string;
-  deadlineTime: string;
-  estimatedTimeTaken: number;
-  importance: string | number;
-  completed?: boolean;
-};
+export default function CompletedTasks() {
+  const { completedTasks, fetchTasks, markTaskAsUndone } = useTaskContext();
 
-type CompletedTasksProps = {
-  tasks: Task[];
-  markTaskAsUndone: (id: string) => void;
-  fetchTasks: () => void;
-};
-
-export default function CompletedTasks({ tasks = [], markTaskAsUndone, fetchTasks}: CompletedTasksProps) {
-  if (!tasks.length) return<div>No completed tasks.</div>;
+  if (!completedTasks.length) return<div>No completed tasks.</div>;
 
   const deleteCompletedTasks = async () => {
     const token = localStorage.getItem("token");
@@ -50,7 +36,7 @@ export default function CompletedTasks({ tasks = [], markTaskAsUndone, fetchTask
         Clear completed tasks
       </Button>
       <ul>
-        {tasks.map((task) => (
+        {completedTasks.map((task) => (
           <li key={task._id} className="border rounded p-2 mb-2 bg-green-50">
             <div className="font-semibold">{task.name}</div>
             <div className="text-sm">{task.description}</div>

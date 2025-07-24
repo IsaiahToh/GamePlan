@@ -5,33 +5,18 @@ import Logout from "@/components/header/Logout";
 import { useDashboardContext } from "@/context/DashboardContext";
 
 export function Dashboard() {
-  const {
-    view,
-    fetchDashboardTasks,
-    dashboardData,
-    fetchDashboard,
-  } = useDashboardContext();
+  const { view, fetchDashboardTasks, fetchDashboard, loggedIn } =
+    useDashboardContext();
 
   useEffect(() => {
     fetchDashboard(localStorage.getItem("email") || "");
-  }, []);
-
-  useEffect(() => {
     fetchDashboardTasks();
   }, []);
 
   return (
     <>
       <div className="flex flex-col justify-center items-center h-screen">
-        {view == "Week" ? (
-          dashboardData && dashboardData.lessons ? (
-            <Weekview />
-          ) : (
-            <Logout />
-          )
-        ) : (
-          <Dayview />
-        )}
+        {loggedIn ? view === "Week" ? <Weekview /> : <Dayview /> : <Logout />}
       </div>
     </>
   );

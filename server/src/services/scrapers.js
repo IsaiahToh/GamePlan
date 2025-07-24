@@ -102,6 +102,7 @@ const SEMESTER = 1;
 const acadYear = "2025-2026";
 
 async function scrape(url) {
+  console.log("Scraping lessons from URL:", url);
   const allLessonClassNames = await scrapeLessonClassNamesInKRfrugFP(url);
 
   const allModuleInfos = await getAllModuleInfos(allLessonClassNames, acadYear);

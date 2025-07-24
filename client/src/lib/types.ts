@@ -74,6 +74,7 @@ export interface FriendRequest {
 
 export interface dashboardData {
   userId: string;
+  url: string;
   blockOutTimings: any[];
   lessons: Lesson[];
   firstSundayOfSem: string;
