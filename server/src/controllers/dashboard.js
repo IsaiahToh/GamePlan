@@ -9,8 +9,8 @@ async function scrapeAndImportDashboard(req, res) {
   try {
     const userId = req.user.id;
     const newUrl = req.body.url;
-    const oldUrl = await Dashboard.findOne({ userId }).then(d => d.url);
-    let lessons = await Dashboard.findOne({ userId }).then(d => d.lessons);
+    const oldUrl = await Dashboard.findOne({ userId }).then(d => d ? d.url : "");
+    let lessons = await Dashboard.findOne({ userId }).then(d => d ? d.lessons : []);
     const groups = req.body.groups;
     const firstSundayOfSem = req.body.firstSundayOfSem;
     const blockOutTimings = req.body.blockOutTimings;
