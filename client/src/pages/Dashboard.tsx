@@ -10,24 +10,13 @@ export function Dashboard() {
 
   useEffect(() => {
     fetchDashboard(localStorage.getItem("email") || "");
-  }, []);
-
-  useEffect(() => {
     fetchDashboardTasks();
   }, []);
 
   return (
     <>
       <div className="flex flex-col justify-center items-center h-screen">
-        {loggedIn ? (
-          view === "Week" ? (
-            <Weekview />
-          ) : (
-            <Dayview />
-          )
-        ) : (
-          <Logout />
-        )}
+        {loggedIn ? view === "Week" ? <Weekview /> : <Dayview /> : <Logout />}
       </div>
     </>
   );
