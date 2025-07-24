@@ -36,12 +36,12 @@ async function clearCompletedTasks(req, res) {
   try {
     const userId = req.user.id;
 
-    await UserTasks.findOneAndUpdate(
+    const result = await UserTasks.findOneAndUpdate(
       { userId },
       { $set: { completedTasks: [] } },
       { new: true }
     );
-    if (!res) return res.status(404).json({ message: "User tasks not found" });
+    if (!result) return res.status(404).json({ message: "User tasks not found" });
 
     res.json({ message: "All completed tasks deleted" });
   } catch (error) {
