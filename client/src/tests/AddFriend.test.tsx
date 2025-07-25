@@ -2,7 +2,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { AddFriend } from "../components/header/profile/AddFriend";
 import "@testing-library/jest-dom";
 
-process.env.VITE_API_URL = "http://localhost:3000";
+import.meta.env.VITE_API_URL = "http://localhost:3000";
 
 // Mock react-hot-toast to avoid errors
 jest.mock("react-hot-toast", () => ({

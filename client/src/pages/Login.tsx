@@ -24,10 +24,6 @@ import { useNavigate } from "react-router-dom";
 import { useDashboardContext } from "@/context/DashboardContext";
 import { loginFormSchema } from "@/lib/types";
 
-// Uncomment the line below if you are testing locally
-// const API_URL = process.env.VITE_API_URL || "http://localhost:3000";
-
-// Uncomment the line below if you are using the deployed app
 const API_URL = import.meta.env.VITE_API_URL;
 
 export function Login() {
@@ -92,7 +88,6 @@ export function Login() {
         <CardDescription>More Game to Plan?</CardDescription>
       </CardHeader>
       <CardContent>
-        
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -146,6 +141,6 @@ export function Login() {
       </CardContent>
     </Card>
   );
-};
+}
 
 export default Login;

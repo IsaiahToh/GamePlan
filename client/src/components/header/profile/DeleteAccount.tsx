@@ -15,9 +15,10 @@ import { useState } from "react";
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const DeleteAccount = () => {
-    const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const { setLoggedIn, setIsSettingsbarOpen, setIsSidebarOpen } = useDashboardContext();
+  const { setLoggedIn, setIsSettingsbarOpen, setIsSidebarOpen } =
+    useDashboardContext();
   const handleDeleteAccount = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -32,12 +33,12 @@ export const DeleteAccount = () => {
       if (response.status === 200) {
         toast.success("Account deleted successfully.", { duration: 2000 });
         setOpen(false);
-        setIsSidebarOpen(false); 
-        setIsSettingsbarOpen(false); 
-        localStorage.removeItem("token"); 
-        localStorage.removeItem("email"); 
-        setLoggedIn(false); 
-        navigate("/signup"); 
+        setIsSidebarOpen(false);
+        setIsSettingsbarOpen(false);
+        localStorage.removeItem("token");
+        localStorage.removeItem("email");
+        setLoggedIn(false);
+        navigate("/signup");
       } else {
         toast.error("An unexpected error occurred.", { duration: 2000 });
       }
@@ -62,13 +63,13 @@ export const DeleteAccount = () => {
           <DialogDescription>This action is irreversible.</DialogDescription>
         </DialogHeader>
 
-            <Button
-              variant="secondary"
-              className="w-full bg-red-500 hover:bg-red-400 cursor-pointer text-white"
-              onClick={handleDeleteAccount}
-            >
-              Please delete my account
-            </Button>
+        <Button
+          variant="secondary"
+          className="w-full bg-red-500 hover:bg-red-400 cursor-pointer text-white"
+          onClick={handleDeleteAccount}
+        >
+          Please delete my account
+        </Button>
       </DialogContent>
     </Dialog>
   );

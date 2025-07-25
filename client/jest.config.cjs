@@ -2,7 +2,6 @@ const { createDefaultPreset } = require("ts-jest");
 
 const tsJestTransformCfg = createDefaultPreset().transform;
 
-/** @type {import("jest").Config} **/
 module.exports = {
   testEnvironment: "jsdom",
   setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
@@ -11,5 +10,27 @@ module.exports = {
   },
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
+  },
+  globals: {
+    "ts-jest": {
+      diagnostics: {
+        ignoreCodes: [1343],
+      },
+      astTransformers: {
+        before: [
+          {
+            path: "ts-jest-mock-import-meta",
+            options: {
+              metaObjectReplacement: {
+                env: {
+                  // Read from process.env at Jest config time
+                  VITE_API_URL: process.env.VITE_API_URL || "http://localhost:3000",
+                },
+              },
+            },
+          },
+        ],
+      },
+    },
   },
 };

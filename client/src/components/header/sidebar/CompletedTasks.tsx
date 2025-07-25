@@ -2,16 +2,12 @@ import { Button } from "@/components/ui/button";
 import { useTaskContext } from "@/context/TaskContext";
 import toast from "react-hot-toast";
 
-// Uncomment the line below if you are testing locally
-// const API_URL = process.env.VITE_API_URL || "http://localhost:3000";
-
-// Uncomment the line below if you are using the deployed app
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function CompletedTasks() {
   const { completedTasks, fetchTasks, markTaskAsUndone } = useTaskContext();
 
-  if (!completedTasks.length) return<div>No completed tasks.</div>;
+  if (!completedTasks.length) return <div>No completed tasks.</div>;
 
   const deleteCompletedTasks = async () => {
     const token = localStorage.getItem("token");
@@ -32,7 +28,11 @@ export default function CompletedTasks() {
 
   return (
     <div className="pr-1 space-y-2 overflow-y-auto max-h-[84vh]">
-      <Button variant="outline" className="w-full" onClick={deleteCompletedTasks}>
+      <Button
+        variant="outline"
+        className="w-full"
+        onClick={deleteCompletedTasks}
+      >
         Clear completed tasks
       </Button>
       <ul>

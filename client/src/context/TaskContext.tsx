@@ -2,10 +2,6 @@ import { createContext, useContext, useState, type ReactNode } from "react";
 import { toast } from "react-hot-toast";
 import { type Task } from "@/lib/types";
 
-// Uncomment the line below if you are testing locally
-// const API_URL = process.env.VITE_API_URL || "http://localhost:3000";
-
-// Uncomment the line below if you are using the deployed app
 const API_URL = import.meta.env.VITE_API_URL;
 
 interface TaskContextValue {
@@ -23,9 +19,7 @@ const TaskContext = createContext<TaskContextValue | undefined>(undefined);
 export const useTaskContext = () => {
   const context = useContext(TaskContext);
   if (!context)
-    throw new Error(
-      "useTaskContext must be used within TaskProvider"
-    );
+    throw new Error("useTaskContext must be used within TaskProvider");
   return context;
 };
 

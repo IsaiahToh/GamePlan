@@ -4,7 +4,7 @@ import { DashboardProvider } from "../context/DashboardContext";
 import "@testing-library/jest-dom";
 
 // Set up environment variable for API URL
-process.env.VITE_API_URL = "http://localhost:3000";
+import.meta.env.VITE_API_URL = "http://localhost:3000";
 
 // Mock react-hot-toast to avoid errors
 jest.mock("react-hot-toast", () => ({

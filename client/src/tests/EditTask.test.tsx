@@ -3,7 +3,7 @@ import { EditTask } from "../components/header/sidebar/EditTask";
 import "@testing-library/jest-dom";
 
 // Set up environment variable for API URL
-process.env.VITE_API_URL = "http://localhost:3000";
+import.meta.env.VITE_API_URL = "http://localhost:3000";
 
 // Mock react-hot-toast to avoid errors
 jest.mock("react-hot-toast", () => ({
@@ -82,7 +82,9 @@ describe("EditTask", () => {
     expect(screen.getByLabelText(/title/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/date/i)).toBeInTheDocument();
     expect(screen.getByLabelText("Time")).toBeInTheDocument();
-    expect(screen.getByLabelText("Estimated time taken (h)")).toBeInTheDocument();
+    expect(
+      screen.getByLabelText("Estimated time taken (h)")
+    ).toBeInTheDocument();
     expect(screen.getByLabelText("Min. chunk (h)")).toBeInTheDocument();
   });
 

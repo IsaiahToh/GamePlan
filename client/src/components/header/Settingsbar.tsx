@@ -28,12 +28,7 @@ import { useDashboardContext } from "@/context/DashboardContext";
 import toast from "react-hot-toast";
 import { settingsSchema } from "@/lib/types";
 
-// Uncomment the line below if you are testing locally
-// const API_URL = process.env.VITE_API_URL || "http://localhost:3000";
-
-// Uncomment the line below if you are using the deployed app
 const API_URL = import.meta.env.VITE_API_URL;
-
 
 export default function Settingsbar() {
   const { fetchDashboard, dashboardData } = useDashboardContext();

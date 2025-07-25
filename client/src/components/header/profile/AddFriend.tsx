@@ -38,14 +38,11 @@ export function AddFriend() {
 
   async function fetchSent() {
     try {
-      const response = await fetch(
-        `${API_URL}/api/friend?type=sent`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${API_URL}/api/friend?type=sent`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (!response.ok) throw new Error("Failed to fetch");
       const data = await response.json();
       setSent(data === null ? [] : data);
@@ -107,8 +104,7 @@ export function AddFriend() {
           form.setError("email", {
             type: "server",
             message: "You cannot send a friend request to yourself.",
-          }
-          );
+          });
         } else if (errData.code === "ALREADY_SENT") {
           form.setError("email", {
             type: "server",
@@ -117,13 +113,14 @@ export function AddFriend() {
         } else if (errData.code === "ALREADY_RECEIVED") {
           form.setError("email", {
             type: "server",
-            message: "You have already received a friend request from this user.",
+            message:
+              "You have already received a friend request from this user.",
           });
         } else {
           form.setError("email", {
             type: "server",
             message: "You are already friends with this user.",
-          })
+          });
         }
       } else if (response.status === 201) {
         toast.success("Friend request sent successfully!", { duration: 2000 });
