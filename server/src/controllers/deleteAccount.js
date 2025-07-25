@@ -7,7 +7,7 @@ async function deleteAccount(req, res) {
   try {
     const userId = req.user.id;
     const email = req.query.email;
-    const response = await Promise.all([
+    await Promise.all([
       User.findOneAndDelete({ email }),
       Dashboard.findOneAndDelete({ userId }),
       UserTask.findOneAndDelete({ userId }),

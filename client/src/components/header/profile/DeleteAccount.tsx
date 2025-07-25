@@ -5,7 +5,6 @@ import {
   DialogTitle,
   DialogDescription,
   DialogHeader,
-  DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";

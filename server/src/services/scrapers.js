@@ -1,5 +1,4 @@
 const puppeteer = require("puppeteer");
-const fs = require("fs");
 
 async function scrapeLessonClassNamesInKRfrugFP(url) {
   const browser = await puppeteer.launch({

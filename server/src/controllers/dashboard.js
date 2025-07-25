@@ -1,4 +1,3 @@
-const fs = require("fs");
 const { scrape } = require("../services/scrapers");
 const { getWeeklyFreeTimes } = require("../services/freeTimes");
 const Dashboard = require("../models/dashboard");
