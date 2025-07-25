@@ -3,7 +3,6 @@ const cors = require('cors');
 const { sendFriendRequest, get, deleteFriend, addFriend } = require('../controllers/friendRequest');
 const { authenticateToken } = require("../utils/authMiddleware");
 
-
 const router = express.Router();
 
 router.use(cors());

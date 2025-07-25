@@ -23,6 +23,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
+import { signupSchema } from "@/lib/types";
 
 // Uncomment the line below if you are testing locally
 // const API_URL = process.env.VITE_API_URL || "http://localhost:3000";
@@ -30,21 +31,12 @@ import { useNavigate } from "react-router-dom";
 // Uncomment the line below if you are using the deployed app
 const API_URL = import.meta.env.VITE_API_URL;
 
-// Zod schema
-const formSchema = z.object({
-  name: z.string().min(1, { message: "Name is required." }),
-  email: z.string().email({ message: "Please enter a valid email address." }),
-  password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters." }),
-});
-
 const Signup = () => {
   const navigate = useNavigate();
 
   // Set up form with useForm and zodResolver
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof signupSchema>>({
+    resolver: zodResolver(signupSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -53,7 +45,7 @@ const Signup = () => {
   });
 
   // Handle form submission
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof signupSchema>) {
     try {
       const response = await fetch(`${API_URL}/api/auth/signup`, {
         method: "POST",

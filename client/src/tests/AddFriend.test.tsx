@@ -1,12 +1,12 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { AddFriend } from "../components/header/friends/AddFriend";
+import { AddFriend } from "../components/header/profile/AddFriend";
 import "@testing-library/jest-dom";
 
 process.env.VITE_API_URL = "http://localhost:3000";
 
 // Mock react-hot-toast to avoid errors
 jest.mock("react-hot-toast", () => ({
-  toast: { error: jest.fn(), success: jest.fn() }
+  toast: { error: jest.fn(), success: jest.fn() },
 }));
 
 // Mock localStorage
@@ -41,7 +41,9 @@ describe("AddFriend", () => {
     fireEvent.click(screen.getByText(/add friends/i));
     // Now the input and button should be in the document
     expect(screen.getByPlaceholderText(/find an email/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /send friend request/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /send friend request/i })
+    ).toBeInTheDocument();
   });
 
   it("allows typing and submitting the form", async () => {
@@ -50,7 +52,9 @@ describe("AddFriend", () => {
     fireEvent.change(screen.getByPlaceholderText(/find an email/i), {
       target: { value: "test@example.com" },
     });
-    fireEvent.click(screen.getByRole("button", { name: /send friend request/i }));
+    fireEvent.click(
+      screen.getByRole("button", { name: /send friend request/i })
+    );
 
     await waitFor(() => {
       expect(globalThis.fetch).toHaveBeenCalledWith(

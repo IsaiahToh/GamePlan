@@ -1,21 +1,23 @@
 import { User } from "lucide-react";
-import { AddFriend } from "./friends/AddFriend";
-import { ViewFriend } from "./friends/ViewFriend";
+import { AddFriend } from "./AddFriend";
+import { ViewFriend } from "./ViewFriend";
 import { useNavigate } from "react-router-dom";
 import { useDashboardContext } from "@/context/DashboardContext";
+import { DeleteAccount } from "./DeleteAccount";
 
 export default function Profile() {
-  const {  setIsSidebarOpen, setIsSettingsbarOpen, setLoggedIn } = useDashboardContext();
+  const { setIsSidebarOpen, setIsSettingsbarOpen, setLoggedIn } =
+    useDashboardContext();
   // Use useNavigate to
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
   async function handleLogout() {
-    setIsSidebarOpen(false); // Close sidebar if open
-    setIsSettingsbarOpen(false); // Close settings bar if open
-    localStorage.removeItem("token"); // Remove token from local storage
-    localStorage.removeItem("email"); // Remove email from local storage
-    setLoggedIn(false); // Update loggedIn state
-    navigate("/login"); // Redirect to login page
+    setIsSidebarOpen(false); 
+    setIsSettingsbarOpen(false);
+    localStorage.removeItem("token"); 
+    localStorage.removeItem("email"); 
+    setLoggedIn(false);
+    navigate("/login"); 
   }
   return (
     <div className="group relative">
@@ -29,6 +31,7 @@ export default function Profile() {
           <p className="cursor-pointer hover:text-black" onClick={handleLogout}>
             Logout
           </p>
+          <DeleteAccount />
         </div>
       </div>
     </div>

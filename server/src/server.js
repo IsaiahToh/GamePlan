@@ -3,11 +3,11 @@ require("dotenv").config({
 });
 
 const express = require("express");
-const signupRoute = require("./routes/signup");
-const loginRoute = require("./routes/login");
+const authRoutes = require("./routes/auth");
 const dashboardRoutes = require("./routes/dashboard");
 const taskRoutes = require("./routes/task");
 const friendRoutes = require("./routes/friendRequest")
+const deleteAccountRoutes = require("./routes/deleteAccount");
 
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -22,11 +22,11 @@ app.get("/", (req, res) => {
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use("/api/auth", signupRoute);
-app.use("/api/auth", loginRoute);
+app.use("/api/auth", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/friend", friendRoutes)
+app.use("/api/delete", deleteAccountRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

@@ -13,6 +13,40 @@ export const taskSchema = z.object({
   importance: z.enum(importanceLevels),
 });
 
+export const settingsSchema = z.object({
+  blockOutTimings: z.array(
+    z.object({
+      from: z.string().min(1, "Start time required"),
+      to: z.string().min(1, "End time required"),
+      label: z.string().optional(),
+      day: z.string().optional(),
+    })
+  ),
+  url: z.string(),
+  groups: z.array(
+    z.object({
+      name: z.string().min(1, "Group name required"),
+      color: z.string(),
+    })
+  ),
+  firstSundayOfSem: z.string().min(1, "First Sunday of Sem required"),
+});
+
+export const loginFormSchema = z.object({
+  email: z.string().email({ message: "Please enter a valid email address." }),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters." }),
+});
+
+export const signupSchema = z.object({
+  name: z.string().min(1, { message: "Name is required." }),
+  email: z.string().email({ message: "Please enter a valid email address." }),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters." }),
+});
+
 export interface Lesson {
   moduleCode: string;
   lessonType: string;

@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { ViewFriend } from "../components/header/friends/ViewFriend";
+import { ViewFriend } from "../components/header/profile/ViewFriend";
 import { DashboardProvider } from "../context/DashboardContext";
 import "@testing-library/jest-dom";
 
@@ -8,7 +8,7 @@ process.env.VITE_API_URL = "http://localhost:3000";
 
 // Mock react-hot-toast to avoid errors
 jest.mock("react-hot-toast", () => ({
-  toast: { error: jest.fn(), success: jest.fn() }
+  toast: { error: jest.fn(), success: jest.fn() },
 }));
 
 // Mock localStorage
@@ -38,7 +38,11 @@ beforeEach(() => {
           Promise.resolve([
             {
               _id: "req1",
-              requester: { _id: "u1", email: "friend@email.com", name: "Friend" },
+              requester: {
+                _id: "u1",
+                email: "friend@email.com",
+                name: "Friend",
+              },
               recipient: { _id: "me", email: "me@email.com", name: "Me" },
               status: "pending",
               createdAt: "",
@@ -55,7 +59,11 @@ beforeEach(() => {
             {
               _id: "req2",
               requester: { _id: "me", email: "me@email.com", name: "Me" },
-              recipient: { _id: "u2", email: "friend2@email.com", name: "Friend2" },
+              recipient: {
+                _id: "u2",
+                email: "friend2@email.com",
+                name: "Friend2",
+              },
               status: "accepted",
               createdAt: "",
               updatedAt: "",
@@ -64,7 +72,11 @@ beforeEach(() => {
       });
     }
     // Accept/delete friend request
-    return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({}) });
+    return Promise.resolve({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve({}),
+    });
   }) as jest.Mock;
 });
 
@@ -95,9 +107,11 @@ describe("ViewFriend", () => {
     );
     fireEvent.click(screen.getByText(/view friends/i));
     await waitFor(() => screen.getByText(/friend requests:/i));
-    const acceptBtn = screen.getAllByRole("button").find(btn =>
-      btn.querySelector("svg")?.getAttribute("color") === "green"
-    );
+    const acceptBtn = screen
+      .getAllByRole("button")
+      .find(
+        (btn) => btn.querySelector("svg")?.getAttribute("color") === "green"
+      );
     if (acceptBtn) {
       fireEvent.click(acceptBtn);
       await waitFor(() => {
@@ -117,9 +131,11 @@ describe("ViewFriend", () => {
     );
     fireEvent.click(screen.getByText(/view friends/i));
     await waitFor(() => screen.getByText(/friend requests:/i));
-    const deleteBtns = screen.getAllByRole("button").filter(btn =>
-      btn.querySelector("svg")?.getAttribute("color") === "red"
-    );
+    const deleteBtns = screen
+      .getAllByRole("button")
+      .filter(
+        (btn) => btn.querySelector("svg")?.getAttribute("color") === "red"
+      );
     if (deleteBtns.length > 0) {
       fireEvent.click(deleteBtns[0]);
       await waitFor(() => {

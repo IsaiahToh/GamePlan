@@ -33,10 +33,6 @@ import { useDashboardContext } from "@/context/DashboardContext";
 import { useTaskContext } from "@/context/TaskContext";
 import { getColorCSS } from "@/lib/utils";
 
-// Uncomment the line below if you are testing locally
-// const API_URL = process.env.VITE_API_URL || "http://localhost:3000";
-
-// Uncomment the line below if you are using the deployed app
 const API_URL = import.meta.env.VITE_API_URL;
 
 export function Create() {
@@ -75,7 +71,7 @@ export function Create() {
       if (fetchTasks) fetchTasks();
       form.reset();
     } catch (error) {
-      console.error("Fetch failed: ", error);
+      console.error("Create task failed: ", error);
     }
   };
 

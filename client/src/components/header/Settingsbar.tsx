@@ -26,6 +26,7 @@ import {
 import { colorOptions } from "@/lib/utils";
 import { useDashboardContext } from "@/context/DashboardContext";
 import toast from "react-hot-toast";
+import { settingsSchema } from "@/lib/types";
 
 // Uncomment the line below if you are testing locally
 // const API_URL = process.env.VITE_API_URL || "http://localhost:3000";
@@ -33,24 +34,6 @@ import toast from "react-hot-toast";
 // Uncomment the line below if you are using the deployed app
 const API_URL = import.meta.env.VITE_API_URL;
 
-const formSchema = z.object({
-  blockOutTimings: z.array(
-    z.object({
-      from: z.string().min(1, "Start time required"),
-      to: z.string().min(1, "End time required"),
-      label: z.string().optional(),
-      day: z.string().optional(),
-    })
-  ),
-  url: z.string(),
-  groups: z.array(
-    z.object({
-      name: z.string().min(1, "Group name required"),
-      color: z.string(),
-    })
-  ),
-  firstSundayOfSem: z.string().min(1, "First Sunday of Sem required"),
-});
 
 export default function Settingsbar() {
   const { fetchDashboard, dashboardData } = useDashboardContext();
@@ -67,8 +50,8 @@ export default function Settingsbar() {
         firstSundayOfSem: dashboardData?.firstSundayOfSem,
       };
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof settingsSchema>>({
+    resolver: zodResolver(settingsSchema),
     defaultValues: initialValues,
   });
 
@@ -97,7 +80,7 @@ export default function Settingsbar() {
     return () => subscription.unsubscribe();
   }, [form]);
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof settingsSchema>) => {
     // Fetch NUSMods API, handle timings, etc.
     setLoading(true);
     try {

@@ -3,7 +3,7 @@ import { Calendar, Menu, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import { Dropdown } from "./Dropdown";
-import Profile from "./Profile";
+import Profile from "./profile/Profile";
 import { useDashboardContext } from "@/context/DashboardContext";
 
 export default function Header() {
@@ -49,7 +49,8 @@ export default function Header() {
       {loggedIn ? (
         <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <p className="text-2xl font-bold text-white px-4 py-2 whitespace-nowrap">
-            {currentDashboard === "My" ? "My" : currentDashboard + "'s"} dashboard
+            {currentDashboard === "My" ? "My" : currentDashboard + "'s"}{" "}
+            dashboard
           </p>
         </div>
       ) : null}
@@ -92,4 +93,3 @@ export default function Header() {
     </header>
   );
 }
-
