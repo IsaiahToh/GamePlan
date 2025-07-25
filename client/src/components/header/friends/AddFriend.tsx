@@ -101,24 +101,37 @@ export function AddFriend() {
       });
 
       if (response.status === 404) {
-        toast.error("Email not found. Please check the email address.", {
-          duration: 2000,
+        form.setError("email", {
+          type: "server",
+          message: "Email address not found.",
         });
       } else if (response.status === 400) {
         const errData = await response.json();
         if (errData.code === "FRIEND") {
-          toast.error("You cannot add yourself as a friend.", {
-            duration: 2000,
-          });
+          form.setError("email", {
+            type: "server",
+            message: "You cannot send a friend request to yourself.",
+          }
+          );
         } else if (errData.code === "ALREADY_SENT") {
-          toast.error("Friend request already sent.", { duration: 2000 });
-        } else {
-          toast.error("You are already friends with this user.", {
-            duration: 2000,
+          form.setError("email", {
+            type: "server",
+            message: "Friend request already sent to this user.",
           });
+        } else if (errData.code === "ALREADY_RECEIVED") {
+          form.setError("email", {
+            type: "server",
+            message: "You have already received a friend request from this user.",
+          });
+        } else {
+          form.setError("email", {
+            type: "server",
+            message: "You are already friends with this user.",
+          })
         }
       } else if (response.status === 201) {
         toast.success("Friend request sent successfully!", { duration: 2000 });
+        form.reset();
       } else {
         toast.error("Unexpected error occurred.", { duration: 2000 });
       }
@@ -126,7 +139,6 @@ export function AddFriend() {
       toast.error("Server error.", { duration: 2000 });
     } finally {
       fetchSent();
-      form.reset();
     }
   }
   return (
