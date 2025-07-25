@@ -84,7 +84,7 @@ export const DashboardProvider: React.FC<React.PropsWithChildren> = ({
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
-      const res = await fetch(`${API_URL}/api/tasks?sort=true`, {
+      const res = await fetch(`${API_URL}/api/tasks?sort=false`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) return;

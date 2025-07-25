@@ -42,21 +42,20 @@ type EditTaskProps = {
 export function EditTask({ task }: EditTaskProps) {
   const { fetchTasks } = useTaskContext();
   const { dashboardData } = useDashboardContext();
-  const formattedDate = new Date().toISOString().slice(0, 10);
   const groups = [...dashboardData.groups];
   groups.push({ name: "None", color: "bg-gray-200" });
 
   const form = useForm<z.infer<typeof taskSchema>>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
-      name: "",
-      description: "",
-      deadlineDate: formattedDate,
-      deadlineTime: "23:59",
-      estimatedTimeTaken: 2,
-      minChunk: 1,
-      importance: "Low",
-      group: "None",
+      name: task.name,
+      description: task.description,
+      deadlineDate: task.deadlineDate,
+      deadlineTime: task.deadlineTime,
+      estimatedTimeTaken: task.estimatedTimeTaken,
+      minChunk: task.minChunk,
+      importance: task.importance,
+      group: task.group,
     },
   });
 
@@ -234,14 +233,12 @@ export function EditTask({ task }: EditTaskProps) {
                 </FormItem>
               )}
             />
-            <DialogClose asChild>
-              <Button
-                type="submit"
-                className="w-full bg-gray-800 hover:bg-gray-700 active:bg-gray-600 cursor-pointer mb-2"
-              >
-                Save Changes
-              </Button>
-            </DialogClose>
+            <Button
+              type="submit"
+              className="w-full bg-gray-800 hover:bg-gray-700 active:bg-gray-600 cursor-pointer mb-2"
+            >
+              Save Changes
+            </Button>
           </form>
         </Form>
       </DialogContent>
