@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -33,16 +33,19 @@ const API_URL = import.meta.env.VITE_API_URL;
 export default function Settingsbar() {
   const { fetchDashboard, dashboardData } = useDashboardContext();
   const [loading, setLoading] = useState(false);
-  const savedFormData =
-    typeof window !== "undefined" ? localStorage.getItem("myFormData") : null;
 
-  const initialValues = savedFormData
-    ? JSON.parse(savedFormData)
+  const initialValues = dashboardData
+    ? {
+        url: dashboardData.url,
+        blockOutTimings: dashboardData.blockOutTimings,
+        groups: dashboardData.groups,
+        firstSundayOfSem: dashboardData.firstSundayOfSem,
+      }
     : {
-        url: dashboardData?.url,
-        blockOutTimings: dashboardData?.blockOutTimings,
-        groups: dashboardData?.groups,
-        firstSundayOfSem: dashboardData?.firstSundayOfSem,
+        url: "",
+        blockOutTimings: [],
+        groups: [],
+        firstSundayOfSem: "",
       };
 
   const form = useForm<z.infer<typeof settingsSchema>>({
@@ -67,13 +70,6 @@ export default function Settingsbar() {
     control: form.control,
     name: "groups",
   });
-
-  useEffect(() => {
-    const subscription = form.watch((value) => {
-      localStorage.setItem("myFormData", JSON.stringify(value));
-    });
-    return () => subscription.unsubscribe();
-  }, [form]);
 
   const onSubmit = async (values: z.infer<typeof settingsSchema>) => {
     // Fetch NUSMods API, handle timings, etc.
